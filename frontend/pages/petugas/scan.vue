@@ -85,16 +85,25 @@
           </div>
         </div>
 
-        <!-- Manual Input Alternative -->
+        <!-- Manual Input Alternative & USB Barcode Scanner -->
         <div class="pt-3 border-t border-slate-100">
-          <label class="block text-xs font-semibold text-slate-700 mb-1.5">
-            Input QR Code Manual
-          </label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-semibold text-slate-700">
+              Input QR Code / Barcode Scanner USB
+            </label>
+            <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-medium">
+              Scanner USB Siap
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 mb-2">
+            Mendukung tembakan barcode scanner USB atau ketik manual kode kartu member.
+          </p>
           <div class="flex gap-2">
             <input
+              id="scanner-manual-input"
               v-model="manualQr"
               type="text"
-              placeholder="Tempel atau ketik kode QR member..."
+              placeholder="Arahkan barcode scanner atau ketik kode..."
               class="flex-1 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none font-mono"
               @keyup.enter="handleScan(manualQr)"
             />
@@ -348,7 +357,38 @@ const formatTime = (timeStr: string) => {
   return new Date(timeStr).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB'
 }
 
+// Global Barcode Scanner (HID Keyboard Wedge) Listener
+let barcodeBuffer = ''
+let lastKeyTime = 0
+
+const handleGlobalKeyDown = (e: KeyboardEvent) => {
+  const activeEl = document.activeElement as HTMLElement
+  if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') && activeEl.id !== 'scanner-manual-input') {
+    return
+  }
+
+  const currentTime = Date.now()
+  if (e.key === 'Enter') {
+    if (barcodeBuffer.trim().length >= 3) {
+      handleScan(barcodeBuffer.trim())
+      barcodeBuffer = ''
+      e.preventDefault()
+    }
+  } else if (e.key.length === 1) {
+    if (currentTime - lastKeyTime > 80) {
+      barcodeBuffer = ''
+    }
+    barcodeBuffer += e.key
+    lastKeyTime = currentTime
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleGlobalKeyDown)
+})
+
 onUnmounted(() => {
   stopCamera()
+  window.removeEventListener('keydown', handleGlobalKeyDown)
 })
 </script>
