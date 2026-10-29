@@ -22,6 +22,9 @@ Route::post('/forgot-password/check-email', [ForgotPasswordController::class, 'c
 Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);
 Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword']);
 
+// Health check endpoint
+Route::get('/health', fn () => response()->json(['status' => 'ok']));
+
 // Kiosk / User: ambil tiket tanpa login
 Route::post('/tiket', [TiketController::class, 'create']);
 

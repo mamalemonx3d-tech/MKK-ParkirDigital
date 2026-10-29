@@ -7,11 +7,11 @@
       </div>
 
       <div class="text-right flex items-center gap-4">
-        <!-- Backend Status Pill -->
-        <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border"
-             :class="isBackendOnline ? 'bg-emerald-950/40 text-emerald-400 border-emerald-800' : 'bg-red-950/40 text-red-400 border-red-800 animate-pulse'">
-          <span class="w-2 h-2 rounded-full" :class="isBackendOnline ? 'bg-emerald-400' : 'bg-red-400'"></span>
-          <span>{{ isBackendOnline ? 'Server Online' : 'Server Offline (Nyalakan php artisan serve)' }}</span>
+        <!-- Status Indicator -->
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono border"
+             :class="isBackendOnline ? 'bg-emerald-950/40 text-emerald-400 border-emerald-800/80' : 'bg-slate-800 text-slate-400 border-slate-700'">
+          <span class="w-2 h-2 rounded-full" :class="isBackendOnline ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'"></span>
+          <span>{{ isBackendOnline ? 'Gerbang Siap' : 'Menghubungkan' }}</span>
         </div>
 
         <div>
@@ -32,21 +32,9 @@
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
           Selamat Datang
         </h1>
-        <p class="text-sm text-slate-400 mb-6 max-w-sm mx-auto">
+        <p class="text-sm text-slate-400 mb-8 max-w-sm mx-auto">
           Silakan tekan tombol di bawah ini untuk mencetak tiket parkir masuk Anda.
         </p>
-
-        <!-- Offline Warning Banner -->
-        <div v-if="!isBackendOnline" class="mb-6 p-3 rounded-xl bg-amber-950/60 border border-amber-800/80 text-xs text-amber-300 text-left space-y-1">
-          <div class="font-bold flex items-center gap-1.5 text-amber-200">
-            <AlertTriangle class="w-4 h-4 text-amber-400 shrink-0" />
-            <span>Backend Belum Berjalan</span>
-          </div>
-          <p class="text-[11px] leading-relaxed text-amber-300/90">
-            Buka terminal baru di folder backend lalu ketik:
-            <code class="bg-black/40 px-1.5 py-0.5 rounded text-amber-100 font-mono">php artisan serve</code>
-          </p>
-        </div>
 
         <!-- Big Tactile Push Button -->
         <button
@@ -61,7 +49,7 @@
         </button>
 
         <!-- Error Alert -->
-        <div v-if="errorMessage" class="mt-4 p-3.5 rounded-lg bg-red-950/80 border border-red-700 text-xs text-red-200 text-left flex items-start gap-2">
+        <div v-if="errorMessage" class="mt-5 p-3.5 rounded-lg bg-red-950/80 border border-red-700 text-xs text-red-200 text-left flex items-start gap-2 animate-in fade-in">
           <AlertTriangle class="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
           <div class="leading-relaxed">{{ errorMessage }}</div>
         </div>
@@ -186,9 +174,10 @@ const updateClock = () => {
 
 const checkBackendHealth = async () => {
   try {
-    // Ping ringan ke backend
-    await fetch('http://127.0.0.1:8000/up', { method: 'GET', signal: AbortSignal.timeout(2000) })
-    isBackendOnline.value = true
+    const res = await api.get('/health')
+    if (res.data?.status === 'ok') {
+      isBackendOnline.value = true
+    }
   } catch {
     isBackendOnline.value = false
   }
@@ -226,7 +215,7 @@ const ambilTiket = async () => {
     errorMessage.value =
       err.customMessage ||
       err.response?.data?.message ||
-      'Server backend belum menyala. Silakan jalankan `php artisan serve` di terminal folder backend (port 8000).'
+      'Server backend belum terhubung di port 8000.'
   } finally {
     isLoading.value = false
   }
