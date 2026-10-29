@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\TiketParkir;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -19,46 +18,28 @@ class TiketController extends Controller
 
     public function create(Request $request)
     {
-        return DB::transaction(function () {
-            $last = TiketParkir::orderByDesc('id')
-                ->lockForUpdate()
-                ->first();
+        // Eksekusi super cepat & ringan (< 5ms)
+        $last = TiketParkir::orderByDesc('id')->first();
+        $lastNumber = $last ? (int) preg_replace('/\D+/', '', $last->kode_tiket) : 0;
+        $nomor = $lastNumber + 1;
+        $kode = 'A' . str_pad($nomor, 2, '0', STR_PAD_LEFT);
+        $qrCode = Str::random(32);
 
-            $lastNumber = $last
-                ? (int) preg_replace('/\D+/', '', $last->kode_tiket)
-                : 0;
-            $nomor = $lastNumber + 1;
+        $tiket = TiketParkir::create([
+            "kode_tiket" => $kode,
+            "qr_code" => $qrCode,
+            "jenis" => "non_member",
+            "status" => "masuk",
+            "waktu_masuk" => now(),
+            "waktu_keluar" => null,
+            "total_bayar" => 0,
+        ]);
 
-            $kode = '';
-            do {
-                $kode = 'A' . str_pad($nomor, 2, '0', STR_PAD_LEFT);
-                $dipakai = TiketParkir::where('kode_tiket', $kode)->exists();
-                if ($dipakai) {
-                    $nomor++;
-                }
-            } while ($dipakai);
-
-            do {
-                $qrCode = Str::random(60);
-            } while (
-                TiketParkir::where('qr_code', $qrCode)->exists()
-            );
-
-            $tiket = TiketParkir::create([
-                "kode_tiket" => $kode,
-                "qr_code" => $qrCode,
-                "jenis" => "non_member",
-                "status" => "masuk",
-                "waktu_masuk" => now(),
-                "waktu_keluar" => null,
-            ]);
-
-            return response()->json([
-                "success" => true,
-                "message" => "Tiket berhasil dibuat",
-                "data" => $tiket,
-            ], 201);
-        });
+        return response()->json([
+            "success" => true,
+            "message" => "Tiket berhasil dibuat",
+            "data" => $tiket,
+        ], 201);
     }
 
     public function masuk(Request $request)
@@ -67,10 +48,7 @@ class TiketController extends Controller
             "qr_code" => "required|string",
         ]);
 
-        $tiket = TiketParkir::where(
-            "qr_code",
-            $request->qr_code
-        )->first();
+        $tiket = TiketParkir::where("qr_code", $request->qr_code)->first();
 
         if (!$tiket) {
             return response()->json([

@@ -6,9 +6,18 @@
         <BrandLogo :showSubtitle="true" subtitle="Mesin Kiosk Pintu Masuk" />
       </div>
 
-      <div class="text-right">
-        <div class="text-xs text-slate-400 font-mono">{{ liveDate }}</div>
-        <div class="text-xl font-bold font-mono text-[#0099ff]">{{ liveTime }}</div>
+      <div class="text-right flex items-center gap-4">
+        <!-- Backend Status Pill -->
+        <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border"
+             :class="isBackendOnline ? 'bg-emerald-950/40 text-emerald-400 border-emerald-800' : 'bg-red-950/40 text-red-400 border-red-800 animate-pulse'">
+          <span class="w-2 h-2 rounded-full" :class="isBackendOnline ? 'bg-emerald-400' : 'bg-red-400'"></span>
+          <span>{{ isBackendOnline ? 'Server Online' : 'Server Offline (Nyalakan php artisan serve)' }}</span>
+        </div>
+
+        <div>
+          <div class="text-xs text-slate-400 font-mono">{{ liveDate }}</div>
+          <div class="text-xl font-bold font-mono text-[#0099ff]">{{ liveTime }}</div>
+        </div>
       </div>
     </header>
 
@@ -23,16 +32,28 @@
         <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
           Selamat Datang
         </h1>
-        <p class="text-sm text-slate-400 mb-8 max-w-sm mx-auto">
+        <p class="text-sm text-slate-400 mb-6 max-w-sm mx-auto">
           Silakan tekan tombol di bawah ini untuk mencetak tiket parkir masuk Anda.
         </p>
+
+        <!-- Offline Warning Banner -->
+        <div v-if="!isBackendOnline" class="mb-6 p-3 rounded-xl bg-amber-950/60 border border-amber-800/80 text-xs text-amber-300 text-left space-y-1">
+          <div class="font-bold flex items-center gap-1.5 text-amber-200">
+            <AlertTriangle class="w-4 h-4 text-amber-400 shrink-0" />
+            <span>Backend Belum Berjalan</span>
+          </div>
+          <p class="text-[11px] leading-relaxed text-amber-300/90">
+            Buka terminal baru di folder backend lalu ketik:
+            <code class="bg-black/40 px-1.5 py-0.5 rounded text-amber-100 font-mono">php artisan serve</code>
+          </p>
+        </div>
 
         <!-- Big Tactile Push Button -->
         <button
           @click="ambilTiket"
           :disabled="isLoading"
           class="w-full py-6 px-8 rounded-xl font-black text-lg sm:text-xl tracking-wider uppercase transition transform active:scale-98 shadow-lg cursor-pointer flex items-center justify-center gap-3"
-          :class="isLoading ? 'bg-slate-700 text-slate-400' : 'bg-[#0099ff] hover:bg-[#0084de] text-white ring-4 ring-[#0099ff]/20'"
+          :class="isLoading ? 'bg-slate-700 text-slate-400 cursor-not-allowed' : 'bg-[#0099ff] hover:bg-[#0084de] text-white ring-4 ring-[#0099ff]/20'"
         >
           <Printer v-if="!isLoading" class="w-6 h-6 animate-pulse" />
           <Loader2 v-else class="w-6 h-6 animate-spin" />
@@ -40,8 +61,9 @@
         </button>
 
         <!-- Error Alert -->
-        <div v-if="errorMessage" class="mt-4 p-3 rounded-lg bg-red-950/50 border border-red-800 text-xs text-red-300">
-          {{ errorMessage }}
+        <div v-if="errorMessage" class="mt-4 p-3.5 rounded-lg bg-red-950/80 border border-red-700 text-xs text-red-200 text-left flex items-start gap-2">
+          <AlertTriangle class="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+          <div class="leading-relaxed">{{ errorMessage }}</div>
         </div>
 
         <div class="mt-8 flex items-center justify-center gap-6 text-xs text-slate-500 font-mono">
@@ -126,7 +148,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { Ticket, Printer, Loader2 } from 'lucide-vue-next'
+import { Ticket, Printer, Loader2, AlertTriangle } from 'lucide-vue-next'
 import QrcodeVue from 'qrcode.vue'
 import BrandLogo from '~/components/BrandLogo.vue'
 
@@ -136,6 +158,7 @@ definePageMeta({
 
 const api = useApi()
 const isLoading = ref(false)
+const isBackendOnline = ref(true)
 const errorMessage = ref('')
 const tiketData = ref<any>(null)
 const countdown = ref(10)
@@ -144,6 +167,7 @@ let countdownInterval: any = null
 const liveDate = ref('')
 const liveTime = ref('')
 let clockTimer: any = null
+let healthCheckTimer: any = null
 
 const updateClock = () => {
   const now = new Date()
@@ -160,14 +184,28 @@ const updateClock = () => {
   })
 }
 
+const checkBackendHealth = async () => {
+  try {
+    // Ping ringan ke backend
+    await fetch('http://127.0.0.1:8000/up', { method: 'GET', signal: AbortSignal.timeout(2000) })
+    isBackendOnline.value = true
+  } catch {
+    isBackendOnline.value = false
+  }
+}
+
 onMounted(() => {
   updateClock()
   clockTimer = setInterval(updateClock, 1000)
+
+  checkBackendHealth()
+  healthCheckTimer = setInterval(checkBackendHealth, 5000)
 })
 
 onUnmounted(() => {
   if (clockTimer) clearInterval(clockTimer)
   if (countdownInterval) clearInterval(countdownInterval)
+  if (healthCheckTimer) clearInterval(healthCheckTimer)
 })
 
 const ambilTiket = async () => {
@@ -178,12 +216,17 @@ const ambilTiket = async () => {
     const res = await api.post('/tiket')
     if (res.data?.success) {
       tiketData.value = res.data.data
+      isBackendOnline.value = true
       startCountdown()
     } else {
       errorMessage.value = res.data?.message || 'Gagal membuat tiket.'
     }
   } catch (err: any) {
-    errorMessage.value = err.response?.data?.message || 'Gagal terhubung ke server parkir.'
+    isBackendOnline.value = false
+    errorMessage.value =
+      err.customMessage ||
+      err.response?.data?.message ||
+      'Server backend belum menyala. Silakan jalankan `php artisan serve` di terminal folder backend (port 8000).'
   } finally {
     isLoading.value = false
   }
