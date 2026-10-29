@@ -45,6 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Tiket
     // =========================
     Route::get('/tiket', [TiketController::class, 'index']);
+    Route::delete('/tiket/clear', [TiketController::class, 'clear']);
+    Route::delete('/tiket/{id}', [TiketController::class, 'destroy']);
     Route::get('/tiket/{qr_code}/cek', [TiketController::class, 'cek']);
     Route::post('/tiket/masuk', [TiketController::class, 'masuk']);
 

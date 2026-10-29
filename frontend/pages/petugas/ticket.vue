@@ -10,13 +10,25 @@
           Seluruh rekaman kendaraan masuk dan keluar di sistem parkir.
         </p>
       </div>
-      <button
-        @click="fetchTickets"
-        class="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer"
-      >
-        <RefreshCw class="w-3.5 h-3.5" :class="isLoading ? 'animate-spin' : ''" />
-        <span>Perbarui Data</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <button
+          v-if="tickets.length > 0"
+          @click="clearAllTickets"
+          :disabled="isClearing"
+          class="px-3.5 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition flex items-center gap-1.5 border border-red-200 cursor-pointer disabled:opacity-60"
+        >
+          <Trash2 class="w-3.5 h-3.5" />
+          <span>{{ isClearing ? 'Menghapus...' : 'Hapus Semua Tiket' }}</span>
+        </button>
+
+        <button
+          @click="fetchTickets"
+          class="px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-2 cursor-pointer"
+        >
+          <RefreshCw class="w-3.5 h-3.5" :class="isLoading ? 'animate-spin' : ''" />
+          <span>Perbarui Data</span>
+        </button>
+      </div>
     </div>
 
     <!-- Filters Strip -->
@@ -67,11 +79,12 @@
               <th class="py-3 px-4">Waktu Keluar</th>
               <th class="py-3 px-4">Total Biaya</th>
               <th class="py-3 px-4">Status</th>
+              <th class="py-3 px-4 text-center">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             <tr v-if="filteredTickets.length === 0">
-              <td colspan="8" class="text-center py-8 text-slate-400">
+              <td colspan="9" class="text-center py-8 text-slate-400">
                 Tidak ada data tiket yang cocok.
               </td>
             </tr>
@@ -115,6 +128,15 @@
                   <span>{{ ticket.status === 'masuk' ? 'Aktif' : 'Keluar' }}</span>
                 </span>
               </td>
+              <td class="py-3 px-4 text-center">
+                <button
+                  @click="deleteSingleTicket(ticket.id, ticket.kode_tiket)"
+                  title="Hapus Tiket"
+                  class="p-1.5 rounded hover:bg-red-50 text-slate-400 hover:text-red-600 transition cursor-pointer"
+                >
+                  <Trash2 class="w-3.5 h-3.5" />
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -125,7 +147,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Search, RefreshCw } from 'lucide-vue-next'
+import { Search, RefreshCw, Trash2 } from 'lucide-vue-next'
 
 definePageMeta({
   layout: 'petugas',
@@ -135,6 +157,7 @@ definePageMeta({
 const api = useApi()
 const tickets = ref<any[]>([])
 const isLoading = ref(false)
+const isClearing = ref(false)
 const searchQuery = ref('')
 const statusFilter = ref('all')
 const jenisFilter = ref('all')
@@ -148,6 +171,39 @@ const fetchTickets = async () => {
     console.error('Gagal mengambil daftar tiket:', err)
   } finally {
     isLoading.value = false
+  }
+}
+
+const clearAllTickets = async () => {
+  if (!confirm('Apakah Anda yakin ingin menghapus seluruh rekaman tiket parkir?')) {
+    return
+  }
+
+  isClearing.value = true
+  try {
+    const res = await api.delete('/tiket/clear')
+    if (res.data?.success) {
+      tickets.value = []
+    }
+  } catch (err: any) {
+    alert(err.response?.data?.message || 'Gagal menghapus semua tiket.')
+  } finally {
+    isClearing.value = false
+  }
+}
+
+const deleteSingleTicket = async (id: number, kode: string) => {
+  if (!confirm(`Hapus data tiket ${kode}?`)) {
+    return
+  }
+
+  try {
+    const res = await api.delete(`/tiket/${id}`)
+    if (res.data?.success) {
+      tickets.value = tickets.value.filter((t) => t.id !== id)
+    }
+  } catch (err: any) {
+    alert(err.response?.data?.message || 'Gagal menghapus tiket.')
   }
 }
 

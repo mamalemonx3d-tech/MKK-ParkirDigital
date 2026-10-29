@@ -114,4 +114,32 @@ class TiketController extends Controller
             ],
         ], 200);
     }
+
+    public function destroy($id)
+    {
+        $tiket = TiketParkir::find($id);
+        if (!$tiket) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tiket tidak ditemukan.',
+            ], 404);
+        }
+
+        $tiket->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data tiket berhasil dihapus.',
+        ]);
+    }
+
+    public function clear()
+    {
+        TiketParkir::truncate();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Seluruh rekaman tiket parkir berhasil dikosongkan.',
+        ]);
+    }
 }
