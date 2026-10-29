@@ -21,31 +21,57 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       <!-- Left Column: Scanner & Quick Search (5 cols) -->
       <div class="lg:col-span-5 bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
             <ScanBarcode class="w-4 h-4 text-[#ff9900]" />
             <span>Pemindaian Tiket</span>
           </span>
-          <button
-            @click="toggleCamera"
-            class="text-xs font-semibold px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 transition cursor-pointer"
-          >
-            {{ isScanning ? 'Matikan Kamera' : 'Buka Kamera' }}
-          </button>
+          <div class="flex items-center gap-2">
+            <select
+              v-if="cameraList.length > 1"
+              v-model="selectedCameraId"
+              @change="changeCamera"
+              class="text-[11px] px-2 py-1 rounded border border-slate-300 bg-white text-slate-700 outline-none max-w-36 truncate"
+            >
+              <option v-for="cam in cameraList" :key="cam.id" :value="cam.id">
+                {{ cam.label || 'Kamera ' + cam.id }}
+              </option>
+            </select>
+            <button
+              @click="toggleCamera"
+              class="text-xs font-bold px-3 py-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 transition cursor-pointer flex items-center gap-1.5"
+            >
+              <Loader2 v-if="isStartingCamera" class="w-3.5 h-3.5 animate-spin text-[#ff9900]" />
+              <span>{{ isScanning ? 'Matikan Kamera' : 'Buka Kamera' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Camera Error Banner -->
+        <div v-if="cameraError" class="p-3.5 rounded-lg bg-amber-50 border border-amber-300 text-xs text-amber-900 space-y-1">
+          <div class="font-bold flex items-center gap-1.5 text-amber-950">
+            <AlertTriangle class="w-4 h-4 text-amber-600 shrink-0" />
+            <span>Kendala Akses Kamera</span>
+          </div>
+          <p class="leading-relaxed text-[11px]">{{ cameraError }}</p>
         </div>
 
         <!-- Camera Container -->
-        <div class="relative bg-slate-900 rounded-lg overflow-hidden aspect-4/3 flex items-center justify-center border border-slate-800">
-          <div id="exit-reader" class="w-full h-full"></div>
-          <div v-if="!isScanning" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 p-4 text-center">
+        <div class="relative bg-slate-900 rounded-lg overflow-hidden min-h-60 flex items-center justify-center border border-slate-800">
+          <div id="exit-reader" class="w-full"></div>
+          <div v-if="!isScanning && !isStartingCamera" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 p-4 text-center">
             <CameraOff class="w-8 h-8 mb-2 opacity-50" />
-            <p class="text-xs">Kamera scanner kasir nonaktif.</p>
+            <p class="text-xs font-medium text-slate-300">Kamera scanner kasir nonaktif.</p>
             <button
-              @click="toggleCamera"
-              class="mt-3 px-3 py-1.5 bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold rounded cursor-pointer"
+              @click="startCamera"
+              class="mt-3 px-4 py-2 bg-[#ff9900] hover:bg-[#e68a00] text-slate-900 text-xs font-bold rounded-lg cursor-pointer transition shadow-xs"
             >
               Nyalakan Scanner
             </button>
+          </div>
+          <div v-if="isStartingCamera" class="p-6 text-center text-slate-300 space-y-2">
+            <Loader2 class="w-8 h-8 mx-auto animate-spin text-[#ff9900]" />
+            <p class="text-xs font-semibold">Menginisialisasi kamera...</p>
           </div>
         </div>
 
@@ -225,6 +251,7 @@ import {
   ScanBarcode,
   CameraOff,
   AlertCircle,
+  AlertTriangle,
   CheckCircle2,
   Receipt,
   Printer,
@@ -240,10 +267,14 @@ definePageMeta({
 
 const api = useApi()
 const isScanning = ref(false)
+const isStartingCamera = ref(false)
 const isLoadingLookup = ref(false)
 const isSubmitting = ref(false)
 const searchCode = ref('')
 const errorMessage = ref('')
+const cameraError = ref('')
+const cameraList = ref<{ id: string; label: string }[]>([])
+const selectedCameraId = ref('')
 const activeTicket = ref<any>(null)
 const successPayment = ref<any>(null)
 let html5QrCode: Html5Qrcode | null = null
@@ -253,31 +284,81 @@ const checkoutForm = reactive({
   jenis_kendaraan: 'mobil',
 })
 
-const toggleCamera = () => {
+const toggleCamera = async () => {
   if (isScanning.value) {
-    stopCamera()
+    await stopCamera()
   } else {
-    startCamera()
+    await startCamera()
   }
 }
 
 const startCamera = async () => {
+  cameraError.value = ''
+  isStartingCamera.value = true
+
   try {
     if (!html5QrCode) {
       html5QrCode = new Html5Qrcode('exit-reader')
     }
-    await html5QrCode.start(
-      { facingMode: 'environment' },
-      { fps: 10, qrbox: { width: 250, height: 250 } },
-      (decodedText) => {
-        lookupTicket(decodedText)
-      },
-      () => {}
-    )
+
+    let cameraIdToUse = selectedCameraId.value
+
+    try {
+      const devices = await Html5Qrcode.getCameras()
+      if (devices && devices.length > 0) {
+        cameraList.value = devices
+        if (!cameraIdToUse) {
+          cameraIdToUse = devices[0].id
+          selectedCameraId.value = cameraIdToUse
+        }
+      }
+    } catch (e) {
+      console.warn('Gagal membaca daftar perangkat scanner keluar:', e)
+    }
+
+    const config = {
+      fps: 10,
+      qrbox: { width: 220, height: 220 },
+      aspectRatio: 1.333,
+    }
+
+    const onScanSuccess = (decodedText: string) => {
+      lookupTicket(decodedText)
+    }
+
+    if (cameraIdToUse) {
+      try {
+        await html5QrCode.start(cameraIdToUse, config, onScanSuccess, () => {})
+      } catch (idErr) {
+        console.warn('Gagal dengan ID kamera spesifik, mencoba fallback:', idErr)
+        await html5QrCode.start({ facingMode: 'user' }, config, onScanSuccess, () => {})
+      }
+    } else {
+      await html5QrCode.start({ facingMode: 'user' }, config, onScanSuccess, () => {})
+    }
+
     isScanning.value = true
-  } catch (err) {
-    console.warn('Gagal menyalakan scanner keluar:', err)
+    cameraError.value = ''
+  } catch (err: any) {
+    console.error('Gagal menyalakan scanner keluar:', err)
     isScanning.value = false
+
+    if (err?.name === 'NotAllowedError' || err?.message?.toLowerCase().includes('permission')) {
+      cameraError.value = 'Izin kamera diblokir browser. Klik ikon gembok/kamera di sebelah kiri URL browser dan pilih "Izinkan" (Allow).'
+    } else if (err?.name === 'NotReadableError' || err?.message?.toLowerCase().includes('in use')) {
+      cameraError.value = 'Kamera sedang digunakan aplikasi lain (Kamera Windows/Zoom/OBS) atau terblokir di Windows Privacy Settings. Tutup aplikasi yang menggunakan kamera lalu coba lagi.'
+    } else {
+      cameraError.value = `Tidak dapat membuka kamera: ${err?.message || err}. Pastikan webcam terhubung dan izin diberikan.`
+    }
+  } finally {
+    isStartingCamera.value = false
+  }
+}
+
+const changeCamera = async () => {
+  if (isScanning.value) {
+    await stopCamera()
+    await startCamera()
   }
 }
 

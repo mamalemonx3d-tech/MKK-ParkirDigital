@@ -45,3 +45,22 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Scanner QR Code Styling */
+#reader video,
+#exit-reader video {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+#reader,
+#exit-reader {
+  width: 100% !important;
+  border: none !important;
+}
+#reader img,
+#exit-reader img {
+  display: none !important;
+}
