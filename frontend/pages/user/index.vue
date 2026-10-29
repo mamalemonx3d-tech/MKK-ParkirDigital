@@ -109,20 +109,30 @@
         </p>
 
         <!-- Actions -->
-        <div class="mt-6 flex flex-col sm:flex-row gap-3">
-          <button
-            @click="cetakStruk"
-            class="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <Printer class="w-4 h-4" />
-            <span>Cetak Fisik</span>
-          </button>
-          <button
-            @click="resetKiosk"
-            class="py-3 px-5 bg-[#0099ff] hover:bg-[#0084de] text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>Selesai ({{ countdown }}s)</span>
-          </button>
+        <div class="mt-6 space-y-3">
+          <!-- Countdown visual bar -->
+          <div class="bg-slate-100 rounded-full h-1.5 overflow-hidden">
+            <div
+              class="bg-[#0099ff] h-full transition-all duration-1000 ease-linear rounded-full"
+              :style="{ width: `${(countdown / 30) * 100}%` }"
+            ></div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3">
+            <button
+              @click="cetakStruk"
+              class="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Printer class="w-4 h-4" />
+              <span>Cetak Fisik</span>
+            </button>
+            <button
+              @click="resetKiosk"
+              class="py-3 px-6 bg-[#0099ff] hover:bg-[#0084de] text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+            >
+              <span>Selesai ({{ countdown }}s)</span>
+            </button>
+          </div>
         </div>
       </div>
     </main>
@@ -149,7 +159,7 @@ const isLoading = ref(false)
 const isBackendOnline = ref(true)
 const errorMessage = ref('')
 const tiketData = ref<any>(null)
-const countdown = ref(10)
+const countdown = ref(30)
 let countdownInterval: any = null
 
 const liveDate = ref('')
@@ -222,7 +232,7 @@ const ambilTiket = async () => {
 }
 
 const startCountdown = () => {
-  countdown.value = 10
+  countdown.value = 30
   if (countdownInterval) clearInterval(countdownInterval)
   countdownInterval = setInterval(() => {
     countdown.value--
