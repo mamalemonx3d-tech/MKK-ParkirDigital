@@ -3,8 +3,8 @@
     <div class="max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
       <!-- Brand & Header -->
       <div class="text-center mb-6">
-        <div class="inline-flex justify-center mb-2">
-          <BrandLogo :showSubtitle="false" />
+        <div class="inline-flex justify-center mb-3">
+          <BrandLogo :showSubtitle="false" size="lg" />
         </div>
         <h2 class="text-xl font-bold text-[#001a4e]">
           Masuk Portal Petugas & Admin

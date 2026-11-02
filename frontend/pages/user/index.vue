@@ -3,7 +3,7 @@
     <!-- Top Hardware Terminal Bar -->
     <header class="max-w-4xl mx-auto w-full flex items-center justify-between border-b border-white/10 pb-4">
       <div class="flex items-center gap-3">
-        <BrandLogo :showSubtitle="true" subtitle="Dispenser Tiket Masuk Otomatis" />
+        <BrandLogo :showSubtitle="true" subtitle="Dispenser Tiket Masuk Otomatis" :isDarkSurface="true" />
       </div>
 
       <div class="flex items-center gap-4 text-right">

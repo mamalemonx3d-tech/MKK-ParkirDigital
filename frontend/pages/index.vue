@@ -3,8 +3,8 @@
     <div class="max-w-4xl mx-auto w-full">
       <!-- Title & Header -->
       <div class="text-center mb-10">
-        <div class="inline-flex justify-center mb-3">
-          <BrandLogo :showSubtitle="false" />
+        <div class="inline-flex justify-center mb-4">
+          <BrandLogo :showSubtitle="false" size="lg" />
         </div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-[#001a4e] tracking-tight">
           Sistem Pengelolaan Parkir Digital

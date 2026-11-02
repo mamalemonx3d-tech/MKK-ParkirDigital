@@ -4,7 +4,7 @@
     <aside class="w-full md:w-64 bg-[#001a4e] text-white flex flex-col shrink-0 md:min-h-screen">
       <!-- Brand Header -->
       <div class="p-5 border-b border-white/10 flex items-center justify-between">
-        <BrandLogo :showSubtitle="true" subtitle="Super Admin Panel" />
+        <BrandLogo :showSubtitle="true" subtitle="Super Admin Panel" :isDarkSurface="true" />
       </div>
 
       <!-- Navigation Links -->
