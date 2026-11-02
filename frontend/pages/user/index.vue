@@ -163,9 +163,23 @@
     </main>
 
     <!-- Kiosk Footer Info -->
-    <footer class="max-w-4xl mx-auto w-full text-center text-xs text-slate-500 font-mono pt-4 border-t border-white/10 flex items-center justify-between">
-      <span>Terminal Gerbang Masuk &bull; Secure Parking System</span>
-      <span>Bantuan Teknis: Hubungi Petugas Pos</span>
+    <footer class="max-w-4xl mx-auto w-full text-center text-xs text-slate-400 font-mono pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span>Terminal Gerbang Masuk &bull; Secure Parking System</span>
+      </div>
+      <div class="flex items-center gap-4 text-xs">
+        <NuxtLink to="/katalog-member" class="text-[#0099ff] hover:underline font-bold flex items-center gap-1 font-sans">
+          <span>Katalog & Status Member</span>
+        </NuxtLink>
+        <span class="text-slate-600">&bull;</span>
+        <NuxtLink to="/petugas/scan" class="text-emerald-400 hover:underline font-bold flex items-center gap-1 font-sans">
+          <span>Scan QR Member Masuk</span>
+        </NuxtLink>
+        <span class="text-slate-600">&bull;</span>
+        <NuxtLink to="/" class="text-slate-400 hover:text-white font-sans">
+          Kembali ke Menu
+        </NuxtLink>
+      </div>
     </footer>
   </div>
 </template>

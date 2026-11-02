@@ -77,6 +77,26 @@
         </div>
       </div>
 
+      <!-- Banner Pengendara: Katalog & Cek Status Member -->
+      <div class="mt-6 bg-gradient-to-r from-[#001a4e] to-[#002b80] rounded-xl p-5 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#001033]">
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-lg bg-[#0099ff]/20 text-[#0099ff] border border-[#0099ff]/30 flex items-center justify-center shrink-0">
+            <CreditCard class="w-5 h-5 text-[#ff9900]" />
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white">Pengendara: Cek Status Kartu Member & Katalog</h4>
+            <p class="text-xs text-slate-300">Lihat paket langganan bulanan motor/mobil dan cek masa aktif kartu Anda secara online.</p>
+          </div>
+        </div>
+        <NuxtLink
+          to="/katalog-member"
+          class="px-4 py-2 rounded-lg bg-[#0099ff] hover:bg-[#0084de] text-white text-xs font-bold transition flex items-center gap-2 shrink-0 shadow-xs"
+        >
+          <span>Buka Katalog Member</span>
+          <ArrowRight class="w-4 h-4" />
+        </NuxtLink>
+      </div>
+
       <!-- Quick Status Strip -->
       <div class="mt-10 bg-white rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
         <div class="flex items-center gap-3">
@@ -93,6 +113,6 @@
 </template>
 
 <script setup lang="ts">
-import { Ticket, Receipt, ShieldCheck, ArrowRight } from 'lucide-vue-next'
+import { Ticket, Receipt, ShieldCheck, ArrowRight, CreditCard } from 'lucide-vue-next'
 import BrandLogo from '~/components/BrandLogo.vue'
 </script>

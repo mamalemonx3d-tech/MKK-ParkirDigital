@@ -27,6 +27,7 @@ Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
 // Kiosk / User: ambil tiket tanpa login
 Route::post('/tiket', [TiketController::class, 'create']);
+Route::post('/member/check-status', [MemberController::class, 'checkStatus']);
 
 
 // =========================
@@ -36,10 +37,11 @@ Route::post('/tiket', [TiketController::class, 'create']);
 Route::middleware('auth:sanctum')->group(function () {
 
     // =========================
-    // Auth
+    // Auth & Profile
     // =========================
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
 
     // =========================
     // Tiket
@@ -98,5 +100,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/harian', [RekapController::class, 'harian']);
             Route::get('/mingguan', [RekapController::class, 'mingguan']);
             Route::get('/bulanan', [RekapController::class, 'bulanan']);
+            Route::get('/petugas', [RekapController::class, 'petugas']);
         });
 });

@@ -204,39 +204,45 @@
             </span>
           </div>
 
-          <!-- Struk Fisik Preview -->
+          <!-- Struk Fisik / Invoice Preview -->
           <div class="bg-slate-50 border border-slate-300 rounded-xl p-5 font-mono text-xs text-slate-800 space-y-3 shadow-inner">
             <div class="text-center pb-3 border-b border-dashed border-slate-300 space-y-0.5">
-              <p class="font-bold text-sm tracking-widest text-[#001a4e]">SECURE PARKING INDONESIA</p>
-              <p class="text-[11px] text-slate-500">STRUK BUKTI PEMBAYARAN KELUAR</p>
-              <p class="text-[10px] text-slate-400">{{ formatDateTime(new Date().toISOString()) }}</p>
+              <p class="font-bold text-sm tracking-widest text-[#001a4e]">SECURE PARKING</p>
+              <p class="text-[11px] font-black text-slate-700 uppercase">INVOICE & STRUK PEMBAYARAN PARKIR</p>
+              <p class="text-[10px] text-slate-400">NO: INV-PKR-{{ String(successPayment.ticketId || '001').padStart(4, '0') }} &bull; {{ formatDateTime(new Date().toISOString()) }}</p>
             </div>
 
             <div class="space-y-1.5 text-[11px]">
+              <div class="flex justify-between">
+                <span class="text-slate-500">Petugas Kasir:</span>
+                <span class="font-bold text-slate-800">{{ auth.user.value?.name || 'Petugas Pos 01' }}</span>
+              </div>
               <div class="flex justify-between">
                 <span class="text-slate-500">Nomor Polisi:</span>
                 <span class="font-bold text-slate-900">{{ successPayment.plat || '-' }}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-slate-500">Tipe Pelanggan:</span>
-                <span class="font-bold uppercase">{{ successPayment.type === 'member' ? 'Member Langganan' : 'Pengendara Umum' }}</span>
+                <span class="font-bold uppercase" :class="successPayment.type === 'member' ? 'text-emerald-700' : 'text-slate-800'">
+                  {{ successPayment.type === 'member' ? 'Member Terdaftar (Bebas Tarif)' : 'Pengendara Non-Member (Umum)' }}
+                </span>
               </div>
               <div class="flex justify-between" v-if="successPayment.type !== 'member'">
-                <span class="text-slate-500">Total Tarif:</span>
-                <span class="font-bold">{{ formatRupiah(successPayment.total) }}</span>
+                <span class="text-slate-500">Total Tarif Tagihan:</span>
+                <span class="font-bold text-[#001a4e] text-xs">{{ formatRupiah(successPayment.total) }}</span>
               </div>
               <div class="flex justify-between" v-if="cashReceived > 0">
                 <span class="text-slate-500">Tunai Diterima:</span>
                 <span>{{ formatRupiah(cashReceived) }}</span>
               </div>
               <div class="flex justify-between" v-if="cashReceived > 0 && calculatedChange >= 0">
-                <span class="text-slate-500">Kembalian:</span>
+                <span class="text-slate-500">Uang Kembalian:</span>
                 <span class="font-bold text-emerald-700">{{ formatRupiah(calculatedChange) }}</span>
               </div>
             </div>
 
             <div class="pt-2 border-t border-dashed border-slate-300 text-center text-[10px] text-slate-400">
-              Terima kasih atas kunjungan Anda &bull; Harap berkendara hati-hati
+              Terima kasih atas kunjungan Anda &bull; Lunas & Terverifikasi Sistem
             </div>
           </div>
 

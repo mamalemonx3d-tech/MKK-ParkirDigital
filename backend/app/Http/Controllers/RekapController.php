@@ -18,20 +18,23 @@ class RekapController extends Controller
      */
     private function hitungPendapatan($start, $end)
     {
-        $pendapatanNonMember = TiketParkir::whereBetween('waktu_keluar', [$start, $end])
+        $pendapatanNonMember = (float) TiketParkir::whereBetween('waktu_keluar', [$start, $end])
             ->where('status', 'keluar')
             ->where('jenis', 'non_member')
-            ->whereNull('member_id')
             ->sum('total_bayar');
 
-        $pendapatanMember = TagihanMember::whereBetween('tanggal_bayar', [
+        $pendapatanMember = (float) TagihanMember::whereBetween('tanggal_bayar', [
             $start->toDateString(),
             $end->toDateString()
         ])
             ->where('status', 'lunas')
             ->sum('jumlah');
 
-        return (float) ($pendapatanNonMember + $pendapatanMember);
+        return [
+            'non_member' => $pendapatanNonMember,
+            'member' => $pendapatanMember,
+            'total' => $pendapatanNonMember + $pendapatanMember,
+        ];
     }
 
     /**
@@ -86,8 +89,19 @@ class RekapController extends Controller
         $end = Carbon::parse($date)->endOfDay();
 
         $masuk = TiketParkir::whereBetween('waktu_masuk', [$start, $end])->count();
+        $masukNonMember = TiketParkir::whereBetween('waktu_masuk', [$start, $end])->where('jenis', 'non_member')->count();
+        $masukMember = TiketParkir::whereBetween('waktu_masuk', [$start, $end])->where('jenis', 'member')->count();
+
         $keluar = TiketParkir::whereBetween('waktu_keluar', [$start, $end])
             ->where('status', 'keluar')
+            ->count();
+        $keluarNonMember = TiketParkir::whereBetween('waktu_keluar', [$start, $end])
+            ->where('status', 'keluar')
+            ->where('jenis', 'non_member')
+            ->count();
+        $keluarMember = TiketParkir::whereBetween('waktu_keluar', [$start, $end])
+            ->where('status', 'keluar')
+            ->where('jenis', 'member')
             ->count();
 
         $pendapatan = $this->hitungPendapatan($start, $end);
@@ -99,7 +113,13 @@ class RekapController extends Controller
                 'tanggal' => $date,
                 'total_masuk' => $masuk,
                 'total_keluar' => $keluar,
-                'total_pendapatan' => $pendapatan,
+                'masuk_non_member' => $masukNonMember,
+                'masuk_member' => $masukMember,
+                'keluar_non_member' => $keluarNonMember,
+                'keluar_member' => $keluarMember,
+                'pendapatan_non_member' => $pendapatan['non_member'],
+                'pendapatan_member' => $pendapatan['member'],
+                'total_pendapatan' => $pendapatan['total'],
                 'detail' => $detail,
             ],
         ]);
@@ -131,7 +151,9 @@ class RekapController extends Controller
                 'nama_hari' => $current->translatedFormat('l'),
                 'total_masuk' => $masuk,
                 'total_keluar' => $keluar,
-                'total_pendapatan' => $pendapatan,
+                'pendapatan_non_member' => $pendapatan['non_member'],
+                'pendapatan_member' => $pendapatan['member'],
+                'total_pendapatan' => $pendapatan['total'],
             ];
 
             $current->addDay();
@@ -144,6 +166,8 @@ class RekapController extends Controller
                 'ringkasan' => [
                     'total_masuk' => collect($results)->sum('total_masuk'),
                     'total_keluar' => collect($results)->sum('total_keluar'),
+                    'pendapatan_non_member' => collect($results)->sum('pendapatan_non_member'),
+                    'pendapatan_member' => collect($results)->sum('pendapatan_member'),
                     'total_pendapatan' => collect($results)->sum('total_pendapatan'),
                 ],
                 'detail' => $results,
@@ -180,7 +204,9 @@ class RekapController extends Controller
                 'tanggal' => $current->toDateString(),
                 'total_masuk' => $masuk,
                 'total_keluar' => $keluar,
-                'total_pendapatan' => $pendapatan,
+                'pendapatan_non_member' => $pendapatan['non_member'],
+                'pendapatan_member' => $pendapatan['member'],
+                'total_pendapatan' => $pendapatan['total'],
             ];
 
             $current->addDay();
@@ -193,6 +219,8 @@ class RekapController extends Controller
                 'ringkasan' => [
                     'total_masuk' => collect($results)->sum('total_masuk'),
                     'total_keluar' => collect($results)->sum('total_keluar'),
+                    'pendapatan_non_member' => collect($results)->sum('pendapatan_non_member'),
+                    'pendapatan_member' => collect($results)->sum('pendapatan_member'),
                     'total_pendapatan' => collect($results)->sum('total_pendapatan'),
                 ],
                 'detail' => $results,
@@ -213,19 +241,56 @@ class RekapController extends Controller
 
         $totalTiketAktif = TiketParkir::where('status', 'masuk')->count();
         $totalTiketHariIni = TiketParkir::whereBetween('waktu_masuk', [$start, $end])->count();
-        $pendapatanHariIni = $this->hitungPendapatan($start, $end);
+        $pendapatan = $this->hitungPendapatan($start, $end);
         $totalPetugas = User::where('role', 'petugas')->count();
         $totalMember = Member::count();
+        $totalMemberLunas = Member::where('status', 'lunas')->count();
 
         return response()->json([
             'success' => true,
             'data' => [
                 'tiket_aktif' => $totalTiketAktif,
                 'tiket_hari_ini' => $totalTiketHariIni,
-                'pendapatan_hari_ini' => $pendapatanHariIni,
+                'pendapatan_hari_ini' => $pendapatan['total'],
+                'pendapatan_non_member' => $pendapatan['non_member'],
+                'pendapatan_member' => $pendapatan['member'],
                 'total_petugas' => $totalPetugas,
                 'total_member' => $totalMember,
+                'total_member_lunas' => $totalMemberLunas,
             ],
+        ]);
+    }
+
+    public function petugas(Request $request)
+    {
+        $today = Carbon::today();
+        $start = $today->copy()->startOfDay();
+        $end = $today->copy()->endOfDay();
+
+        $totalTiketHariIni = TiketParkir::whereBetween('waktu_masuk', [$start, $end])->count();
+        $pendapatan = $this->hitungPendapatan($start, $end);
+
+        $petugasList = User::where('role', 'petugas')
+            ->orderBy('name')
+            ->get()
+            ->map(function ($u, $idx) use ($totalTiketHariIni, $pendapatan) {
+                return [
+                    'id' => $u->id,
+                    'name' => $u->name,
+                    'email' => $u->email,
+                    'no_hp' => $u->no_hp ?: '-',
+                    'role' => 'Petugas Kasir & Gerbang',
+                    'status' => 'Aktif Bertugas',
+                    'shift' => ($idx % 2 === 0) ? 'Shift Pagi (07:00 - 15:00)' : 'Shift Siang (15:00 - 23:00)',
+                    'total_tiket_shift' => $totalTiketHariIni,
+                    'total_koleksi_shift' => $pendapatan['total'],
+                    'terdaftar_pada' => $u->created_at ? $u->created_at->format('d M Y') : '-',
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => $petugasList,
         ]);
     }
 }

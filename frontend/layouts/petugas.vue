@@ -80,6 +80,15 @@
           <span>Laporan Shift Harian</span>
         </NuxtLink>
 
+        <NuxtLink
+          to="/petugas/profile"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
+          :class="$route.path === '/petugas/profile' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+        >
+          <User class="w-4 h-4 shrink-0" />
+          <span>Kelola Profil Akun</span>
+        </NuxtLink>
+
         <!-- Admin Backlink if super_admin -->
         <div v-if="auth.isSuperAdmin.value" class="pt-3 pb-1 px-3 text-[11px] font-semibold text-slate-400 tracking-wider uppercase">
           Panel Administrator
@@ -97,12 +106,12 @@
       <!-- User Profile & Logout Bottom Bar -->
       <div class="p-4 border-t border-white/10 bg-black/20">
         <div class="flex items-center justify-between">
-          <div class="truncate pr-2">
+          <NuxtLink to="/petugas/profile" class="truncate pr-2 hover:opacity-80 transition cursor-pointer flex-1">
             <p class="text-xs font-semibold text-white truncate">{{ auth.user.value?.name || 'Petugas Gerbang' }}</p>
             <span class="inline-block text-[10px] font-medium text-[#0099ff] uppercase tracking-wider">
               {{ auth.user.value?.role === 'super_admin' ? 'Administrator' : 'Petugas Pos' }}
             </span>
-          </div>
+          </NuxtLink>
           <button
             @click="auth.logout"
             title="Keluar dari sesi"
@@ -150,6 +159,7 @@ import {
   FileText,
   ShieldAlert,
   LogOut,
+  User,
 } from 'lucide-vue-next'
 import BrandLogo from '~/components/BrandLogo.vue'
 

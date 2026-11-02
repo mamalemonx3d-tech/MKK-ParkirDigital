@@ -70,18 +70,140 @@
                 </span>
               </td>
               <td class="py-3 px-4 text-center">
-                <button
-                  v-if="t.status !== 'lunas'"
-                  @click="bayarTagihan(t.id)"
-                  class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded transition cursor-pointer"
-                >
-                  Bayar Sekarang
-                </button>
-                <span v-else class="text-[11px] text-slate-400 font-medium">Tuntas</span>
+                <div class="inline-flex items-center gap-1.5 justify-center">
+                  <button
+                    v-if="t.status !== 'lunas'"
+                    @click="bayarTagihan(t.id)"
+                    class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded transition cursor-pointer"
+                  >
+                    Bayar Sekarang
+                  </button>
+                  <button
+                    v-else
+                    @click="bukaInvoice(t)"
+                    class="px-2.5 py-1 bg-slate-100 hover:bg-[#e6f4ff] text-[#0099ff] font-bold text-[11px] rounded transition cursor-pointer inline-flex items-center gap-1"
+                    title="Cetak Invoice Kuitansi"
+                  >
+                    <Receipt class="w-3.5 h-3.5" />
+                    <span>Invoice</span>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Modal Invoice Kuitansi Member Resmi -->
+    <div
+      v-if="activeInvoice"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+    >
+      <div class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 relative print:border-none print:shadow-none print:max-w-full">
+        <!-- Close button (hidden in print) -->
+        <button
+          @click="activeInvoice = null"
+          class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 print:hidden cursor-pointer"
+        >
+          <X class="w-5 h-5" />
+        </button>
+
+        <!-- Printable Invoice Area -->
+        <div id="printable-invoice" class="space-y-6">
+          <!-- Invoice Header -->
+          <div class="flex items-start justify-between border-b-2 border-slate-200 pb-4">
+            <div>
+              <BrandLogo :showSubtitle="true" subtitle="Kuitansi Resmi Iuran Member" />
+              <p class="text-[10px] text-slate-400 font-mono mt-1">SISTEM PENGELOLAAN PARKIR TERPADU</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block">KODE INVOICE</span>
+              <p class="text-xs font-mono font-black text-[#001a4e]">
+                INV-MBR-{{ String(activeInvoice.id).padStart(4, '0') }}-{{ activeInvoice.tanggal_bayar ? activeInvoice.tanggal_bayar.replace(/-/g, '') : '2026' }}
+              </p>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">
+                LUNAS / PAID
+              </span>
+            </div>
+          </div>
+
+          <!-- Member & Cashier Metadata Grid -->
+          <div class="grid grid-cols-2 gap-4 text-xs">
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Diterbitkan Untuk:</span>
+              <p class="font-black text-slate-900 text-sm">{{ activeInvoice.member?.nama || '-' }}</p>
+              <p class="font-mono text-slate-600">ID: {{ activeInvoice.member?.kode || '-' }}</p>
+              <p class="text-slate-500">{{ activeInvoice.member?.perusahaan || '-' }}</p>
+            </div>
+            <div class="space-y-1 text-right">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Detail Transaksi:</span>
+              <p class="text-slate-700">Tgl Bayar: <span class="font-mono font-bold">{{ activeInvoice.tanggal_bayar || '-' }}</span></p>
+              <p class="text-slate-700">Tgl Tagihan: <span class="font-mono">{{ activeInvoice.tanggal_tagihan || '-' }}</span></p>
+              <p class="text-slate-700">Kasir: <span class="font-bold">{{ auth.user.value?.name || 'Petugas Kasir' }}</span></p>
+            </div>
+          </div>
+
+          <!-- Line Items Table -->
+          <div class="border rounded-xl border-slate-200 overflow-hidden">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase text-[10px]">
+                <tr>
+                  <th class="py-2.5 px-4">Deskripsi Pembayaran</th>
+                  <th class="py-2.5 px-4 text-right">Jumlah</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr>
+                  <td class="py-3 px-4">
+                    <p class="font-bold text-slate-800">Iuran Berlangganan Parkir Member</p>
+                    <p class="text-[10px] text-slate-400">Periode Tagihan: {{ activeInvoice.tanggal_tagihan }}</p>
+                  </td>
+                  <td class="py-3 px-4 text-right font-mono font-bold text-slate-900">
+                    {{ formatRupiah(activeInvoice.jumlah) }}
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot class="bg-slate-50 border-t border-slate-200 font-mono">
+                <tr>
+                  <td class="py-3 px-4 font-bold text-slate-800 uppercase text-xs">Total Pembayaran</td>
+                  <td class="py-3 px-4 text-right font-black text-sm text-emerald-700">
+                    {{ formatRupiah(activeInvoice.jumlah) }}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- Signature & Notice -->
+          <div class="pt-2 flex items-end justify-between text-[11px] text-slate-500">
+            <div class="space-y-1">
+              <p class="italic">Simpan kuitansi ini sebagai bukti pembayaran iuran resmi.</p>
+              <p class="text-[10px] text-slate-400">Dicetak melalui Secure Parking Digital Management.</p>
+            </div>
+            <div class="text-center w-36">
+              <p class="text-[10px] text-slate-400 mb-8">Petugas Kasir Pos,</p>
+              <p class="font-bold border-t border-slate-300 pt-1 text-slate-800">{{ auth.user.value?.name || 'Petugas Kasir' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons (hidden in print) -->
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3 print:hidden">
+          <button
+            @click="activeInvoice = null"
+            class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold transition cursor-pointer"
+          >
+            Tutup
+          </button>
+          <button
+            @click="cetakInvoice"
+            class="px-5 py-2 rounded-lg bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
+          >
+            <Printer class="w-4 h-4 text-[#ff9900]" />
+            <span>Cetak Invoice</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -89,16 +211,19 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { RefreshCw } from 'lucide-vue-next'
+import { RefreshCw, Receipt, X, Printer } from 'lucide-vue-next'
+import BrandLogo from '~/components/BrandLogo.vue'
 
 definePageMeta({
   layout: 'petugas',
   middleware: 'auth',
 })
 
+const auth = useAuth()
 const api = useApi()
 const tagihanList = ref<any[]>([])
 const isLoading = ref(false)
+const activeInvoice = ref<any>(null)
 
 const fetchTagihan = async () => {
   isLoading.value = true
@@ -112,12 +237,23 @@ const fetchTagihan = async () => {
   }
 }
 
+const bukaInvoice = (t: any) => {
+  activeInvoice.value = t
+}
+
+const cetakInvoice = () => {
+  window.print()
+}
+
 const bayarTagihan = async (id: number) => {
   if (!confirm('Konfirmasi penerimaan pembayaran tagihan ini?')) return
   try {
     const res = await api.post(`/tagihan/${id}/bayar`)
     if (res.data?.success) {
       await fetchTagihan()
+      if (res.data.data) {
+        activeInvoice.value = res.data.data
+      }
     }
   } catch (err: any) {
     alert(err.response?.data?.message || 'Gagal memproses pembayaran.')
