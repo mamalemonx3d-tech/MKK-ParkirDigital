@@ -83,7 +83,8 @@
       <!-- STATE 2: Ticket Printed & Active Countdown -->
       <div v-else class="bg-white text-slate-900 rounded-2xl p-6 sm:p-8 shadow-2xl border-2 border-slate-300 relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <!-- Physical Receipt Look Header -->
-        <div class="text-center pb-4 border-b-2 border-dashed border-slate-300 space-y-1">
+        <div class="text-center pb-4 border-b-2 border-dashed border-slate-300 space-y-1 flex flex-col items-center">
+          <LottieAnimation animationPath="/lottie/check.json" width="w-16" height="h-16" :loop="false" />
           <p class="font-black text-sm tracking-widest text-[#001a4e]">SECURE PARKING</p>
           <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">TIKET MASUK PARKIR RESMI</p>
           <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 text-[10px] font-bold uppercase font-mono">

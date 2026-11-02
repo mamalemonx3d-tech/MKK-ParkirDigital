@@ -191,9 +191,7 @@
         <div v-if="successPayment" class="space-y-4">
           <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">
-                <Check class="w-6 h-6 stroke-[3]" />
-              </div>
+              <LottieAnimation animationPath="/lottie/check.json" width="w-12" height="h-12" :loop="false" />
               <div>
                 <h3 class="text-sm font-bold text-emerald-900">Pembayaran Berhasil — Palang Terangkat</h3>
                 <p class="text-xs text-emerald-800">Transaksi selesai dicatat. Pengendara dipersilakan keluar.</p>

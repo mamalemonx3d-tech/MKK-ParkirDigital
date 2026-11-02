@@ -113,9 +113,12 @@
         <div id="printable-invoice" class="space-y-6">
           <!-- Invoice Header -->
           <div class="flex items-start justify-between border-b-2 border-slate-200 pb-4">
-            <div>
-              <BrandLogo :showSubtitle="true" subtitle="Kuitansi Resmi Iuran Member" />
-              <p class="text-[10px] text-slate-400 font-mono mt-1">SISTEM PENGELOLAAN PARKIR TERPADU</p>
+            <div class="flex items-center gap-3">
+              <LottieAnimation animationPath="/lottie/check.json" width="w-12" height="h-12" :loop="false" class="print:hidden" />
+              <div>
+                <BrandLogo :showSubtitle="true" subtitle="Kuitansi Resmi Iuran Member" />
+                <p class="text-[10px] text-slate-400 font-mono mt-1">SISTEM PENGELOLAAN PARKIR TERPADU</p>
+              </div>
             </div>
             <div class="text-right">
               <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block">KODE INVOICE</span>

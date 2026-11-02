@@ -16,6 +16,7 @@
     "html5-qrcode": "^2.3.8",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.9",
+    "lottie-web": "^5.13.0",
     "lucide-vue-next": "^1.0.0",
     "nuxt": "^4.6.3",
     "qrcode.vue": "^3.11.0",
