@@ -46,9 +46,9 @@
         </NuxtLink>
 
         <NuxtLink
-          to="/petugas/profile"
+          to="/admin/profile"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/profile' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :class="$route.path === '/admin/profile' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
         >
           <User class="w-4 h-4 shrink-0" />
           <span>Kelola Profil Akun</span>
@@ -79,7 +79,7 @@
       <!-- User Profile & Logout Bottom Bar -->
       <div class="p-4 border-t border-white/10 bg-black/20">
         <div class="flex items-center justify-between">
-          <NuxtLink to="/petugas/profile" class="truncate pr-2 hover:opacity-80 transition cursor-pointer flex-1">
+          <NuxtLink to="/admin/profile" class="truncate pr-2 hover:opacity-80 transition cursor-pointer flex-1">
             <p class="text-xs font-semibold text-white truncate">{{ auth.user.value?.name || 'Administrator' }}</p>
             <span class="inline-block text-[10px] font-medium text-[#ff9900] uppercase tracking-wider">
               Super Admin

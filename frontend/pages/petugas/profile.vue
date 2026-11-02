@@ -190,8 +190,8 @@ import {
 const auth = useAuth()
 const api = useApi()
 
-// Decide layout dynamically based on role
 definePageMeta({
+  layout: 'petugas',
   middleware: 'auth',
 })
 
