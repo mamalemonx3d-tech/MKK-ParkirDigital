@@ -10,9 +10,6 @@
           Arahkan QR Code kartu member ke kamera atau masukkan kode secara manual.
         </p>
       </div>
-      <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#e6f4ff] text-[#0099ff] border border-[#0099ff]/30">
-        Pintu Masuk 1
-      </span>
     </div>
 
     <!-- Scanner & Result Grid -->

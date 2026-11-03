@@ -217,7 +217,7 @@ onMounted(async () => {
     try {
       const res = await api.get('/me')
       if (res.data?.data) {
-        auth.user.value = res.data.data
+        auth.updateUser(res.data.data)
         form.value.name = res.data.data.name || ''
         form.value.email = res.data.data.email || ''
         form.value.no_hp = res.data.data.no_hp || ''
@@ -257,10 +257,7 @@ const saveProfile = async () => {
     if (res.data?.success) {
       successMessage.value = 'Profil Anda berhasil diperbarui.'
       if (res.data?.data) {
-        auth.user.value = res.data.data
-        if (process.client) {
-          localStorage.setItem('user', JSON.stringify(res.data.data))
-        }
+        auth.updateUser(res.data.data)
       }
       form.value.current_password = ''
       form.value.password = ''

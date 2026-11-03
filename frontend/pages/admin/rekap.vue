@@ -494,13 +494,6 @@ const formatTime = (str: string) => {
   return new Date(str).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
 }
 
-const formatRupiah = (val: number) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    maximumFractionDigits: 0,
-  }).format(val || 0)
-}
 
 onMounted(() => {
   fetchReport()

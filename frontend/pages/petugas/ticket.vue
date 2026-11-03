@@ -230,13 +230,6 @@ const formatDateTime = (str: string) => {
   })
 }
 
-const formatRupiah = (val: number) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    maximumFractionDigits: 0,
-  }).format(val || 0)
-}
 
 onMounted(() => {
   fetchTickets()

@@ -34,7 +34,7 @@
         <NuxtLink
           to="/petugas/keluar"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/keluar' ? 'bg-[#ff9900] text-slate-900 font-bold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :class="$route.path === '/petugas/keluar' ? 'bg-[#0099ff] text-white font-bold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
         >
           <Receipt class="w-4 h-4 shrink-0" />
           <span>Pos Kasir Keluar</span>
@@ -46,7 +46,7 @@
           :class="$route.path === '/petugas/ticket' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
         >
           <Ticket class="w-4 h-4 shrink-0" />
-          <span>Daftar Tiket Sesi Parkir</span>
+          <span>Daftar Tiket Parkir</span>
         </NuxtLink>
 
         <div class="pt-3 pb-1 px-3 text-[11px] font-semibold text-[#ff9900] tracking-wider uppercase">
@@ -77,7 +77,7 @@
           :class="$route.path === '/petugas/laporan' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
         >
           <FileText class="w-4 h-4 shrink-0" />
-          <span>Laporan Shift Harian</span>
+          <span>Laporan Shift Kasir</span>
         </NuxtLink>
 
         <NuxtLink
@@ -127,11 +127,10 @@
     <div class="flex-1 flex flex-col min-w-0">
       <!-- Topbar Header -->
       <header class="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between sticky top-0 z-30">
-        <div class="flex items-center gap-3">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs font-bold text-slate-700 tracking-wide uppercase">
-            Status Gerbang: Siap Operasi
-          </span>
+        <div class="flex items-center gap-2 text-xs font-medium text-slate-700">
+          <span class="font-bold text-[#001a4e]">Terminal Operasional Gerbang</span>
+          <span class="text-slate-300">&bull;</span>
+          <span class="text-slate-500">Shift Petugas Aktif</span>
         </div>
 
         <div class="flex items-center gap-4 text-xs font-mono text-slate-600">

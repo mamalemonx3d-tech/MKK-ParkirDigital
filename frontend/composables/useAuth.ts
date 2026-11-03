@@ -39,6 +39,13 @@ export const useAuth = () => {
     }
   }
 
+  const updateUser = (updatedUser: AuthUser) => {
+    user.value = updatedUser
+    if (import.meta.client) {
+      localStorage.setItem('auth_user', JSON.stringify(updatedUser))
+    }
+  }
+
   const logout = async () => {
     try {
       await api.post('/logout')
@@ -65,6 +72,7 @@ export const useAuth = () => {
     token,
     initAuth,
     setAuth,
+    updateUser,
     logout,
     isAuthenticated,
     isSuperAdmin,

@@ -12,9 +12,9 @@
       </div>
 
       <span
-        class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#001a4e] text-white font-mono"
+        class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0099ff] text-white font-mono"
       >
-        {{ auth.user.value?.role === 'super_admin' ? 'Super Admin' : 'Petugas Gerbang' }}
+        Petugas Loket
       </span>
     </div>
 
@@ -94,7 +94,7 @@
                 placeholder="08123456789"
                 class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0099ff] focus:ring-1 focus:ring-[#0099ff]"
               />
-              <p class="text-[10px] text-slate-400 mt-0.5">Digunakan untuk pemulihan akun via OTP WhatsApp.</p>
+              <p class="text-[10px] text-slate-400 mt-0.5">Digunakan untuk verifikasi pemulihan sandi via OTP.</p>
             </div>
 
             <div>
@@ -102,7 +102,7 @@
                 Peran Akun
               </label>
               <input
-                :value="auth.user.value?.role?.toUpperCase()"
+                value="PETUGAS LOKET"
                 disabled
                 class="w-full px-3 py-2 rounded-lg border border-slate-200 bg-slate-100 text-xs font-mono font-bold text-slate-500 cursor-not-allowed"
               />
@@ -217,7 +217,7 @@ onMounted(async () => {
     try {
       const res = await api.get('/me')
       if (res.data?.data) {
-        auth.user.value = res.data.data
+        auth.updateUser(res.data.data)
         form.value.name = res.data.data.name || ''
         form.value.email = res.data.data.email || ''
         form.value.no_hp = res.data.data.no_hp || ''
@@ -257,10 +257,7 @@ const saveProfile = async () => {
     if (res.data?.success) {
       successMessage.value = 'Profil Anda berhasil diperbarui.'
       if (res.data?.data) {
-        auth.user.value = res.data.data
-        if (process.client) {
-          localStorage.setItem('user', JSON.stringify(res.data.data))
-        }
+        auth.updateUser(res.data.data)
       }
       form.value.current_password = ''
       form.value.password = ''

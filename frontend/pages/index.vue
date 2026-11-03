@@ -6,7 +6,7 @@
         <div class="inline-flex justify-center mb-4">
           <BrandLogo :showSubtitle="false" size="lg" />
         </div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-[#001a4e] tracking-tight">
+        <h2 class="text-2xl sm:text-3xl font-bold text-[#001a4e] tracking-tight">
           Sistem Pengelolaan Parkir Digital
         </h2>
         <p class="mt-2 text-sm text-slate-600 max-w-xl mx-auto">
@@ -25,7 +25,7 @@
             Kiosk Tiket Masuk
           </h3>
           <p class="text-xs text-slate-500 mb-6 flex-1 leading-relaxed">
-            Antarmuka mandiri bagi pengendara umum untuk menekan tombol cetak tiket barcode di pintu masuk.
+            Antarmuka mandiri bagi pengendara umum untuk mencetak tiket parkir di pintu masuk.
           </p>
           <NuxtLink
             to="/user"
@@ -45,7 +45,7 @@
             Pos Kasir Keluar
           </h3>
           <p class="text-xs text-slate-500 mb-6 flex-1 leading-relaxed">
-            Loket verifikasi tiket, pemindaian QR keluar, perhitungan durasi jam, dan pencatatan pembayaran.
+            Loket verifikasi tiket, pemindaian QR keluar, perhitungan durasi, dan pencatatan pembayaran.
           </p>
           <NuxtLink
             to="/petugas/keluar"
@@ -78,9 +78,9 @@
       </div>
 
       <!-- Banner Pengendara: Katalog & Cek Status Member -->
-      <div class="mt-6 bg-gradient-to-r from-[#001a4e] to-[#002b80] rounded-xl p-5 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#001033]">
+      <div class="mt-6 bg-[#001a4e] rounded-xl p-5 text-white shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4 border border-[#001033]">
         <div class="flex items-center gap-3.5">
-          <div class="w-10 h-10 rounded-lg bg-[#0099ff]/20 text-[#0099ff] border border-[#0099ff]/30 flex items-center justify-center shrink-0">
+          <div class="w-10 h-10 rounded-lg bg-white/10 text-[#0099ff] border border-white/10 flex items-center justify-center shrink-0">
             <CreditCard class="w-5 h-5 text-[#ff9900]" />
           </div>
           <div>
@@ -97,14 +97,20 @@
         </NuxtLink>
       </div>
 
-      <!-- Quick Status Strip -->
-      <div class="mt-10 bg-white rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-        <div class="flex items-center gap-3">
-          <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
-          <span class="text-slate-700 font-medium">Sistem Server API Terkoneksi</span>
+      <!-- Quick Status Strip (Dynamic Backend Health) -->
+      <div class="mt-8 bg-white rounded-xl border border-slate-200 p-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <div class="flex items-center gap-2.5">
+          <div
+            class="w-2.5 h-2.5 rounded-full"
+            :class="isServerOnline ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'"
+          ></div>
+          <span class="text-slate-700 font-medium">
+            {{ isServerOnline ? 'Koneksi Server API Normal' : 'Menghubungkan ke Server API...' }}
+          </span>
         </div>
-        <div class="flex items-center gap-6 text-slate-500 font-mono">
+        <div class="flex items-center gap-5 text-slate-500 font-mono text-[11px]">
           <span>Tarif Standar: Rp 3.000 / Jam</span>
+          <span>&bull;</span>
           <span>Dukungan: Motor & Mobil</span>
         </div>
       </div>
@@ -113,6 +119,21 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { Ticket, Receipt, ShieldCheck, ArrowRight, CreditCard } from 'lucide-vue-next'
 import BrandLogo from '~/components/BrandLogo.vue'
+
+const api = useApi()
+const isServerOnline = ref(true)
+
+onMounted(async () => {
+  try {
+    const res = await api.get('/health')
+    if (res.data?.status === 'ok') {
+      isServerOnline.value = true
+    }
+  } catch {
+    isServerOnline.value = false
+  }
+})
 </script>
