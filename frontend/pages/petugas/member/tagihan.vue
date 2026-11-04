@@ -224,6 +224,7 @@ definePageMeta({
 
 const auth = useAuth()
 const api = useApi()
+const { askConfirm, askAlert } = useConfirm()
 const tagihanList = ref<any[]>([])
 const isLoading = ref(false)
 const activeInvoice = ref<any>(null)
@@ -249,7 +250,15 @@ const cetakInvoice = () => {
 }
 
 const bayarTagihan = async (id: number) => {
-  if (!confirm('Konfirmasi penerimaan pembayaran tagihan ini?')) return
+  const ok = await askConfirm({
+    title: 'Konfirmasi Pembayaran Tagihan',
+    message: 'Apakah Anda yakin ingin memproses penerimaan pembayaran iuran member ini? Status akan otomatis menjadi LUNAS.',
+    type: 'info',
+    confirmText: 'Proses Pembayaran',
+    cancelText: 'Batal',
+  })
+  if (!ok) return
+
   try {
     const res = await api.post(`/tagihan/${id}/bayar`)
     if (res.data?.success) {
@@ -259,7 +268,7 @@ const bayarTagihan = async (id: number) => {
       }
     }
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Gagal memproses pembayaran.')
+    await askAlert(err.response?.data?.message || 'Gagal memproses pembayaran.', 'Gagal Memproses', 'danger')
   }
 }
 

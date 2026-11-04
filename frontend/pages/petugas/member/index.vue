@@ -203,6 +203,7 @@ definePageMeta({
 })
 
 const api = useApi()
+const { askConfirm, askAlert } = useConfirm()
 const members = ref<any[]>([])
 const isModalOpen = ref(false)
 const isSubmitting = ref(false)
@@ -247,7 +248,7 @@ const submitMember = async () => {
       await fetchMembers()
     }
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Gagal menyimpan member.')
+    await askAlert(err.response?.data?.message || 'Gagal menyimpan data member.', 'Gagal Menyimpan', 'danger')
   } finally {
     isSubmitting.value = false
   }
@@ -263,7 +264,15 @@ const markLunas = async (id: number) => {
 }
 
 const deleteMember = async (id: number) => {
-  if (!confirm('Apakah Anda yakin ingin menghapus data member ini?')) return
+  const ok = await askConfirm({
+    title: 'Hapus Data Member',
+    message: 'Apakah Anda yakin ingin menghapus data member langganan ini? Seluruh kartu barcode member akan dinonaktifkan.',
+    type: 'danger',
+    confirmText: 'Ya, Hapus Member',
+    cancelText: 'Batal',
+  })
+  if (!ok) return
+
   try {
     await api.delete(`/members/${id}`)
     await fetchMembers()

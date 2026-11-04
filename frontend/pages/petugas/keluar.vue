@@ -421,6 +421,7 @@ definePageMeta({
 
 const auth = useAuth()
 const api = useApi()
+const { askConfirm } = useConfirm()
 
 const isScanning = ref(false)
 const isStartingCamera = ref(false)
@@ -453,9 +454,16 @@ const calculatedChange = computed(() => {
   return cashReceived.value - total
 })
 
-const toggleManualBarrier = () => {
+const toggleManualBarrier = async () => {
   if (barrierGateStatus.value === 'closed') {
-    if (confirm('Buka palang gerbang secara manual?')) {
+    const ok = await askConfirm({
+      title: 'Buka Palang Manual',
+      message: 'Buka palang gerbang secara manual tanpa verifikasi kasir? Pastikan kendaraan telah memenuhi syarat operasional.',
+      type: 'warning',
+      confirmText: 'Buka Palang',
+      cancelText: 'Batal',
+    })
+    if (ok) {
       barrierGateStatus.value = 'open'
     }
   } else {

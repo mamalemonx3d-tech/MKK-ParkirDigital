@@ -155,6 +155,7 @@ definePageMeta({
 })
 
 const api = useApi()
+const { askConfirm, askAlert } = useConfirm()
 const tickets = ref<any[]>([])
 const isLoading = ref(false)
 const isClearing = ref(false)
@@ -175,9 +176,14 @@ const fetchTickets = async () => {
 }
 
 const clearAllTickets = async () => {
-  if (!confirm('Apakah Anda yakin ingin menghapus seluruh rekaman tiket parkir?')) {
-    return
-  }
+  const ok = await askConfirm({
+    title: 'Hapus Seluruh Tiket Parkir',
+    message: 'Apakah Anda yakin ingin menghapus seluruh rekaman tiket parkir? Seluruh data sesi dan riwayat akan direset permanen.',
+    type: 'danger',
+    confirmText: 'Ya, Hapus Semua',
+    cancelText: 'Batal',
+  })
+  if (!ok) return
 
   isClearing.value = true
   try {
@@ -186,16 +192,21 @@ const clearAllTickets = async () => {
       tickets.value = []
     }
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Gagal menghapus semua tiket.')
+    await askAlert(err.response?.data?.message || 'Gagal menghapus semua tiket.', 'Gagal Menghapus', 'danger')
   } finally {
     isClearing.value = false
   }
 }
 
 const deleteSingleTicket = async (id: number, kode: string) => {
-  if (!confirm(`Hapus data tiket ${kode}?`)) {
-    return
-  }
+  const ok = await askConfirm({
+    title: 'Hapus Tiket Parkir',
+    message: `Apakah Anda yakin ingin menghapus data tiket ${kode}? Tindakan ini tidak dapat dibatalkan.`,
+    type: 'danger',
+    confirmText: 'Ya, Hapus',
+    cancelText: 'Batal',
+  })
+  if (!ok) return
 
   try {
     const res = await api.delete(`/tiket/${id}`)
@@ -203,7 +214,7 @@ const deleteSingleTicket = async (id: number, kode: string) => {
       tickets.value = tickets.value.filter((t) => t.id !== id)
     }
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Gagal menghapus tiket.')
+    await askAlert(err.response?.data?.message || 'Gagal menghapus tiket.', 'Gagal Menghapus', 'danger')
   }
 }
 

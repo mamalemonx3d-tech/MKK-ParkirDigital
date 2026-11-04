@@ -174,6 +174,7 @@ definePageMeta({
 })
 
 const api = useApi()
+const { askConfirm, askAlert } = useConfirm()
 const users = ref<any[]>([])
 const isModalOpen = ref(false)
 const isSubmitting = ref(false)
@@ -229,19 +230,27 @@ const submitUser = async () => {
     isModalOpen.value = false
     await fetchUsers()
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Gagal menyimpan data petugas.')
+    await askAlert(err.response?.data?.message || 'Gagal menyimpan data petugas.', 'Gagal Menyimpan', 'danger')
   } finally {
     isSubmitting.value = false
   }
 }
 
 const deleteUser = async (id: number) => {
-  if (!confirm('Apakah Anda yakin ingin menghapus akun petugas ini?')) return
+  const ok = await askConfirm({
+    title: 'Hapus Akun Petugas',
+    message: 'Apakah Anda yakin ingin menghapus akun petugas ini? Akses login akun petugas akan dicabut.',
+    type: 'danger',
+    confirmText: 'Ya, Hapus Akun',
+    cancelText: 'Batal',
+  })
+  if (!ok) return
+
   try {
     await api.delete(`/users/${id}`)
     await fetchUsers()
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Gagal menghapus petugas.')
+    await askAlert(err.response?.data?.message || 'Gagal menghapus petugas.', 'Gagal Menghapus', 'danger')
   }
 }
 
