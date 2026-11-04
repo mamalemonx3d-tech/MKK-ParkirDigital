@@ -53,7 +53,7 @@ class RekapController extends Controller
             ->get()
             ->map(function ($t) {
                 $durasi = $t->waktu_keluar
-                    ? Carbon::parse($t->waktu_masuk)->diffInMinutes(Carbon::parse($t->waktu_keluar))
+                    ? max(1, (int) round(Carbon::parse($t->waktu_masuk)->diffInMinutes(Carbon::parse($t->waktu_keluar))))
                     : null;
 
                 $jam = $durasi !== null ? max(1, (int) ceil($durasi / 60)) : 0;

@@ -92,7 +92,7 @@ class TiketController extends Controller
         }
 
         $waktuMasuk = Carbon::parse($tiket->waktu_masuk);
-        $durasiMenit = max(0, $waktuMasuk->diffInMinutes(Carbon::now()));
+        $durasiMenit = max(1, (int) round($waktuMasuk->diffInMinutes(Carbon::now())));
         $jam = max(1, (int) ceil($durasiMenit / 60));
 
         $tarifPerJam = 3000;

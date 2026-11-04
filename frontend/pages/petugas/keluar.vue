@@ -247,7 +247,7 @@
             <div class="text-right">
               <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Durasi Sesi</span>
               <span class="text-sm font-bold font-mono text-slate-800">
-                {{ activeTicket.type === 'member' ? '-' : `${activeTicket.data.durasi_menit} Menit (${activeTicket.data.durasi_jam} Jam)` }}
+                {{ activeTicket.type === 'member' ? '-' : `${formatDurasiMenit(activeTicket.data.durasi_menit)} (${activeTicket.data.durasi_jam} Jam)` }}
               </span>
             </div>
           </div>
@@ -412,7 +412,7 @@ import {
   BadgeDollarSign,
 } from 'lucide-vue-next'
 import { Html5Qrcode } from 'html5-qrcode'
-import { formatRupiah, formatDateTime } from '~/utils/formatters'
+import { formatRupiah, formatDateTime, formatDurasiMenit } from '~/utils/formatters'
 
 definePageMeta({
   layout: 'petugas',

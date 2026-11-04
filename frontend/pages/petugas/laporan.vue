@@ -105,7 +105,7 @@
                 {{ formatTime(item.waktu_keluar) }}
               </td>
               <td class="py-3 px-4 font-mono text-slate-700">
-                {{ item.durasi_menit !== null ? item.durasi_menit + ' m' : '-' }}
+                {{ item.durasi_menit !== null ? Math.max(1, Math.round(Number(item.durasi_menit))) + ' m' : '-' }}
               </td>
               <td class="py-3 px-4 text-right font-mono font-bold text-emerald-700">
                 {{ formatRupiah(item.biaya) }}

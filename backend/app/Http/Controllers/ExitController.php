@@ -69,7 +69,7 @@ class ExitController extends Controller
             ], 404);
         }
 
-        $durasiMenit = max(0, Carbon::parse($tiket->waktu_masuk)->diffInMinutes(now()));
+        $durasiMenit = max(1, (int) round(Carbon::parse($tiket->waktu_masuk)->diffInMinutes(now())));
         $durasiJam = max(1, (int) ceil($durasiMenit / 60));
         $totalBayar = $durasiJam * $this->tarifPerJam;
 
@@ -172,7 +172,7 @@ class ExitController extends Controller
                 ], 422);
             }
 
-            $durasiMenit = max(0, Carbon::parse($tiket->waktu_masuk)->diffInMinutes(now()));
+            $durasiMenit = max(1, (int) round(Carbon::parse($tiket->waktu_masuk)->diffInMinutes(now())));
             $durasiJam = max(1, (int) ceil($durasiMenit / 60));
             $totalBayar = $durasiJam * $this->tarifPerJam;
 

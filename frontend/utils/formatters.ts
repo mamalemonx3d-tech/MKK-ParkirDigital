@@ -36,3 +36,11 @@ export const formatDate = (dateStr: string | null | undefined): string => {
     year: 'numeric',
   }).format(d)
 }
+
+export const formatDurasiMenit = (menit: number | string | null | undefined): string => {
+  if (menit === null || menit === undefined || menit === '') return '-'
+  const num = typeof menit === 'string' ? parseFloat(menit) : Number(menit)
+  if (isNaN(num)) return '-'
+  const rounded = Math.round(num)
+  return `${Math.max(1, rounded)} Menit`
+}
