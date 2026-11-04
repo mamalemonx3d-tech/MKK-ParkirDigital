@@ -25,15 +25,13 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'no_hp' => 'nullable|string|max:20|unique:users,no_hp',
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+                        'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'no_hp' => $request->no_hp,
-            'password' => Hash::make($request->password),
+                        'password' => Hash::make($request->password),
             'role' => 'petugas',
         ]);
 
@@ -61,15 +59,13 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
-            'no_hp' => 'nullable|string|max:20|unique:users,no_hp,' . $id,
-            'password' => ['nullable', 'string', 'min:6'],
+                        'password' => ['nullable', 'string', 'min:6'],
         ]);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'no_hp' => $request->no_hp,
-        ];
+                    ];
 
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);

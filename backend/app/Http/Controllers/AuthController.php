@@ -75,8 +75,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'no_hp' => 'nullable|string|max:20|unique:users,no_hp,' . $user->id,
-            'current_password' => 'nullable|string',
+                        'current_password' => 'nullable|string',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
@@ -93,8 +92,7 @@ class AuthController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->no_hp = $request->no_hp;
-        $user->save();
+                $user->save();
 
         return response()->json([
             'success' => true,
