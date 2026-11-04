@@ -45,7 +45,7 @@
             class="w-full px-3.5 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] focus:ring-2 focus:ring-[#0099ff]/20 outline-none transition"
           />
           <p class="text-[11px] text-slate-400 mt-1">
-            Kode verifikasi 6-digit akan dikirimkan ke nomor WhatsApp yang terdaftar pada akun Anda.
+            Kode verifikasi 6-digit akan dikirimkan langsung ke email resmi Anda (Google Mailer OTP).
           </p>
         </div>
 
