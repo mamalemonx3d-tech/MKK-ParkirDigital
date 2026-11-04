@@ -23,12 +23,12 @@
         </div>
 
         <NuxtLink
-          to="/petugas/scan"
+          to="/user"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/scan' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :class="['/user', '/petugas/scan'].includes($route.path) ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
         >
           <Camera class="w-4 h-4 shrink-0" />
-          <span>Pintu Masuk (Scan Member)</span>
+          <span>Pintu Masuk (Kiosk & Member)</span>
         </NuxtLink>
 
         <NuxtLink

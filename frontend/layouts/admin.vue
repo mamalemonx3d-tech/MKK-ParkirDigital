@@ -72,7 +72,7 @@
           class="flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-white/5 hover:text-white transition"
         >
           <QrCode class="w-3.5 h-3.5 shrink-0 text-[#0099ff]" />
-          <span>Buka Kiosk Tiket Masuk</span>
+          <span>Pintu Masuk (Kiosk & Member)</span>
         </NuxtLink>
       </nav>
 

@@ -15,16 +15,25 @@ class ScanController extends Controller
             'qr_code' => 'required|string',
         ]);
 
-        $member = Member::where(
-            'qr_code',
-            $request->qr_code
-        )->first();
+        $member = Member::where('qr_code', $request->qr_code)
+            ->orWhere('kode', $request->qr_code)
+            ->first();
 
         if (!$member) {
             return response()->json([
                 'success' => false,
-                'message' => 'QR Code member tidak ditemukan.',
+                'message' => 'Kartu atau QR Code member tidak ditemukan dalam sistem.',
             ], 404);
+        }
+
+        if ($member->status !== 'lunas') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Status keanggotaan belum lunas. Harap lakukan pembayaran iuran terlebih dahulu.',
+                'data' => [
+                    'member' => $member,
+                ],
+            ], 403);
         }
 
         if (
@@ -33,7 +42,7 @@ class ScanController extends Controller
         ) {
             return response()->json([
                 'success' => false,
-                'message' => 'Masa berlaku member sudah habis.',
+                'message' => 'Masa berlaku kartu member sudah habis (kadaluarsa).',
                 'data' => [
                     'member' => $member,
                 ],

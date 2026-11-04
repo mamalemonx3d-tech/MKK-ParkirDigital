@@ -16,7 +16,7 @@
 
       <!-- Action Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- 1. Kiosk Tiket Masuk -->
+        <!-- 1. Pintu Masuk (Kiosk & Member) -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-xs hover:border-[#0099ff] hover:shadow-md transition flex flex-col p-6">
           <div class="w-12 h-12 rounded-lg bg-[#e6f4ff] text-[#0099ff] flex items-center justify-center mb-4">
             <Ticket class="w-6 h-6" />
@@ -25,7 +25,7 @@
             Kiosk Tiket Masuk
           </h3>
           <p class="text-xs text-slate-500 mb-6 flex-1 leading-relaxed">
-            Antarmuka mandiri bagi pengendara umum untuk mencetak tiket parkir di pintu masuk.
+            Terminal operasional pos gerbang masuk untuk mencetak tiket non-member dan validasi QR kartu member.
           </p>
           <NuxtLink
             to="/user"

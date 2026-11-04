@@ -24,11 +24,11 @@
           <span>Perbarui</span>
         </button>
         <NuxtLink
-          to="/petugas/scan"
+          to="/user"
           class="px-3.5 py-2 rounded-lg bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
         >
           <Camera class="w-3.5 h-3.5" />
-          <span>Scan Masuk</span>
+          <span>Pintu Masuk (Kiosk)</span>
         </NuxtLink>
         <NuxtLink
           to="/petugas/keluar"
