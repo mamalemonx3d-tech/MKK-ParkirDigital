@@ -6,37 +6,44 @@
   --font-display: 'DM Serif Display', Georgia, Cambria, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* 3-Color Primary Palette: Biru Cerah (Aqua #00FFFF), Kuning Cerah (#FFE600), Putih (#FFFFFF) */
-  --color-brand-blue: #00ffff;
-  --color-brand-blue-hover: #00e5e5;
-  --color-brand-blue-light: #e6ffff;
-  --color-brand-blue-subtle: #f0ffff;
+  /* 1. Primary Sidebar Color (Solid Dark Slate Blue) */
+  --color-brand-sidebar: #1e293b;
+  --color-brand-sidebar-hover: #334155;
 
-  --color-brand-yellow: #ffe600;
-  --color-brand-yellow-hover: #e6cf00;
-  --color-brand-yellow-light: #fefce8;
-  --color-brand-yellow-subtle: #fffbeb;
+  /* 2. Accent Color (Warm Amber / Active Menu) */
+  --color-brand-amber: #f59e0b;
+  --color-brand-amber-hover: #d97706;
+  --color-brand-amber-light: #fef3c7;
 
-  --color-brand-white: #ffffff;
+  /* 3. Action Button Color (Modern Web Standard Blue) */
+  --color-brand-blue: #3b82f6;
+  --color-brand-blue-hover: #2563eb;
+  --color-brand-blue-light: #eff6ff;
+
+  /* 4. Main Content Background */
   --color-brand-bg: #f8fafc;
-  --color-brand-surface: #ffffff;
+
+  /* 5. Card / Box Background */
+  --color-brand-card: #ffffff;
   --color-brand-border: #e2e8f0;
+
+  /* 6. Typography & Text */
   --color-brand-text: #0f172a;
   --color-brand-muted: #64748b;
 
-  /* Semantic Class Mappings to Aqua Scheme */
-  --color-secure-cyan: #00ffff;
-  --color-secure-cyan-hover: #00e5e5;
-  --color-secure-cyan-light: #e6ffff;
-  --color-secure-cyan-subtle: #f0ffff;
+  /* Semantic & Legacy Class Mappings */
+  --color-secure-cyan: #3b82f6;
+  --color-secure-cyan-hover: #2563eb;
+  --color-secure-cyan-light: #eff6ff;
+  --color-secure-cyan-subtle: #f8fafc;
 
-  --color-secure-navy: #00ffff;
-  --color-secure-navy-dark: #00e5e5;
-  --color-secure-navy-light: #33ffff;
+  --color-secure-navy: #1e293b;
+  --color-secure-navy-dark: #0f172a;
+  --color-secure-navy-light: #334155;
 
-  --color-secure-orange: #ffe600;
-  --color-secure-orange-hover: #e6cf00;
-  --color-secure-orange-light: #fefce8;
+  --color-secure-orange: #f59e0b;
+  --color-secure-orange-hover: #d97706;
+  --color-secure-orange-light: #fef3c7;
 
   --color-surface-bg: #f8fafc;
   --color-surface-card: #ffffff;

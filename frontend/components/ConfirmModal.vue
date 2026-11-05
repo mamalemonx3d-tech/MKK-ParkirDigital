@@ -29,7 +29,7 @@
 
           <!-- Dialog Title & Message -->
           <div class="space-y-1.5">
-            <h3 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
+            <h3 class="text-lg font-normal text-[#0f172a] font-serif tracking-tight">
               {{ options.title }}
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed font-sans">
@@ -43,7 +43,7 @@
             <div v-if="options.isAlert">
               <button
                 @click="handleConfirm"
-                class="w-full py-2.5 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
+                class="w-full py-2.5 px-4 bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
               >
                 {{ options.confirmText || 'Mengerti' }}
               </button>
@@ -62,7 +62,7 @@
                 type="button"
                 @click="handleConfirm"
                 class="flex-1 py-2.5 px-4 text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
-                :class="options.type === 'danger' ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400'"
+                :class="options.type === 'danger' ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-[#3b82f6] hover:bg-[#2563eb] text-white'"
               >
                 {{ options.confirmText || 'Ya, Lanjutkan' }}
               </button>

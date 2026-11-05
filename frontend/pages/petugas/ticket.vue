@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
+        <h1 class="text-lg font-normal text-[#0f172a] font-serif tracking-tight">
           Daftar Sesi Tiket Parkir
         </h1>
         <p class="text-xs text-slate-500 mt-0.5">
@@ -40,14 +40,14 @@
           v-model="searchQuery"
           type="text"
           placeholder="Cari kode tiket atau nomor polisi..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] outline-none"
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#3b82f6] outline-none"
         />
       </div>
 
       <!-- Filter Status -->
       <select
         v-model="statusFilter"
-        class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] outline-none bg-white font-medium"
+        class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#3b82f6] outline-none bg-white font-medium"
       >
         <option value="all">Semua Status</option>
         <option value="masuk">Di Dalam (Masuk)</option>
@@ -57,7 +57,7 @@
       <!-- Filter Jenis -->
       <select
         v-model="jenisFilter"
-        class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] outline-none bg-white font-medium"
+        class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#3b82f6] outline-none bg-white font-medium"
       >
         <option value="all">Semua Jenis</option>
         <option value="non_member">Umum (Non-Member)</option>

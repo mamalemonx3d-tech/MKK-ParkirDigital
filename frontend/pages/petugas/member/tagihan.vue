@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
+        <h1 class="text-lg font-normal text-[#0f172a] font-serif tracking-tight">
           Iuran & Tagihan Member Parkir
         </h1>
         <p class="text-xs text-slate-500 mt-0.5">
@@ -81,7 +81,7 @@
                   <button
                     v-else
                     @click="bukaInvoice(t)"
-                    class="px-2.5 py-1 bg-slate-100 hover:bg-[#e6f4ff] text-[#00ffff] font-bold text-[11px] rounded transition cursor-pointer inline-flex items-center gap-1"
+                    class="px-2.5 py-1 bg-slate-100 hover:bg-[#e6f4ff] text-[#3b82f6] font-bold text-[11px] rounded transition cursor-pointer inline-flex items-center gap-1"
                     title="Cetak Invoice Kuitansi"
                   >
                     <Receipt class="w-3.5 h-3.5" />
@@ -122,7 +122,7 @@
             </div>
             <div class="text-right">
               <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block">KODE INVOICE</span>
-              <p class="text-xs font-mono font-black text-[#00ffff]">
+              <p class="text-xs font-mono font-black text-[#3b82f6]">
                 INV-MBR-{{ String(activeInvoice.id).padStart(4, '0') }}-{{ activeInvoice.tanggal_bayar ? activeInvoice.tanggal_bayar.replace(/-/g, '') : '2026' }}
               </p>
               <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">
@@ -201,9 +201,9 @@
           </button>
           <button
             @click="cetakInvoice"
-            class="px-5 py-2 rounded-lg bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
+            class="px-5 py-2 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
           >
-            <Printer class="w-4 h-4 text-[#ffe600]" />
+            <Printer class="w-4 h-4 text-[#f59e0b]" />
             <span>Cetak Invoice</span>
           </button>
         </div>

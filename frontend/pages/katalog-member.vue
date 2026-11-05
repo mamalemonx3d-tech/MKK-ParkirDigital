@@ -17,7 +17,7 @@
           </NuxtLink>
           <NuxtLink
             to="/login"
-            class="px-3.5 py-1.5 rounded-lg bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold transition"
+            class="px-3.5 py-1.5 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition"
           >
             Portal Petugas
           </NuxtLink>
@@ -29,7 +29,7 @@
     <main class="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10 space-y-10 flex-1">
       <!-- Title Section -->
       <div class="text-center max-w-2xl mx-auto space-y-2">
-        <h1 class="text-2xl sm:text-3xl font-bold text-[#00ffff] tracking-tight">
+        <h1 class="text-2xl sm:text-3xl font-bold text-[#3b82f6] tracking-tight">
           Status & Katalog Keanggotaan Member
         </h1>
         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -40,8 +40,8 @@
       <!-- Member Card Status Checker Box -->
       <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 sm:p-8 max-w-3xl mx-auto space-y-6">
         <div class="border-b border-slate-100 pb-3">
-          <h1 class="text-sm font-normal  flex items-center gap-2 text-slate-900 font-serif tracking-tight">
-            <Search class="w-4 h-4 text-[#00ffff]" />
+          <h1 class="text-sm font-normal  flex items-center gap-2 text-[#0f172a] font-serif tracking-tight">
+            <Search class="w-4 h-4 text-[#3b82f6]" />
             <span>Pemeriksaan Status Kartu Member</span>
           </h1>
           <p class="text-xs text-slate-500 mt-0.5">
@@ -58,13 +58,13 @@
               type="text"
               placeholder="Masukkan kode member (MBR-001) atau nama..."
               required
-              class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff] bg-white transition"
+              class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6] bg-white transition"
             />
           </div>
           <button
             type="submit"
             :disabled="isLoading"
-            class="px-5 py-2.5 rounded-lg bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-50"
+            class="px-5 py-2.5 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-50"
           >
             <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin" />
             <Search v-else class="w-4 h-4" />
@@ -155,9 +155,9 @@
                 <div class="mt-1 flex items-center gap-1.5">
                   <span
                     class="w-2 h-2 rounded-full"
-                    :class="memberData.sedang_parkir ? 'bg-[#00ffff]' : 'bg-slate-400'"
+                    :class="memberData.sedang_parkir ? 'bg-[#3b82f6]' : 'bg-slate-400'"
                   ></span>
-                  <p class="font-bold" :class="memberData.sedang_parkir ? 'text-[#00ffff]' : 'text-slate-600'">
+                  <p class="font-bold" :class="memberData.sedang_parkir ? 'text-[#3b82f6]' : 'text-slate-600'">
                     {{ memberData.sedang_parkir ? 'Di Dalam Area Parkir' : 'Di Luar Area Parkir' }}
                   </p>
                 </div>
@@ -179,7 +179,7 @@
       <!-- Membership Pricing Catalog Section -->
       <div class="space-y-6 pt-4">
         <div class="text-center max-w-xl mx-auto space-y-1">
-          <h1 class="text-xl font-normal text-slate-900 font-serif tracking-tight">
+          <h1 class="text-xl font-normal text-[#0f172a] font-serif tracking-tight">
             Katalog Paket Berlangganan Parkir
           </h1>
           <p class="text-xs text-slate-500">
@@ -192,7 +192,7 @@
           <div class="bg-white rounded-xl border border-slate-200 p-6 flex flex-col justify-between shadow-xs">
             <div class="space-y-4">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-[#00ffff] bg-slate-100 px-3 py-1 rounded-full">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#3b82f6] bg-slate-100 px-3 py-1 rounded-full">
                   RODA DUA (MOTOR)
                 </span>
                 <Bike class="w-5 h-5 text-slate-600" />
@@ -204,7 +204,7 @@
               </div>
 
               <div class="flex items-baseline gap-1 py-2 border-y border-slate-100">
-                <span class="text-2xl font-black font-mono text-[#00ffff]">Rp 50.000</span>
+                <span class="text-2xl font-black font-mono text-[#3b82f6]">Rp 50.000</span>
                 <span class="text-xs font-medium text-slate-400">/ bulan</span>
               </div>
 
@@ -243,7 +243,7 @@
           <div class="bg-white rounded-xl border border-slate-200 p-6 flex flex-col justify-between shadow-xs">
             <div class="space-y-4">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-wider text-[#00ffff] bg-slate-100 px-3 py-1 rounded-full">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#3b82f6] bg-slate-100 px-3 py-1 rounded-full">
                   RODA EMPAT (MOBIL)
                 </span>
                 <Car class="w-5 h-5 text-slate-600" />
@@ -255,7 +255,7 @@
               </div>
 
               <div class="flex items-baseline gap-1 py-2 border-y border-slate-100">
-                <span class="text-2xl font-black font-mono text-[#00ffff]">Rp 200.000</span>
+                <span class="text-2xl font-black font-mono text-[#3b82f6]">Rp 200.000</span>
                 <span class="text-xs font-medium text-slate-400">/ bulan</span>
               </div>
 
@@ -282,7 +282,7 @@
             <div class="mt-6 pt-4 border-t border-slate-100">
               <NuxtLink
                 to="/user"
-                class="w-full py-2 px-4 rounded-lg bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs"
+                class="w-full py-2 px-4 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs"
               >
                 <span>Pendaftaran di Loket Parkir</span>
                 <ArrowRight class="w-3.5 h-3.5" />

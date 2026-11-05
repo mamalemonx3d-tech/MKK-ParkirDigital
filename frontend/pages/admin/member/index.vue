@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
+        <h1 class="text-lg font-normal text-[#0f172a] font-serif tracking-tight">
           Monitoring Anggota Langganan (Member)
         </h1>
         <p class="text-xs text-slate-500 mt-0.5">
@@ -12,7 +12,7 @@
       </div>
       <NuxtLink
         to="/petugas/member"
-        class="px-3.5 py-2 rounded-lg bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
+        class="px-3.5 py-2 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
       >
         <UserPlus class="w-4 h-4" />
         <span>Buka Form Pendaftaran Member</span>
@@ -45,7 +45,7 @@
               :key="m.id"
               class="hover:bg-slate-50/80 transition"
             >
-              <td class="py-3 px-4 font-mono font-bold text-[#00ffff]">
+              <td class="py-3 px-4 font-mono font-bold text-[#3b82f6]">
                 {{ m.kode }}
               </td>
               <td class="py-3 px-4 font-bold text-slate-900">
@@ -71,7 +71,7 @@
               <td class="py-3 px-4 text-center">
                 <NuxtLink
                   :to="`/petugas/member/kartu/${m.id}`"
-                  class="px-3 py-1 bg-slate-100 hover:bg-[#e6f4ff] text-[#00ffff] text-[11px] font-bold rounded transition inline-flex items-center gap-1.5"
+                  class="px-3 py-1 bg-slate-100 hover:bg-[#e6f4ff] text-[#3b82f6] text-[11px] font-bold rounded transition inline-flex items-center gap-1.5"
                 >
                   <CreditCard class="w-3.5 h-3.5" />
                   <span>Lihat Kartu</span>

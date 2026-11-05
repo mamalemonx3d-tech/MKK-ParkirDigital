@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#f8fafc] flex flex-col text-slate-900 font-sans">
+  <div class="min-h-screen bg-[#f8fafc] flex flex-col text-[#0f172a] font-sans">
     <!-- Top Navigation Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-2xs">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -10,13 +10,13 @@
         <nav class="flex items-center gap-3">
           <NuxtLink
             to="/user"
-            class="px-3.5 py-1.5 text-xs font-bold rounded-xl border border-slate-300 text-slate-700 hover:border-[#00ffff] hover:bg-[#e6ffff] transition"
+            class="px-3.5 py-1.5 text-xs font-bold rounded-xl border border-slate-300 text-slate-700 hover:border-[#3b82f6] hover:text-[#3b82f6] transition"
           >
             Kiosk Tiket Masuk
           </NuxtLink>
           <NuxtLink
             to="/login"
-            class="px-4 py-1.5 text-xs font-bold rounded-xl bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 transition shadow-xs"
+            class="px-4 py-1.5 text-xs font-bold rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white transition shadow-xs"
           >
             Portal Staf
           </NuxtLink>
@@ -24,8 +24,8 @@
       </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col">
+    <!-- Main Content Canvas -->
+    <main class="flex-1 flex flex-col bg-[#f8fafc]">
       <slot />
     </main>
 

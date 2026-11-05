@@ -17,8 +17,8 @@
       <!-- Action Cards Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- 1. Pintu Masuk (Kiosk & Member) -->
-        <div class="bg-white rounded-2xl border-2 border-slate-200 hover:border-[#00ffff] shadow-xs hover:shadow-md transition flex flex-col p-6">
-          <div class="w-12 h-12 rounded-xl bg-[#e6ffff] text-[#00ffff] flex items-center justify-center mb-4">
+        <div class="bg-white rounded-2xl border-2 border-slate-200 hover:border-[#3b82f6] shadow-xs hover:shadow-md transition flex flex-col p-6">
+          <div class="w-12 h-12 rounded-xl bg-[#eff6ff] text-[#3b82f6] flex items-center justify-center mb-4">
             <Ticket class="w-6 h-6" />
           </div>
           <h2 class="text-lg font-bold text-slate-900 mb-1 font-sans">
@@ -29,17 +29,17 @@
           </p>
           <NuxtLink
             to="/user"
-            class="w-full py-2.5 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-xl text-center transition flex items-center justify-center gap-2 shadow-xs"
+            class="w-full py-2.5 px-4 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold rounded-xl text-center transition flex items-center justify-center gap-2 shadow-xs"
           >
             <span>Buka Layar Kiosk</span>
-            <ArrowRight class="w-4 h-4 text-[#ffe600]" />
+            <ArrowRight class="w-4 h-4 text-[#f59e0b]" />
           </NuxtLink>
         </div>
 
         <!-- 2. Pos Kasir Keluar -->
-        <div class="bg-white rounded-2xl border-2 border-slate-200 hover:border-[#ffe600] shadow-xs hover:shadow-md transition flex flex-col p-6">
-          <div class="w-12 h-12 rounded-xl bg-[#fefce8] text-slate-900 border border-[#ffe600] flex items-center justify-center mb-4 font-bold">
-            <Receipt class="w-6 h-6 text-[#00ffff]" />
+        <div class="bg-white rounded-2xl border-2 border-slate-200 hover:border-[#f59e0b] shadow-xs hover:shadow-md transition flex flex-col p-6">
+          <div class="w-12 h-12 rounded-xl bg-[#fef3c7] text-slate-900 border border-[#f59e0b] flex items-center justify-center mb-4 font-bold">
+            <Receipt class="w-6 h-6 text-[#3b82f6]" />
           </div>
           <h2 class="text-lg font-bold text-slate-900 mb-1 font-sans">
             Pos Kasir Keluar
@@ -52,14 +52,14 @@
             class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl text-center transition flex items-center justify-center gap-2 shadow-xs"
           >
             <span>Buka Loket Kasir</span>
-            <ArrowRight class="w-4 h-4 text-[#ffe600]" />
+            <ArrowRight class="w-4 h-4 text-[#f59e0b]" />
           </NuxtLink>
         </div>
 
         <!-- 3. Portal Petugas / Admin -->
-        <div class="bg-white rounded-2xl border-2 border-slate-200 hover:border-[#00ffff] shadow-xs hover:shadow-md transition flex flex-col p-6">
+        <div class="bg-white rounded-2xl border-2 border-slate-200 hover:border-[#3b82f6] shadow-xs hover:shadow-md transition flex flex-col p-6">
           <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center mb-4">
-            <ShieldCheck class="w-6 h-6 text-[#00ffff]" />
+            <ShieldCheck class="w-6 h-6 text-[#3b82f6]" />
           </div>
           <h2 class="text-lg font-bold text-slate-900 mb-1 font-sans">
             Portal Staf & Admin
@@ -69,28 +69,28 @@
           </p>
           <NuxtLink
             to="/login"
-            class="w-full py-2.5 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-xl text-center transition flex items-center justify-center gap-2 shadow-xs"
+            class="w-full py-2.5 px-4 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold rounded-xl text-center transition flex items-center justify-center gap-2 shadow-xs"
           >
             <span>Masuk ke Akun</span>
-            <ArrowRight class="w-4 h-4 text-[#ffe600]" />
+            <ArrowRight class="w-4 h-4 text-[#f59e0b]" />
           </NuxtLink>
         </div>
       </div>
 
       <!-- Banner Pengendara: Katalog Member -->
-      <div class="bg-[#00ffff] rounded-2xl p-6 text-slate-950 border-2 border-cyan-400 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="bg-[#1e293b] rounded-2xl p-6 text-white border border-slate-700 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-4">
-          <div class="w-11 h-11 rounded-xl bg-white/15 text-[#ffe600] flex items-center justify-center shrink-0">
+          <div class="w-11 h-11 rounded-xl bg-white/10 text-[#f59e0b] flex items-center justify-center shrink-0">
             <CreditCard class="w-6 h-6" />
           </div>
           <div>
-            <h3 class="text-base font-bold text-slate-950">Pengendara: Cek Status Kartu Member & Katalog</h3>
-            <p class="text-xs text-slate-800 mt-0.5">Lihat paket langganan bulanan motor/mobil dan cek masa aktif kartu Anda secara online.</p>
+            <h3 class="text-base font-bold text-white">Pengendara: Cek Status Kartu Member & Katalog</h3>
+            <p class="text-xs text-slate-300 mt-0.5">Lihat paket langganan bulanan motor/mobil dan cek masa aktif kartu Anda secara online.</p>
           </div>
         </div>
         <NuxtLink
           to="/katalog-member"
-          class="px-5 py-2.5 rounded-xl bg-[#ffe600] hover:bg-[#e6cf00] text-slate-950 text-xs font-bold transition flex items-center gap-2 shrink-0 shadow-xs"
+          class="px-5 py-2.5 rounded-xl bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 text-xs font-bold transition flex items-center gap-2 shrink-0 shadow-xs"
         >
           <span>Buka Katalog Member</span>
           <ArrowRight class="w-4 h-4" />
@@ -102,7 +102,7 @@
         <div class="flex items-center gap-2.5">
           <div
             class="w-2.5 h-2.5 rounded-full"
-            :class="isServerOnline ? 'bg-[#00ffff] animate-pulse' : 'bg-red-500'"
+            :class="isServerOnline ? 'bg-[#3b82f6] animate-pulse' : 'bg-red-500'"
           ></div>
           <span class="text-slate-800 font-bold">
             {{ isServerOnline ? 'Koneksi Server API Normal' : 'Menghubungkan ke Server API...' }}

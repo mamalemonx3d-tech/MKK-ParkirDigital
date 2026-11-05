@@ -4,11 +4,11 @@
     <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-[#00ffff] animate-pulse"></span>
-          <h1 class="text-xl sm:text-2xl font-normal text-slate-900 font-serif tracking-tight">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#3b82f6] animate-pulse"></span>
+          <h1 class="text-xl sm:text-2xl font-normal text-[#0f172a] font-serif tracking-tight">
             Terminal Masuk Gerbang
           </h1>
-          <span class="px-2.5 py-0.5 rounded-full bg-[#fefce8] text-slate-900 border border-[#ffe600] text-[10px] font-bold">
+          <span class="px-2.5 py-0.5 rounded-full bg-[#fef3c7] text-slate-900 border border-[#f59e0b] text-[10px] font-bold">
             Kiosk Mandiri & Member
           </span>
         </div>
@@ -29,7 +29,7 @@
           to="/petugas"
           class="flex items-center gap-2 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition border border-slate-300 shadow-2xs cursor-pointer"
         >
-          <ArrowLeft class="w-3.5 h-3.5 text-slate-950 bg-[#e6ffff] px-3 py-1 rounded-xl border border-cyan-300 inline-block" />
+          <ArrowLeft class="w-3.5 h-3.5 text-slate-950 bg-[#eff6ff] px-3 py-1 rounded-xl border border-blue-300 inline-block" />
           <span>Dashboard Petugas</span>
         </NuxtLink>
       </div>
@@ -47,7 +47,7 @@
         <div v-if="!tiketData" class="flex flex-col justify-between h-full space-y-6">
           <!-- Header Kartu Kiri -->
           <div class="text-center space-y-2">
-            <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-slate-950 px-3 py-1 rounded-full bg-[#ffe600] border border-[#e6cf00]">
+            <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-slate-950 px-3 py-1 rounded-full bg-[#f59e0b] border border-[#d97706]">
               PENGENDARA NON-MEMBER (UMUM)
             </span>
             <h2 class="text-3xl sm:text-4xl font-normal text-slate-900 tracking-tight font-serif pt-1">
@@ -63,10 +63,10 @@
             <button
               @click="ambilTiket"
               :disabled="isLoadingTicket || !isBackendOnline"
-              class="w-full py-6 px-6 rounded-2xl font-bold text-xl tracking-wide uppercase transition active:scale-[0.98] shadow-md cursor-pointer flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border-2 border-cyan-400"
+              class="w-full py-6 px-6 rounded-2xl font-bold text-xl tracking-wide uppercase transition active:scale-[0.98] shadow-md cursor-pointer flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed bg-[#3b82f6] hover:bg-[#2563eb] text-white border-2 border-blue-600"
             >
-              <Printer v-if="!isLoadingTicket" class="w-7 h-7 shrink-0 text-slate-950" />
-              <Loader2 v-else class="w-7 h-7 animate-spin text-slate-950" />
+              <Printer v-if="!isLoadingTicket" class="w-7 h-7 shrink-0 text-white" />
+              <Loader2 v-else class="w-7 h-7 animate-spin text-white" />
               <span>{{ isLoadingTicket ? 'Mencetak Tiket...' : 'AMBIL TIKET PARKIR' }}</span>
             </button>
 
@@ -88,7 +88,7 @@
 
           <!-- Footer Strip Info -->
           <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
-            <span>Sistem Karcis: <strong class="text-[#00ffff]">Aktif (Online)</strong></span>
+            <span>Sistem Karcis: <strong class="text-[#3b82f6]">Aktif (Online)</strong></span>
             <span class="text-slate-700 font-bold">Palang: Otomatis</span>
           </div>
         </div>
@@ -97,7 +97,7 @@
         <div v-else class="space-y-5 text-center flex flex-col justify-between h-full">
           <div class="space-y-2 pb-4 border-b border-dashed border-slate-300 flex flex-col items-center">
             <LottieAnimation animationPath="/lottie/check.json" width="w-14" height="h-14" :loop="false" />
-            <h3 class="text-xl sm:text-2xl font-normal text-slate-900 font-serif">
+            <h3 class="text-xl sm:text-2xl font-normal text-[#0f172a] font-serif">
               Tiket Berhasil Dicetak &mdash; Palang Terbuka!
             </h3>
             <p class="text-xs text-slate-500">Ambil struk karcis fisik dan pengendara dipersilakan masuk.</p>
@@ -109,7 +109,7 @@
               <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                 NOMOR TIKET RESMI
               </span>
-              <span class="text-4xl font-bold font-mono text-[#00ffff]">
+              <span class="text-4xl font-bold font-mono text-[#3b82f6]">
                 {{ tiketData.kode_tiket }}
               </span>
             </div>
@@ -125,7 +125,7 @@
               </div>
               <div class="flex justify-between text-slate-600">
                 <span>Tarif Dasar:</span>
-                <span class="font-bold text-[#00ffff]">Rp 3.000 / Jam</span>
+                <span class="font-bold text-[#3b82f6]">Rp 3.000 / Jam</span>
               </div>
               <div class="flex justify-between text-slate-600">
                 <span>Petugas Pos:</span>
@@ -137,19 +137,19 @@
           <!-- Countdown Bar & Reset Action -->
           <div class="pt-3 border-t border-slate-100 space-y-3">
             <div class="text-xs text-slate-600 font-mono">
-              Reset otomatis dalam: <strong class="text-[#00ffff] font-bold">{{ countdown }} detik</strong>
+              Reset otomatis dalam: <strong class="text-[#3b82f6] font-bold">{{ countdown }} detik</strong>
             </div>
             <div class="flex items-center justify-center gap-2">
               <button
                 @click="cetakStruk"
                 class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-300"
               >
-                <Printer class="w-3.5 h-3.5 text-[#00ffff]" />
+                <Printer class="w-3.5 h-3.5 text-[#3b82f6]" />
                 <span>Cetak Fisik</span>
               </button>
               <button
                 @click="resetKiosk"
-                class="px-5 py-2 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 rounded-xl text-xs font-bold transition cursor-pointer shadow-xs"
+                class="px-5 py-2 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 rounded-xl text-xs font-bold transition cursor-pointer shadow-xs"
               >
                 <span>Kendaraan Berikutnya</span>
               </button>
@@ -165,7 +165,7 @@
         
         <!-- Header Kartu Kanan -->
         <div class="text-center space-y-2">
-          <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-slate-900 px-3 py-1 rounded-full bg-[#e6ffff] border border-[#00ffff]/30">
+          <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-slate-900 px-3 py-1 rounded-full bg-[#eff6ff] border border-[#3b82f6]/30">
             PENGENDARA MEMBER (LANGGANAN)
           </span>
           <h2 class="text-3xl sm:text-4xl font-normal text-slate-900 tracking-tight font-serif pt-1">
@@ -180,7 +180,7 @@
         <div class="space-y-3">
           <div class="flex items-center justify-between text-xs">
             <span class="font-bold text-slate-800 flex items-center gap-1.5">
-              <Camera class="w-3.5 h-3.5 text-[#00ffff]" />
+              <Camera class="w-3.5 h-3.5 text-[#3b82f6]" />
               <span>Kamera Scanner Member</span>
             </span>
 
@@ -199,7 +199,7 @@
               <button
                 @click="toggleCamera"
                 class="text-xs font-bold px-3 py-1.5 rounded-xl border transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
-                :class="isScanning ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100' : 'bg-[#00ffff] text-slate-950 border border-cyan-400 border-blue-600 hover:bg-[#00e5e5]'"
+                :class="isScanning ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100' : 'bg-[#3b82f6] text-white border border-blue-600 border-blue-600 hover:bg-[#2563eb]'"
               >
                 <Loader2 v-if="isStartingCamera" class="w-3.5 h-3.5 animate-spin" />
                 <span>{{ isScanning ? 'Matikan Kamera' : 'Nyalakan Kamera' }}</span>
@@ -231,10 +231,10 @@
         <div class="space-y-1.5 pt-1">
           <div class="flex items-center justify-between text-xs">
             <label for="kiosk-manual-qr-input" class="font-bold text-slate-700 flex items-center gap-1.5">
-              <ScanLine class="w-3.5 h-3.5 text-[#00ffff]" />
+              <ScanLine class="w-3.5 h-3.5 text-[#3b82f6]" />
               <span>Barcode Scanner USB / Input Kode:</span>
             </label>
-            <span class="text-[10px] font-mono text-slate-900 bg-[#fefce8] px-2 py-0.5 rounded-full border border-[#ffe600] font-bold">
+            <span class="text-[10px] font-mono text-slate-900 bg-[#fef3c7] px-2 py-0.5 rounded-full border border-[#f59e0b] font-bold">
               USB Siap Tembak
             </span>
           </div>
@@ -245,13 +245,13 @@
               v-model="manualQr"
               type="text"
               placeholder="Arahkan barcode scanner atau ketik kode member..."
-              class="flex-1 px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20 outline-none font-mono"
+              class="flex-1 px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#3b82f6] focus:ring-2 focus:ring-[#3b82f6]/20 outline-none font-mono"
               @keyup.enter="handleScan(manualQr)"
             />
             <button
               @click="handleScan(manualQr)"
               :disabled="isLoadingMember || !manualQr"
-              class="px-4 py-2.5 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-xl transition disabled:opacity-60 cursor-pointer shadow-xs"
+              class="px-4 py-2.5 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold rounded-xl transition disabled:opacity-60 cursor-pointer shadow-xs"
             >
               {{ isLoadingMember ? 'Memeriksa...' : 'Verifikasi' }}
             </button>
@@ -286,14 +286,14 @@
           <!-- 2. Kondisi SUKSES (Member Asli & Valid) -->
           <div
             v-else-if="memberSuccessResult"
-            class="bg-[#f0ffff] border-2 border-[#00ffff] rounded-2xl p-4 text-slate-900 space-y-2.5 animate-in fade-in"
+            class="bg-[#eff6ff] border-2 border-[#3b82f6] rounded-2xl p-4 text-slate-900 space-y-2.5 animate-in fade-in"
           >
-            <div class="flex items-center justify-between pb-2 border-b border-blue-200 font-bold text-xs text-[#00ffff]">
+            <div class="flex items-center justify-between pb-2 border-b border-blue-200 font-bold text-xs text-[#3b82f6]">
               <div class="flex items-center gap-1.5">
                 <LottieAnimation animationPath="/lottie/check.json" width="w-5" height="h-5" :loop="false" />
                 <span>MEMBER ASLI & AKTIF &mdash; PALANG TERBUKA</span>
               </div>
-              <span class="font-mono bg-[#ffe600] text-slate-950 px-2 py-0.5 rounded-lg text-[10px] font-bold">
+              <span class="font-mono bg-[#f59e0b] text-slate-950 px-2 py-0.5 rounded-lg text-[10px] font-bold">
                 {{ memberSuccessResult.tiket.kode_tiket }}
               </span>
             </div>
@@ -305,7 +305,7 @@
               </div>
               <div>
                 <span class="text-slate-400 text-[10px] block">Kode Member:</span>
-                <span class="font-mono font-bold text-[#00ffff]">{{ memberSuccessResult.member.kode }}</span>
+                <span class="font-mono font-bold text-[#3b82f6]">{{ memberSuccessResult.member.kode }}</span>
               </div>
               <div>
                 <span class="text-slate-400 text-[10px] block">Perusahaan:</span>
@@ -313,13 +313,13 @@
               </div>
               <div>
                 <span class="text-slate-400 text-[10px] block">Masa Berlaku:</span>
-                <span class="font-mono font-bold text-[#00ffff]">{{ memberSuccessResult.member.expired_at }}</span>
+                <span class="font-mono font-bold text-[#3b82f6]">{{ memberSuccessResult.member.expired_at }}</span>
               </div>
             </div>
 
             <button
               @click="clearMemberResult"
-              class="w-full py-2 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
+              class="w-full py-2 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
             >
               Siap untuk Kendaraan Berikutnya
             </button>

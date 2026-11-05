@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
+        <h1 class="text-lg font-normal text-[#0f172a] font-serif tracking-tight">
           Laporan Rekapitulasi Shift Petugas
         </h1>
         <p class="text-xs text-slate-500 mt-0.5">
@@ -20,7 +20,7 @@
         />
         <button
           @click="printReport"
-          class="px-3.5 py-2 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer shadow-xs"
+          class="px-3.5 py-2 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer shadow-xs"
         >
           <Printer class="w-4 h-4" />
           <span>Cetak Laporan</span>
@@ -89,7 +89,7 @@
               :key="item.kode_tiket"
               class="hover:bg-slate-50/80 transition"
             >
-              <td class="py-3 px-4 font-mono font-bold text-[#00ffff]">
+              <td class="py-3 px-4 font-mono font-bold text-[#3b82f6]">
                 {{ item.kode_tiket }}
               </td>
               <td class="py-3 px-4 font-mono font-bold text-slate-700">
