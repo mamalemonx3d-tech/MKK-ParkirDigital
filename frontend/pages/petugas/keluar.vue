@@ -355,26 +355,13 @@
         <!-- ========================================== -->
         <!-- STATE 3: IDLE / MENUNGGU TIKET             -->
         <!-- ========================================== -->
-        <div v-else class="text-center py-16 px-4 space-y-4">
+        <div v-else class="text-center py-16 px-4 space-y-3">
           <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto border border-slate-200">
             <ScanBarcode class="w-7 h-7 text-slate-500" />
           </div>
-          <div class="space-y-1">
-            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">
-              Pos Kasir Siap Melayani Kendaraan
-            </h3>
-            <p class="text-xs text-slate-500 max-w-md mx-auto">
-              Scan barcode tiket parkir atau kartu member menggunakan barcode scanner USB, atau nyalakan kamera scanner di sebelah kiri.
-            </p>
-          </div>
-
-          <div class="inline-flex items-center gap-4 text-[11px] font-mono text-slate-400 bg-slate-50 px-4 py-2 rounded-lg border border-slate-200">
-            <span>[Tembak Barcode] Baca Tiket</span>
-            <span>&bull;</span>
-            <span>[Enter] Konfirmasi</span>
-            <span>&bull;</span>
-            <span>[Esc] Batal</span>
-          </div>
+          <p class="text-xs sm:text-sm font-semibold text-slate-500">
+            Data Transaksi akan muncul disini
+          </p>
         </div>
       </div>
     </div>
