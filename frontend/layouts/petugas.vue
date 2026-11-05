@@ -1,121 +1,216 @@
 <template>
-  <div class="min-h-screen bg-slate-100 flex flex-col md:flex-row text-slate-800">
+  <div class="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row text-slate-900 font-sans">
     <!-- Sidebar Navigation -->
-    <aside class="w-full md:w-64 bg-[#001a4e] text-white flex flex-col shrink-0 md:min-h-screen">
-      <!-- Brand Header -->
-      <div class="p-5 border-b border-white/10 flex items-center justify-between">
-        <BrandLogo :showSubtitle="true" subtitle="Pos Operasional Gerbang" :isDarkSurface="true" />
+    <aside
+      class="bg-[#0066ff] text-white flex flex-col shrink-0 md:min-h-screen transition-all duration-300 ease-in-out relative z-40"
+      :class="isCollapsed ? 'w-full md:w-16' : 'w-full md:w-64'"
+    >
+      <!-- Brand Header & Toggle Button -->
+      <div
+        class="border-b border-white/15 flex items-center transition-all duration-300"
+        :class="isCollapsed ? 'p-3 justify-center flex-col gap-2' : 'p-4 justify-between'"
+      >
+        <NuxtLink to="/petugas" class="focus:outline-none">
+          <BrandLogo
+            :showSubtitle="!isCollapsed"
+            subtitle="Pos Operasional"
+            :isDarkSurface="true"
+            :compact="isCollapsed"
+            size="sm"
+          />
+        </NuxtLink>
+
+        <!-- Toggle Collapse/Expand Button -->
+        <button
+          @click="toggleSidebar"
+          type="button"
+          :title="isCollapsed ? 'Buka Sidebar (Menu Lengkap)' : 'Tutup Sidebar (Perluas Layar)'"
+          class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition cursor-pointer"
+        >
+          <ChevronRight v-if="isCollapsed" class="w-4 h-4 text-[#ffe600]" />
+          <ChevronLeft v-else class="w-4 h-4 text-white" />
+        </button>
       </div>
 
       <!-- Navigation Links -->
-      <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+      <nav class="flex-1 p-2 space-y-1 overflow-y-auto">
+        <!-- Dashboard -->
         <NuxtLink
           to="/petugas"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :title="isCollapsed ? 'Dashboard Operasional' : undefined"
+          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
+          :class="[
+            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
+            $route.path === '/petugas'
+              ? 'bg-[#ffe600] text-slate-950 shadow-xs'
+              : 'text-white/85 hover:bg-white/10 hover:text-white'
+          ]"
         >
           <LayoutDashboard class="w-4 h-4 shrink-0" />
-          <span>Dashboard Operasional</span>
+          <span v-if="!isCollapsed" class="truncate">Dashboard Operasional</span>
         </NuxtLink>
 
-        <div class="pt-3 pb-1 px-3 text-[11px] font-semibold text-[#ff9900] tracking-wider uppercase">
+        <!-- Category: Lalu Lintas Kendaraan -->
+        <div v-if="!isCollapsed" class="pt-3 pb-1 px-3 text-[10px] font-bold text-[#ffe600] tracking-wider uppercase">
           Lalu Lintas Kendaraan
         </div>
+        <div v-else class="my-2 border-t border-white/15"></div>
 
+        <!-- Kiosk Tiket & Member -->
         <NuxtLink
           to="/user"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="['/user', '/petugas/scan'].includes($route.path) ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :title="isCollapsed ? 'Pintu Masuk (Kiosk & Member)' : undefined"
+          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
+          :class="[
+            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
+            ['/user', '/petugas/scan'].includes($route.path)
+              ? 'bg-[#ffe600] text-slate-950 shadow-xs'
+              : 'text-white/85 hover:bg-white/10 hover:text-white'
+          ]"
         >
           <Camera class="w-4 h-4 shrink-0" />
-          <span>Pintu Masuk (Kiosk & Member)</span>
+          <span v-if="!isCollapsed" class="truncate">Pintu Masuk (Kiosk & Member)</span>
         </NuxtLink>
 
+        <!-- Pos Kasir Keluar -->
         <NuxtLink
           to="/petugas/keluar"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/keluar' ? 'bg-[#0099ff] text-white font-bold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :title="isCollapsed ? 'Pos Kasir Keluar' : undefined"
+          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
+          :class="[
+            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
+            $route.path === '/petugas/keluar'
+              ? 'bg-[#ffe600] text-slate-950 shadow-xs'
+              : 'text-white/85 hover:bg-white/10 hover:text-white'
+          ]"
         >
           <Receipt class="w-4 h-4 shrink-0" />
-          <span>Pos Kasir Keluar</span>
+          <span v-if="!isCollapsed" class="truncate">Pos Kasir Keluar</span>
         </NuxtLink>
 
+        <!-- Daftar Tiket Parkir -->
         <NuxtLink
           to="/petugas/ticket"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/ticket' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :title="isCollapsed ? 'Daftar Tiket Parkir' : undefined"
+          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
+          :class="[
+            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
+            $route.path === '/petugas/ticket'
+              ? 'bg-[#ffe600] text-slate-950 shadow-xs'
+              : 'text-white/85 hover:bg-white/10 hover:text-white'
+          ]"
         >
           <Ticket class="w-4 h-4 shrink-0" />
-          <span>Daftar Tiket Parkir</span>
+          <span v-if="!isCollapsed" class="truncate">Daftar Tiket Parkir</span>
         </NuxtLink>
 
-        <div class="pt-3 pb-1 px-3 text-[11px] font-semibold text-[#ff9900] tracking-wider uppercase">
+        <!-- Category: Layanan Pelanggan -->
+        <div v-if="!isCollapsed" class="pt-3 pb-1 px-3 text-[10px] font-bold text-[#ffe600] tracking-wider uppercase">
           Layanan Pelanggan
         </div>
+        <div v-else class="my-2 border-t border-white/15"></div>
 
+        <!-- Registrasi Member -->
         <NuxtLink
           to="/petugas/member"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/member' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :title="isCollapsed ? 'Registrasi Member' : undefined"
+          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
+          :class="[
+            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
+            $route.path === '/petugas/member'
+              ? 'bg-[#ffe600] text-slate-950 shadow-xs'
+              : 'text-white/85 hover:bg-white/10 hover:text-white'
+          ]"
         >
           <CreditCard class="w-4 h-4 shrink-0" />
-          <span>Registrasi Member</span>
+          <span v-if="!isCollapsed" class="truncate">Registrasi Member</span>
         </NuxtLink>
 
+        <!-- Iuran Tagihan Member -->
         <NuxtLink
           to="/petugas/member/tagihan"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/member/tagihan' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :title="isCollapsed ? 'Iuran & Tagihan Member' : undefined"
+          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
+          :class="[
+            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
+            $route.path === '/petugas/member/tagihan'
+              ? 'bg-[#ffe600] text-slate-950 shadow-xs'
+              : 'text-white/85 hover:bg-white/10 hover:text-white'
+          ]"
         >
           <BadgeDollarSign class="w-4 h-4 shrink-0" />
-          <span>Iuran & Tagihan Member</span>
+          <span v-if="!isCollapsed" class="truncate">Iuran & Tagihan Member</span>
         </NuxtLink>
 
+        <!-- Laporan Shift Kasir -->
         <NuxtLink
           to="/petugas/laporan"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/laporan' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :title="isCollapsed ? 'Laporan Shift Kasir' : undefined"
+          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
+          :class="[
+            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
+            $route.path === '/petugas/laporan'
+              ? 'bg-[#ffe600] text-slate-950 shadow-xs'
+              : 'text-white/85 hover:bg-white/10 hover:text-white'
+          ]"
         >
           <FileText class="w-4 h-4 shrink-0" />
-          <span>Laporan Shift Kasir</span>
+          <span v-if="!isCollapsed" class="truncate">Laporan Shift Kasir</span>
         </NuxtLink>
 
+        <!-- Kelola Profil Akun -->
         <NuxtLink
           to="/petugas/profile"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition"
-          :class="$route.path === '/petugas/profile' ? 'bg-[#0099ff] text-white font-semibold' : 'text-slate-300 hover:bg-white/5 hover:text-white'"
+          :title="isCollapsed ? 'Kelola Profil Akun' : undefined"
+          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
+          :class="[
+            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
+            $route.path === '/petugas/profile'
+              ? 'bg-[#ffe600] text-slate-950 shadow-xs'
+              : 'text-white/85 hover:bg-white/10 hover:text-white'
+          ]"
         >
           <User class="w-4 h-4 shrink-0" />
-          <span>Kelola Profil Akun</span>
+          <span v-if="!isCollapsed" class="truncate">Kelola Profil Akun</span>
         </NuxtLink>
 
         <!-- Admin Backlink if super_admin -->
-        <div v-if="auth.isSuperAdmin.value" class="pt-3 pb-1 px-3 text-[11px] font-semibold text-slate-400 tracking-wider uppercase">
-          Panel Administrator
-        </div>
-        <NuxtLink
-          v-if="auth.isSuperAdmin.value"
-          to="/admin/dashboard"
-          class="flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-white/5 hover:text-white transition"
-        >
-          <ShieldAlert class="w-3.5 h-3.5 shrink-0 text-[#0099ff]" />
-          <span>Kembali ke Super Admin</span>
-        </NuxtLink>
+        <template v-if="auth.isSuperAdmin.value">
+          <div v-if="!isCollapsed" class="pt-3 pb-1 px-3 text-[10px] font-bold text-white/60 tracking-wider uppercase">
+            Super Admin
+          </div>
+          <div v-else class="my-2 border-t border-white/15"></div>
+
+          <NuxtLink
+            to="/admin/dashboard"
+            :title="isCollapsed ? 'Kembali ke Panel Super Admin' : undefined"
+            class="flex items-center gap-3 rounded-xl text-xs font-bold text-white/80 hover:bg-white/10 hover:text-white transition"
+            :class="isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2'"
+          >
+            <ShieldAlert class="w-4 h-4 shrink-0 text-[#ffe600]" />
+            <span v-if="!isCollapsed" class="truncate">Panel Super Admin</span>
+          </NuxtLink>
+        </template>
       </nav>
 
       <!-- User Profile & Logout Bottom Bar -->
-      <div class="p-4 border-t border-white/10 bg-black/20">
-        <div class="flex items-center justify-between">
-          <NuxtLink to="/petugas/profile" class="truncate pr-2 hover:opacity-80 transition cursor-pointer flex-1">
-            <p class="text-xs font-semibold text-white truncate">{{ auth.user.value?.name || 'Petugas Gerbang' }}</p>
-            <span class="inline-block text-[10px] font-medium text-[#0099ff] uppercase tracking-wider">
-              {{ auth.user.value?.role === 'super_admin' ? 'Administrator' : 'Petugas Pos' }}
+      <div class="p-3 border-t border-white/15 bg-black/10">
+        <div class="flex items-center" :class="isCollapsed ? 'justify-center' : 'justify-between'">
+          <NuxtLink
+            v-if="!isCollapsed"
+            to="/petugas/profile"
+            class="truncate pr-2 hover:opacity-85 transition cursor-pointer flex-1"
+          >
+            <p class="text-xs font-bold text-white truncate">{{ auth.user.value?.name || 'Petugas Pos' }}</p>
+            <span class="inline-block text-[10px] font-bold text-[#ffe600] uppercase tracking-wider">
+              {{ auth.user.value?.role === 'super_admin' ? 'Administrator' : 'Petugas Gerbang' }}
             </span>
           </NuxtLink>
+
           <button
             @click="auth.logout"
-            title="Keluar dari sesi"
-            class="p-2 rounded-md hover:bg-white/10 text-slate-300 hover:text-white transition cursor-pointer"
+            :title="`Keluar (${auth.user.value?.name || 'Petugas'})`"
+            class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition cursor-pointer"
           >
             <LogOut class="w-4 h-4" />
           </button>
@@ -126,20 +221,39 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0">
       <!-- Topbar Header -->
-      <header class="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between sticky top-0 z-30">
-        <div class="flex items-center gap-2 text-xs font-medium text-slate-700">
-          <span class="font-bold text-[#001a4e]">Terminal Operasional Gerbang</span>
-          <span class="text-slate-300">&bull;</span>
-          <span class="text-slate-500">Shift Petugas Aktif</span>
+      <header class="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between sticky top-0 z-30 shadow-2xs">
+        <div class="flex items-center gap-3">
+          <!-- Quick Sidebar Toggle on Topbar -->
+          <button
+            @click="toggleSidebar"
+            type="button"
+            class="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+            :title="isCollapsed ? 'Perluas Menu Sidebar' : 'Tutup Menu Sidebar'"
+          >
+            <PanelLeftClose v-if="!isCollapsed" class="w-4 h-4 text-[#0066ff]" />
+            <PanelLeftOpen v-else class="w-4 h-4 text-[#0066ff]" />
+            <span class="hidden sm:inline text-[11px]">{{ isCollapsed ? 'Buka Menu' : 'Tutup Menu' }}</span>
+          </button>
+
+          <div class="flex items-center gap-2 text-xs">
+            <span class="font-bold text-slate-900">POS OPERASIONAL GERBANG</span>
+            <span class="text-slate-300 hidden sm:inline">&bull;</span>
+            <span class="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#fefce8] text-slate-900 border border-[#ffe600] font-bold text-[10px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#0066ff] animate-pulse"></span>
+              Shift Aktif
+            </span>
+          </div>
         </div>
 
-        <div class="flex items-center gap-4 text-xs font-mono text-slate-600">
-          <span>{{ currentFormattedTime }}</span>
+        <div class="flex items-center gap-4 text-xs font-mono text-slate-700">
+          <span class="bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 font-bold text-[11px]">
+            {{ currentFormattedTime }}
+          </span>
         </div>
       </header>
 
       <!-- Page Content -->
-      <main class="flex-1 p-6 overflow-y-auto">
+      <main class="flex-1 p-4 sm:p-6 overflow-y-auto">
         <slot />
       </main>
     </div>
@@ -147,7 +261,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import {
   LayoutDashboard,
   Camera,
@@ -159,10 +273,34 @@ import {
   ShieldAlert,
   LogOut,
   User,
+  ChevronLeft,
+  ChevronRight,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-vue-next'
 import BrandLogo from '~/components/BrandLogo.vue'
 
 const auth = useAuth()
+const route = useRoute()
+
+// Persistent reactive sidebar collapse state
+const isCollapsed = useState<boolean>('petugas-sidebar-collapsed', () => false)
+
+const toggleSidebar = () => {
+  isCollapsed.value = !isCollapsed.value
+}
+
+// Automatically collapse sidebar on /user (Kiosk page) as requested: "agar tetap ada sidebar namun sidebarnya hanya menutup"
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === '/user') {
+      isCollapsed.value = true
+    }
+  },
+  { immediate: true }
+)
+
 onMounted(() => {
   auth.initAuth()
 })
@@ -172,12 +310,15 @@ let timer: any = null
 
 const updateClock = () => {
   const now = new Date()
-  currentFormattedTime.value = now.toLocaleDateString('id-ID', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  }) + ' - ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  currentFormattedTime.value =
+    now.toLocaleDateString('id-ID', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }) +
+    ' - ' +
+    now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
 }
 
 onMounted(() => {

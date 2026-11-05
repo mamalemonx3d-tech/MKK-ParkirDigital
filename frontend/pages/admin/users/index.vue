@@ -3,16 +3,16 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-lg font-bold text-[#001a4e]">
+        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
           Manajemen Akun Petugas Gerbang
-        </h2>
+        </h1>
         <p class="text-xs text-slate-500 mt-0.5">
           Kelola data login staf pos keluar dan gerbang masuk.
         </p>
       </div>
       <button
         @click="openModal()"
-        class="px-3.5 py-2 rounded-lg bg-[#0099ff] hover:bg-[#0084de] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
+        class="px-3.5 py-2 rounded-lg bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
       >
         <UserPlus class="w-4 h-4" />
         <span>Tambah Petugas Baru</span>
@@ -58,7 +58,7 @@
                   <button
                     @click="openModal(u)"
                     title="Edit Petugas"
-                    class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-[#0099ff] transition cursor-pointer"
+                    class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-[#0066ff] transition cursor-pointer"
                   >
                     <Edit class="w-4 h-4" />
                   </button>
@@ -84,7 +84,7 @@
     >
       <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <h3 class="text-sm font-bold text-[#001a4e]">
+          <h3 class="text-sm font-bold text-[#0066ff]">
             {{ editingId ? 'Edit Data Petugas' : 'Tambah Petugas Baru' }}
           </h3>
           <button @click="isModalOpen = false" class="text-slate-400 hover:text-slate-600">
@@ -100,7 +100,7 @@
               type="text"
               required
               placeholder="Contoh: Ahmad Fauzi"
-              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none"
             />
           </div>
 
@@ -111,7 +111,7 @@
               type="email"
               required
               placeholder="ahmad@parkir.com"
-              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none"
             />
           </div>
 
@@ -126,7 +126,7 @@
               :required="!editingId"
               minlength="6"
               placeholder="••••••••"
-              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none"
             />
           </div>
 
@@ -138,7 +138,7 @@
               required
               minlength="6"
               placeholder="••••••••"
-              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none"
             />
           </div>
 
@@ -146,7 +146,7 @@
             <button
               type="submit"
               :disabled="isSubmitting"
-              class="flex-1 py-2.5 px-4 bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold rounded-lg transition cursor-pointer disabled:opacity-60"
+              class="flex-1 py-2.5 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg transition cursor-pointer disabled:opacity-60"
             >
               {{ isSubmitting ? 'Menyimpan...' : 'Simpan Data Petugas' }}
             </button>

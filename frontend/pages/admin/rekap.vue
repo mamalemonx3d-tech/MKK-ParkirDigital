@@ -3,9 +3,9 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-lg font-bold text-[#001a4e]">
+        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
           Laporan Rekapitulasi & Kinerja Parkir
-        </h2>
+        </h1>
         <p class="text-xs text-slate-500 mt-0.5">
           Tinjau performa transaksi, pendapatan non-member & member, serta evaluasi seluruh petugas loket.
         </p>
@@ -31,7 +31,7 @@
           :key="tab.id"
           @click="changeTab(tab.id)"
           class="px-3.5 py-1.5 rounded-md text-xs font-bold transition cursor-pointer"
-          :class="activeTab === tab.id ? 'bg-white text-[#001a4e] shadow-xs' : 'text-slate-500 hover:text-slate-800'"
+          :class="activeTab === tab.id ? 'bg-white text-[#0066ff] shadow-xs' : 'text-slate-500 hover:text-slate-800'"
         >
           {{ tab.label }}
         </button>
@@ -59,7 +59,7 @@
           {{ summaryTotals.total_masuk }} <span class="text-xs font-normal text-slate-400">unit</span>
         </div>
         <p class="text-[11px] text-slate-500 mt-1">
-          Non-Member: <span class="font-bold text-slate-700">{{ summaryTotals.masuk_non_member }}</span> &bull; Member: <span class="font-bold text-[#0099ff]">{{ summaryTotals.masuk_member }}</span>
+          Non-Member: <span class="font-bold text-slate-700">{{ summaryTotals.masuk_non_member }}</span> &bull; Member: <span class="font-bold text-[#0066ff]">{{ summaryTotals.masuk_member }}</span>
         </p>
       </div>
 
@@ -77,7 +77,7 @@
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
           Pendapatan Iuran Member
         </span>
-        <div class="text-2xl font-black font-mono text-[#0099ff]">
+        <div class="text-2xl font-black font-mono text-[#0066ff]">
           {{ formatRupiah(summaryTotals.pendapatan_member) }}
         </div>
         <p class="text-[11px] text-slate-500 mt-1">Pelunasan langganan bulanan</p>
@@ -132,7 +132,7 @@
             </tr>
             <tr v-for="p in petugasList" :key="p.id" class="hover:bg-slate-50/80 transition">
               <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
-                <div class="w-7 h-7 rounded-full bg-[#001a4e] text-white flex items-center justify-center font-bold text-xs uppercase">
+                <div class="w-7 h-7 rounded-full bg-[#0066ff] text-white flex items-center justify-center font-bold text-xs uppercase">
                   {{ p.name.charAt(0) }}
                 </div>
                 <span>{{ p.name }}</span>
@@ -164,7 +164,7 @@
         <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Ticket class="w-4 h-4 text-[#ff9900]" />
+              <Ticket class="w-4 h-4 text-[#ffe600]" />
               <span>Pengendara Non-Member (Umum)</span>
             </h3>
             <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">
@@ -192,11 +192,11 @@
         <!-- Kartu 2: Member -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h3 class="text-sm font-bold text-[#001a4e] flex items-center gap-2">
-              <CreditCard class="w-4 h-4 text-[#0099ff]" />
+            <h3 class="text-sm font-bold text-[#0066ff] flex items-center gap-2">
+              <CreditCard class="w-4 h-4 text-[#0066ff]" />
               <span>Pengendara Member (Langganan)</span>
             </h3>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#e6f4ff] text-[#0099ff] border border-[#0099ff]/30">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#e6f4ff] text-[#0066ff] border border-[#0066ff]/30">
               QR RFID Kartu
             </span>
           </div>
@@ -214,7 +214,7 @@
 
           <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
             <span class="text-slate-500 font-medium">Total Pendapatan Iuran:</span>
-            <span class="text-base font-black font-mono text-[#0099ff]">{{ formatRupiah(summaryTotals.pendapatan_member) }}</span>
+            <span class="text-base font-black font-mono text-[#0066ff]">{{ formatRupiah(summaryTotals.pendapatan_member) }}</span>
           </div>
         </div>
       </div>
@@ -247,11 +247,11 @@
                 </td>
               </tr>
               <tr v-for="item in reportData.detail" :key="item.kode_tiket" class="hover:bg-slate-50/80 transition">
-                <td class="py-3 px-4 font-mono font-bold text-[#001a4e]">{{ item.kode_tiket }}</td>
+                <td class="py-3 px-4 font-mono font-bold text-[#0066ff]">{{ item.kode_tiket }}</td>
                 <td class="py-3 px-4">
                   <span
                     class="px-2 py-0.5 rounded text-[10px] font-bold uppercase"
-                    :class="item.jenis === 'member' ? 'bg-[#e6f4ff] text-[#0099ff]' : 'bg-slate-100 text-slate-700'"
+                    :class="item.jenis === 'member' ? 'bg-[#e6f4ff] text-[#0066ff]' : 'bg-slate-100 text-slate-700'"
                   >
                     {{ item.jenis === 'member' ? 'Member' : 'Non-Member' }}
                   </span>
@@ -298,7 +298,7 @@
                 </td>
               </tr>
               <tr v-for="item in reportData.detail" :key="item.kode_tiket" class="hover:bg-slate-50/80 transition">
-                <td class="py-3 px-4 font-mono font-bold text-[#001a4e]">{{ item.kode_tiket }}</td>
+                <td class="py-3 px-4 font-mono font-bold text-[#0066ff]">{{ item.kode_tiket }}</td>
                 <td class="py-3 px-4 font-mono font-bold text-slate-700">{{ item.nomor_polisi || '-' }}</td>
                 <td class="py-3 px-4 capitalize">{{ item.jenis_kendaraan || '-' }}</td>
                 <td class="py-3 px-4 font-mono text-slate-600 text-[11px]">{{ formatTime(item.waktu_masuk) }}</td>

@@ -1,31 +1,42 @@
 <template>
   <div class="inline-flex flex-col items-start select-none">
-    <!-- Logo Badge / Transparent Image -->
+    <!-- Compact Mode (For Collapsed Sidebar) -->
     <div
-      class="inline-flex items-center transition"
-      :class="[
-        isDarkSurface
-          ? 'py-0.5'
-          : 'bg-[#001a4e] px-3.5 py-1.5 rounded-xl border border-slate-700/50 shadow-sm'
-      ]"
+      v-if="compact"
+      class="w-10 h-10 rounded-xl bg-[#FFE600] text-slate-950 flex items-center justify-center font-black text-lg shadow-xs"
+      title="Secure Parking"
     >
-      <img
-        src="/logo.webp"
-        alt="Secure Parking"
-        class="w-auto object-contain transition-all"
-        :class="sizeClass"
-        loading="eager"
-      />
+      <span class="font-serif">P</span>
     </div>
 
-    <!-- Optional Subtitle -->
-    <span
-      v-if="showSubtitle"
-      class="text-[10px] font-bold tracking-widest uppercase mt-1 pl-0.5"
-      :class="isDarkSurface ? 'text-slate-300' : 'text-slate-600'"
-    >
-      {{ subtitle || 'Sistem Parkir Digital' }}
-    </span>
+    <!-- Full Mode -->
+    <template v-else>
+      <div
+        class="inline-flex items-center transition"
+        :class="[
+          isDarkSurface
+            ? 'py-0.5'
+            : 'bg-[#0066FF] px-3.5 py-1.5 rounded-xl shadow-xs'
+        ]"
+      >
+        <img
+          src="/logo.webp"
+          alt="Secure Parking"
+          class="w-auto object-contain transition-all"
+          :class="sizeClass"
+          loading="eager"
+        />
+      </div>
+
+      <!-- Optional Subtitle -->
+      <span
+        v-if="showSubtitle"
+        class="text-[10px] font-bold tracking-wider uppercase mt-1 pl-0.5"
+        :class="isDarkSurface ? 'text-[#FFE600]' : 'text-[#0066FF]'"
+      >
+        {{ subtitle || 'Sistem Parkir Digital' }}
+      </span>
+    </template>
   </div>
 </template>
 
@@ -37,11 +48,14 @@ const props = withDefaults(
     subtitle?: string
     showSubtitle?: boolean
     isDarkSurface?: boolean
+    compact?: boolean
     size?: 'sm' | 'md' | 'lg' | 'xl'
   }>(),
   {
+    subtitle: '',
     showSubtitle: false,
     isDarkSurface: false,
+    compact: false,
     size: 'md',
   }
 )
@@ -55,7 +69,7 @@ const sizeClass = computed(() => {
     case 'xl':
       return 'h-14'
     case 'md':
-    default:
+      default:
       return 'h-9'
   }
 })

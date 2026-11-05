@@ -1,340 +1,346 @@
 <template>
-  <div class="min-h-screen bg-slate-100 flex flex-col justify-between p-4 sm:p-6 lg:p-8 select-none text-slate-800">
-    <!-- Top Header Bar (Sesuai Gambar Standalone Kiosk + Tombol Kembali ke Halaman Petugas) -->
-    <header class="max-w-6xl mx-auto w-full bg-white rounded-xl border border-slate-200 shadow-xs px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <BrandLogo :showSubtitle="true" subtitle="Terminal Masuk Gerbang" size="sm" />
+  <div class="space-y-6 max-w-6xl mx-auto select-none font-sans pb-8">
+    <!-- Top Kiosk Operational Banner -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#0066ff] animate-pulse"></span>
+          <h1 class="text-xl sm:text-2xl font-normal text-slate-900 font-serif tracking-tight">
+            Terminal Masuk Gerbang
+          </h1>
+          <span class="px-2.5 py-0.5 rounded-full bg-[#fefce8] text-slate-900 border border-[#ffe600] text-[10px] font-bold">
+            Kiosk Mandiri & Member
+          </span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">
+          Layanan terpadu: cetak tiket karcis pengunjung umum dan validasi pemindaian kartu member aktif.
+        </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-4 self-end md:self-auto">
-        <!-- Status Petugas Bertugas & Jam Realtime -->
-        <div class="text-xs text-slate-500 text-left md:text-right">
-          <div class="flex items-center gap-1.5 md:justify-end text-slate-700 font-medium">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Petugas: <strong>{{ auth.user.value?.name || 'Petugas Gerbang' }}</strong></span>
-          </div>
-          <div class="font-bold text-slate-800 text-xs sm:text-sm font-mono mt-0.5">
-            {{ liveDate }} &bull; {{ liveTime }} WIB
-          </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Live Date & Clock -->
+        <div class="text-right hidden sm:block text-xs">
+          <div class="text-slate-500 font-medium">Petugas: <strong class="text-slate-800">{{ auth.user.value?.name || 'Petugas 1' }}</strong></div>
+          <div class="font-mono font-bold text-slate-800 text-[11px]">{{ liveDate }} &bull; {{ liveTime }} WIB</div>
         </div>
 
-        <!-- Tombol Kembali ke Halaman Petugas Parkir -->
+        <!-- Tombol Cepat Kembali ke Dashboard -->
         <NuxtLink
           to="/petugas"
-          class="flex items-center gap-2 px-4 py-2.5 bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold rounded-lg transition active:scale-[0.98] shadow-xs cursor-pointer border border-slate-700"
+          class="flex items-center gap-2 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition border border-slate-300 shadow-2xs cursor-pointer"
         >
-          <ArrowLeft class="w-4 h-4 text-[#ff9900]" />
-          <span>Kembali ke Halaman Petugas</span>
+          <ArrowLeft class="w-3.5 h-3.5 text-[#0066ff]" />
+          <span>Dashboard Petugas</span>
         </NuxtLink>
       </div>
-    </header>
+    </div>
 
-    <!-- Main Body: Sebelahan Tanpa Tab (Kiri: Ambil Tiket, Kanan: Scan Member) -->
-    <main class="max-w-6xl mx-auto w-full my-auto py-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+    <!-- Main Dual Column Layout (Sebelahan: Kiri Non-Member, Kanan Member) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+      
+      <!-- ======================================================== -->
+      <!-- KOLOM KIRI: PENGENDARA NON-MEMBER (AMBIL TIKET PARKIR)    -->
+      <!-- ======================================================== -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 flex flex-col justify-between space-y-6">
         
-        <!-- ======================================================== -->
-        <!-- KOLOM KIRI: PENGENDARA NON-MEMBER (AMBIL TIKET PARKIR)    -->
-        <!-- ======================================================== -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6">
-          
-          <!-- STATE 1A: Standby Siap Cetak Tiket -->
-          <div v-if="!tiketData" class="flex flex-col justify-between h-full space-y-6">
-            <!-- Header Kartu Kiri -->
-            <div class="text-center space-y-2">
-              <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-[#0099ff] px-3 py-1 rounded-full bg-[#e6f4ff] border border-[#0099ff]/20">
-                PENGENDARA NON-MEMBER (UMUM)
-              </span>
-              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#001a4e] tracking-tight">
-                Selamat Datang
-              </h2>
-              <p class="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
-                Silakan tekan tombol di bawah untuk mencetak tiket parkir masuk Anda.
-              </p>
-            </div>
-
-            <!-- Tombol Cetak Tiket Besar (Sesuai Gambar Asli) -->
-            <div class="max-w-sm mx-auto w-full space-y-3 py-4">
-              <button
-                @click="ambilTiket"
-                :disabled="isLoadingTicket || !isBackendOnline"
-                class="w-full py-6 px-6 rounded-xl font-black text-xl tracking-wide uppercase transition active:scale-[0.99] shadow-md cursor-pointer flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed bg-[#001a4e] hover:bg-[#001033] text-white border border-slate-700"
-              >
-                <Printer v-if="!isLoadingTicket" class="w-7 h-7 shrink-0 text-[#ff9900]" />
-                <Loader2 v-else class="w-7 h-7 animate-spin" />
-                <span>{{ isLoadingTicket ? 'Mencetak Tiket...' : 'AMBIL TIKET PARKIR' }}</span>
-              </button>
-
-              <p class="text-xs text-center text-slate-500 font-medium">
-                Tarif Parkir: <strong>Rp 3.000 / Jam</strong> &bull; Palang pintu akan terbuka otomatis
-              </p>
-            </div>
-
-            <!-- Error Notification -->
-            <div v-if="ticketErrorMessage" class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2">
-              <AlertTriangle class="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-              <div class="leading-relaxed">{{ ticketErrorMessage }}</div>
-            </div>
-
-            <!-- Footer Strip Info -->
-            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
-              <span>Sistem Karcis: <strong class="text-emerald-600">Online</strong></span>
-              <span class="text-slate-600 font-bold">Palang: Siap Buka Otomatis</span>
-            </div>
-          </div>
-
-          <!-- STATE 1B: Tiket Selesai Dicetak (Preview & Countdown) -->
-          <div v-else class="space-y-5 text-center flex flex-col justify-between h-full">
-            <div class="space-y-2 pb-4 border-b border-dashed border-slate-300 flex flex-col items-center">
-              <LottieAnimation animationPath="/lottie/check.json" width="w-14" height="h-14" :loop="false" />
-              <h3 class="text-lg sm:text-xl font-black text-emerald-800">
-                Tiket Berhasil Dicetak — Palang Terbuka!
-              </h3>
-              <p class="text-xs text-slate-500">Ambil struk karcis fisik dan pengendara dipersilakan masuk.</p>
-            </div>
-
-            <!-- Detail Tiket -->
-            <div class="space-y-3 max-w-xs mx-auto w-full">
-              <div>
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  NOMOR TIKET RESMI
-                </span>
-                <span class="text-4xl font-black font-mono text-[#001a4e]">
-                  {{ tiketData.kode_tiket }}
-                </span>
-              </div>
-
-              <div class="p-2.5 bg-white rounded-xl border border-slate-200 shadow-xs inline-block">
-                <QrcodeVue :value="tiketData.qr_code" :size="130" level="M" />
-              </div>
-
-              <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs font-mono space-y-1 text-left">
-                <div class="flex justify-between text-slate-600">
-                  <span>Waktu Masuk:</span>
-                  <span class="font-bold text-slate-900">{{ formatDateTime(tiketData.waktu_masuk) }}</span>
-                </div>
-                <div class="flex justify-between text-slate-600">
-                  <span>Tarif Dasar:</span>
-                  <span class="font-bold text-emerald-700">Rp 3.000 / Jam</span>
-                </div>
-                <div class="flex justify-between text-slate-600">
-                  <span>Petugas Pos:</span>
-                  <span class="font-bold text-slate-800">{{ auth.user.value?.name || 'Petugas 1' }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Countdown Bar & Reset Action -->
-            <div class="pt-3 border-t border-slate-100 space-y-3">
-              <div class="text-xs text-slate-500 font-mono">
-                Reset otomatis dalam: <strong>{{ countdown }} detik</strong>
-              </div>
-              <div class="flex items-center justify-center gap-2">
-                <button
-                  @click="cetakStruk"
-                  class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-300"
-                >
-                  <Printer class="w-3.5 h-3.5 text-[#ff9900]" />
-                  <span>Cetak Fisik</span>
-                </button>
-                <button
-                  @click="resetKiosk"
-                  class="px-4 py-2 bg-[#001a4e] hover:bg-[#001033] text-white rounded-lg text-xs font-bold transition cursor-pointer"
-                >
-                  <span>Kendaraan Berikutnya</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ======================================================== -->
-        <!-- KOLOM KANAN: PENGENDARA MEMBER (SCAN QR & VALIDASI)       -->
-        <!-- ======================================================== -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-6">
-          
-          <!-- Header Kartu Kanan -->
+        <!-- STATE 1A: Standby Siap Cetak Tiket -->
+        <div v-if="!tiketData" class="flex flex-col justify-between h-full space-y-6">
+          <!-- Header Kartu Kiri -->
           <div class="text-center space-y-2">
-            <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-emerald-700 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200">
-              PENGENDARA MEMBER (LANGGANAN)
+            <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-slate-950 px-3 py-1 rounded-full bg-[#ffe600] border border-[#e6cf00]">
+              PENGENDARA NON-MEMBER (UMUM)
             </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#001a4e] tracking-tight">
-              Scan Kartu Member
+            <h2 class="text-3xl sm:text-4xl font-normal text-slate-900 tracking-tight font-serif pt-1">
+              Selamat Datang
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
-              Arahkan QR Code kartu ke kamera atau scan dengan barcode scanner USB.
+              Silakan tekan tombol di bawah untuk mencetak tiket parkir masuk Anda.
             </p>
           </div>
 
-          <!-- Kamera Viewport & Kontrol -->
-          <div class="space-y-3">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-slate-700 flex items-center gap-1.5">
-                <Camera class="w-3.5 h-3.5 text-[#0099ff]" />
-                <span>Kamera Scanner Member</span>
-              </span>
+          <!-- Tombol Cetak Tiket Besar (Bersih, Non AI-Slop, 3 Warna) -->
+          <div class="max-w-sm mx-auto w-full space-y-4 py-4">
+            <button
+              @click="ambilTiket"
+              :disabled="isLoadingTicket || !isBackendOnline"
+              class="w-full py-6 px-6 rounded-2xl font-bold text-xl tracking-wide uppercase transition active:scale-[0.98] shadow-md cursor-pointer flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed bg-[#0066ff] hover:bg-[#0052cc] text-white border-2 border-blue-500"
+            >
+              <Printer v-if="!isLoadingTicket" class="w-7 h-7 shrink-0 text-[#ffe600]" />
+              <Loader2 v-else class="w-7 h-7 animate-spin text-[#ffe600]" />
+              <span>{{ isLoadingTicket ? 'Mencetak Tiket...' : 'AMBIL TIKET PARKIR' }}</span>
+            </button>
 
-              <div class="flex items-center gap-2">
-                <select
-                  v-if="cameraList.length > 1"
-                  v-model="selectedCameraId"
-                  @change="changeCamera"
-                  class="text-[11px] px-2 py-1 rounded border border-slate-300 bg-white text-slate-700 outline-none max-w-32 truncate"
-                >
-                  <option v-for="cam in cameraList" :key="cam.id" :value="cam.id">
-                    {{ cam.label || 'Kamera ' + cam.id }}
-                  </option>
-                </select>
-
-                <button
-                  @click="toggleCamera"
-                  class="text-xs font-bold px-3 py-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 transition cursor-pointer flex items-center gap-1.5"
-                >
-                  <Loader2 v-if="isStartingCamera" class="w-3.5 h-3.5 animate-spin" />
-                  <span>{{ isScanning ? 'Matikan Kamera' : 'Nyalakan Kamera' }}</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Kamera Container -->
-            <div class="relative bg-slate-900 rounded-xl overflow-hidden min-h-48 flex items-center justify-center border border-slate-800">
-              <div id="reader-kiosk" class="w-full"></div>
-
-              <!-- Placeholder jika kamera off -->
-              <div v-if="!isScanning && !isStartingCamera" class="p-5 text-center text-slate-400 space-y-2">
-                <CameraOff class="w-8 h-8 mx-auto opacity-40 text-slate-400" />
-                <p class="text-xs font-bold text-slate-300">Kamera Scanner Standby</p>
-                <p class="text-[11px] text-slate-400 max-w-xs">
-                  Klik "Nyalakan Kamera" atau gunakan alat Barcode Scanner USB di bawah.
-                </p>
-              </div>
-            </div>
-
-            <!-- Alert Error Kamera -->
-            <div v-if="cameraError" class="p-3 rounded-lg bg-amber-50 border border-amber-300 text-[11px] text-amber-900 leading-relaxed">
-              <strong>Kendala Kamera:</strong> {{ cameraError }}
+            <div class="text-center space-y-1">
+              <p class="text-xs text-slate-600 font-medium">
+                Tarif Parkir: <strong class="text-slate-900">Rp 3.000 / Jam</strong>
+              </p>
+              <p class="text-[11px] text-slate-500">
+                Palang pintu gerbang masuk akan terbuka otomatis setelah tiket keluar
+              </p>
             </div>
           </div>
 
-          <!-- Input Barcode Scanner USB & Input Manual Kode -->
-          <div class="space-y-1.5 pt-1">
-            <div class="flex items-center justify-between text-xs">
-              <label for="kiosk-manual-qr-input" class="font-bold text-slate-700 flex items-center gap-1.5">
-                <ScanLine class="w-3.5 h-3.5 text-[#ff9900]" />
-                <span>Barcode Scanner USB / Input Kode:</span>
-              </label>
-              <span class="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold">
-                USB Siap Tembak
-              </span>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <input
-                id="kiosk-manual-qr-input"
-                v-model="manualQr"
-                type="text"
-                placeholder="Arahkan barcode scanner atau ketik kode (misal: MBR-001)..."
-                class="flex-1 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none font-mono"
-                @keyup.enter="handleScan(manualQr)"
-              />
-              <button
-                @click="handleScan(manualQr)"
-                :disabled="isLoadingMember || !manualQr"
-                class="px-4 py-2 bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold rounded-lg transition disabled:opacity-60 cursor-pointer"
-              >
-                {{ isLoadingMember ? 'Memeriksa...' : 'Verifikasi' }}
-              </button>
-            </div>
+          <!-- Error Notification -->
+          <div v-if="ticketErrorMessage" class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2">
+            <AlertTriangle class="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+            <div class="leading-relaxed">{{ ticketErrorMessage }}</div>
           </div>
 
-          <!-- Hasil Verifikasi Petugas (Mengetahui Member Asli vs Palsu) -->
-          <div>
-            <!-- 1. Kondisi ERROR (Member Palsu, Expired, Belum Lunas, Anti-passback) -->
-            <div
-              v-if="memberErrorResult"
-              class="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-red-900 space-y-2.5 animate-in fade-in"
-            >
-              <div class="flex items-center justify-between pb-2 border-b border-red-200 font-bold text-xs text-red-700">
-                <div class="flex items-center gap-1.5">
-                  <AlertTriangle class="w-4 h-4 text-red-600 shrink-0" />
-                  <span>AKSES DITOLAK: KARTU TIDAK VALID</span>
-                </div>
-                <button @click="clearMemberResult" class="text-red-500 hover:text-red-700 text-xs font-bold">
-                  &times;
-                </button>
-              </div>
-
-              <p class="text-xs font-semibold leading-relaxed text-red-800">
-                {{ memberErrorResult }}
-              </p>
-              <p class="text-[10px] text-red-600">
-                Catatan Petugas: Pastikan kartu resmi, iuran lunas, dan tidak ada pelanggaran anti-passback.
-              </p>
-            </div>
-
-            <!-- 2. Kondisi SUKSES (Member Asli & Valid) -->
-            <div
-              v-else-if="memberSuccessResult"
-              class="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4 text-emerald-950 space-y-2.5 animate-in fade-in"
-            >
-              <div class="flex items-center justify-between pb-2 border-b border-emerald-200 font-bold text-xs text-emerald-800">
-                <div class="flex items-center gap-1.5">
-                  <LottieAnimation animationPath="/lottie/check.json" width="w-5" height="h-5" :loop="false" />
-                  <span>MEMBER ASLI & AKTIF — PALANG TERBUKA</span>
-                </div>
-                <span class="font-mono bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded text-[10px]">
-                  {{ memberSuccessResult.tiket.kode_tiket }}
-                </span>
-              </div>
-
-              <div class="grid grid-cols-2 gap-2 text-xs bg-white p-3 rounded-lg border border-emerald-200">
-                <div>
-                  <span class="text-slate-400 text-[10px] block">Nama Pemilik:</span>
-                  <span class="font-bold text-slate-900">{{ memberSuccessResult.member.nama }}</span>
-                </div>
-                <div>
-                  <span class="text-slate-400 text-[10px] block">Kode Member:</span>
-                  <span class="font-mono font-bold text-[#001a4e]">{{ memberSuccessResult.member.kode }}</span>
-                </div>
-                <div>
-                  <span class="text-slate-400 text-[10px] block">Perusahaan:</span>
-                  <span class="font-medium text-slate-700">{{ memberSuccessResult.member.perusahaan || '-' }}</span>
-                </div>
-                <div>
-                  <span class="text-slate-400 text-[10px] block">Masa Berlaku:</span>
-                  <span class="font-mono font-bold text-emerald-700">{{ memberSuccessResult.member.expired_at }}</span>
-                </div>
-              </div>
-
-              <button
-                @click="clearMemberResult"
-                class="w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition cursor-pointer"
-              >
-                Siap untuk Kendaraan Berikutnya
-              </button>
-            </div>
-
-            <!-- 3. Standby Info jika belum scan -->
-            <div v-else class="text-center py-2 text-[11px] text-slate-400">
-              Menunggu pemindaian kartu member saat pengendara mendekati gerbang...
-            </div>
+          <!-- Footer Strip Info -->
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span>Sistem Karcis: <strong class="text-[#0066ff]">Aktif (Online)</strong></span>
+            <span class="text-slate-700 font-bold">Palang: Otomatis</span>
           </div>
         </div>
 
-      </div>
-    </main>
+        <!-- STATE 1B: Tiket Selesai Dicetak (Preview & Countdown) -->
+        <div v-else class="space-y-5 text-center flex flex-col justify-between h-full">
+          <div class="space-y-2 pb-4 border-b border-dashed border-slate-300 flex flex-col items-center">
+            <LottieAnimation animationPath="/lottie/check.json" width="w-14" height="h-14" :loop="false" />
+            <h3 class="text-xl sm:text-2xl font-normal text-slate-900 font-serif">
+              Tiket Berhasil Dicetak &mdash; Palang Terbuka!
+            </h3>
+            <p class="text-xs text-slate-500">Ambil struk karcis fisik dan pengendara dipersilakan masuk.</p>
+          </div>
 
-    <!-- Minimalist Footer (Sesuai Gambar Standalone Kiosk) -->
-    <footer class="max-w-6xl mx-auto w-full text-center text-xs text-slate-500 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-200/60 mt-4">
-      <div>&copy; 2026 Secure Parking System &bull; Seluruh Hak Cipta Dilindungi</div>
-      <div class="flex items-center gap-4 font-medium">
-        <NuxtLink to="/katalog-member" class="hover:text-slate-800 transition">Katalog Member</NuxtLink>
-        <span class="text-slate-300">&bull;</span>
-        <NuxtLink to="/" class="hover:text-slate-800 transition">Menu Utama</NuxtLink>
-        <span class="text-slate-300">&bull;</span>
-        <NuxtLink to="/petugas" class="hover:text-slate-800 font-bold text-[#001a4e] transition">Halaman Petugas</NuxtLink>
+          <!-- Detail Tiket -->
+          <div class="space-y-3 max-w-xs mx-auto w-full">
+            <div>
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                NOMOR TIKET RESMI
+              </span>
+              <span class="text-4xl font-bold font-mono text-[#0066ff]">
+                {{ tiketData.kode_tiket }}
+              </span>
+            </div>
+
+            <div class="p-3 bg-white rounded-2xl border-2 border-slate-200 shadow-xs inline-block">
+              <QrcodeVue :value="tiketData.qr_code" :size="130" level="M" />
+            </div>
+
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs font-mono space-y-1.5 text-left">
+              <div class="flex justify-between text-slate-600">
+                <span>Waktu Masuk:</span>
+                <span class="font-bold text-slate-900">{{ formatDateTime(tiketData.waktu_masuk) }}</span>
+              </div>
+              <div class="flex justify-between text-slate-600">
+                <span>Tarif Dasar:</span>
+                <span class="font-bold text-[#0066ff]">Rp 3.000 / Jam</span>
+              </div>
+              <div class="flex justify-between text-slate-600">
+                <span>Petugas Pos:</span>
+                <span class="font-bold text-slate-800">{{ auth.user.value?.name || 'Petugas 1' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Countdown Bar & Reset Action -->
+          <div class="pt-3 border-t border-slate-100 space-y-3">
+            <div class="text-xs text-slate-600 font-mono">
+              Reset otomatis dalam: <strong class="text-[#0066ff] font-bold">{{ countdown }} detik</strong>
+            </div>
+            <div class="flex items-center justify-center gap-2">
+              <button
+                @click="cetakStruk"
+                class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-300"
+              >
+                <Printer class="w-3.5 h-3.5 text-[#0066ff]" />
+                <span>Cetak Fisik</span>
+              </button>
+              <button
+                @click="resetKiosk"
+                class="px-5 py-2 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-xl text-xs font-bold transition cursor-pointer shadow-xs"
+              >
+                <span>Kendaraan Berikutnya</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </footer>
+
+      <!-- ======================================================== -->
+      <!-- KOLOM KANAN: PENGENDARA MEMBER (SCAN QR & VALIDASI)       -->
+      <!-- ======================================================== -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        
+        <!-- Header Kartu Kanan -->
+        <div class="text-center space-y-2">
+          <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-slate-900 px-3 py-1 rounded-full bg-[#ebf3ff] border border-[#0066ff]/30">
+            PENGENDARA MEMBER (LANGGANAN)
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-normal text-slate-900 tracking-tight font-serif pt-1">
+            Scan Kartu Member
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
+            Arahkan QR Code kartu ke kamera atau scan dengan barcode scanner USB.
+          </p>
+        </div>
+
+        <!-- Kamera Viewport & Kontrol -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5">
+              <Camera class="w-3.5 h-3.5 text-[#0066ff]" />
+              <span>Kamera Scanner Member</span>
+            </span>
+
+            <div class="flex items-center gap-2">
+              <select
+                v-if="cameraList.length > 1"
+                v-model="selectedCameraId"
+                @change="changeCamera"
+                class="text-[11px] px-2.5 py-1 rounded-lg border border-slate-300 bg-white text-slate-700 outline-none max-w-32 truncate"
+              >
+                <option v-for="cam in cameraList" :key="cam.id" :value="cam.id">
+                  {{ cam.label || 'Kamera ' + cam.id }}
+                </option>
+              </select>
+
+              <button
+                @click="toggleCamera"
+                class="text-xs font-bold px-3 py-1.5 rounded-xl border transition cursor-pointer flex items-center gap-1.5 shadow-2xs"
+                :class="isScanning ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100' : 'bg-[#0066ff] text-white border-blue-600 hover:bg-[#0052cc]'"
+              >
+                <Loader2 v-if="isStartingCamera" class="w-3.5 h-3.5 animate-spin" />
+                <span>{{ isScanning ? 'Matikan Kamera' : 'Nyalakan Kamera' }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Kamera Container -->
+          <div class="relative bg-slate-900 rounded-2xl overflow-hidden min-h-48 flex items-center justify-center border border-slate-800">
+            <div id="reader-kiosk" class="w-full"></div>
+
+            <!-- Placeholder jika kamera off -->
+            <div v-if="!isScanning && !isStartingCamera" class="p-6 text-center text-slate-400 space-y-2">
+              <CameraOff class="w-8 h-8 mx-auto opacity-50 text-slate-400" />
+              <p class="text-xs font-bold text-slate-200">Kamera Scanner Standby</p>
+              <p class="text-[11px] text-slate-400 max-w-xs">
+                Klik "Nyalakan Kamera" atau gunakan alat Barcode Scanner USB di bawah ini.
+              </p>
+            </div>
+          </div>
+
+          <!-- Alert Error Kamera -->
+          <div v-if="cameraError" class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-[11px] text-amber-900 leading-relaxed">
+            <strong>Kendala Kamera:</strong> {{ cameraError }}
+          </div>
+        </div>
+
+        <!-- Input Barcode Scanner USB & Input Manual Kode -->
+        <div class="space-y-1.5 pt-1">
+          <div class="flex items-center justify-between text-xs">
+            <label for="kiosk-manual-qr-input" class="font-bold text-slate-700 flex items-center gap-1.5">
+              <ScanLine class="w-3.5 h-3.5 text-[#0066ff]" />
+              <span>Barcode Scanner USB / Input Kode:</span>
+            </label>
+            <span class="text-[10px] font-mono text-slate-900 bg-[#fefce8] px-2 py-0.5 rounded-full border border-[#ffe600] font-bold">
+              USB Siap Tembak
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input
+              id="kiosk-manual-qr-input"
+              v-model="manualQr"
+              type="text"
+              placeholder="Arahkan barcode scanner atau ketik kode member..."
+              class="flex-1 px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none font-mono"
+              @keyup.enter="handleScan(manualQr)"
+            />
+            <button
+              @click="handleScan(manualQr)"
+              :disabled="isLoadingMember || !manualQr"
+              class="px-4 py-2.5 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-xl transition disabled:opacity-60 cursor-pointer shadow-xs"
+            >
+              {{ isLoadingMember ? 'Memeriksa...' : 'Verifikasi' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Hasil Verifikasi Petugas (Mengetahui Member Asli vs Palsu) -->
+        <div>
+          <!-- 1. Kondisi ERROR (Member Palsu, Expired, Belum Lunas, Anti-passback) -->
+          <div
+            v-if="memberErrorResult"
+            class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-red-900 space-y-2.5 animate-in fade-in"
+          >
+            <div class="flex items-center justify-between pb-2 border-b border-red-200 font-bold text-xs text-red-700">
+              <div class="flex items-center gap-1.5">
+                <AlertTriangle class="w-4 h-4 text-red-600 shrink-0" />
+                <span>AKSES DITOLAK: KARTU TIDAK VALID</span>
+              </div>
+              <button @click="clearMemberResult" class="text-red-500 hover:text-red-700 text-xs font-bold cursor-pointer">
+                &times;
+              </button>
+            </div>
+
+            <p class="text-xs font-bold leading-relaxed text-red-800">
+              {{ memberErrorResult }}
+            </p>
+            <p class="text-[10px] text-red-600">
+              Catatan Petugas: Pastikan kartu resmi, iuran langganan aktif, dan tidak melanggar anti-passback.
+            </p>
+          </div>
+
+          <!-- 2. Kondisi SUKSES (Member Asli & Valid) -->
+          <div
+            v-else-if="memberSuccessResult"
+            class="bg-[#f0f6ff] border-2 border-[#0066ff] rounded-2xl p-4 text-slate-900 space-y-2.5 animate-in fade-in"
+          >
+            <div class="flex items-center justify-between pb-2 border-b border-blue-200 font-bold text-xs text-[#0066ff]">
+              <div class="flex items-center gap-1.5">
+                <LottieAnimation animationPath="/lottie/check.json" width="w-5" height="h-5" :loop="false" />
+                <span>MEMBER ASLI & AKTIF &mdash; PALANG TERBUKA</span>
+              </div>
+              <span class="font-mono bg-[#ffe600] text-slate-950 px-2 py-0.5 rounded-lg text-[10px] font-bold">
+                {{ memberSuccessResult.tiket.kode_tiket }}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs bg-white p-3 rounded-xl border border-slate-200">
+              <div>
+                <span class="text-slate-400 text-[10px] block">Nama Pemilik:</span>
+                <span class="font-bold text-slate-900">{{ memberSuccessResult.member.nama }}</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] block">Kode Member:</span>
+                <span class="font-mono font-bold text-[#0066ff]">{{ memberSuccessResult.member.kode }}</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] block">Perusahaan:</span>
+                <span class="font-medium text-slate-700">{{ memberSuccessResult.member.perusahaan || '-' }}</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] block">Masa Berlaku:</span>
+                <span class="font-mono font-bold text-[#0066ff]">{{ memberSuccessResult.member.expired_at }}</span>
+              </div>
+            </div>
+
+            <button
+              @click="clearMemberResult"
+              class="w-full py-2 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
+            >
+              Siap untuk Kendaraan Berikutnya
+            </button>
+          </div>
+
+          <!-- 3. Standby Info jika belum scan -->
+          <div v-else class="text-center py-2 text-[11px] text-slate-400">
+            Menunggu pemindaian kartu member saat pengendara mendekati gerbang masuk...
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Minimalist Footer Status -->
+    <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-200">
+      <div class="font-medium">Sistem Gerbang Masuk Terpadu &bull; Pos Operasional</div>
+      <div class="flex items-center gap-3 font-mono text-[11px]">
+        <span class="text-slate-600 font-bold">Palang Pintu: Siap Beroperasi</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -352,12 +358,11 @@ import {
 import { Html5Qrcode } from 'html5-qrcode'
 import QrcodeVue from 'qrcode.vue'
 import LottieAnimation from '~/components/LottieAnimation.vue'
-import BrandLogo from '~/components/BrandLogo.vue'
 import { formatDateTime } from '~/utils/formatters'
 
-// Berdiri halaman sendiri tanpa sidebar, terproteksi login petugas
+// Terintegrasi dalam layout Petugas dengan sidebar yang tertutup secara default
 definePageMeta({
-  layout: false,
+  layout: 'petugas',
   middleware: 'auth',
 })
 

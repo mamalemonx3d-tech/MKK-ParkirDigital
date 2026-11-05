@@ -3,9 +3,9 @@
     <!-- Header Banner -->
     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-xl font-bold text-[#001a4e]">
+        <h1 class="text-xl font-normal text-slate-900 font-serif tracking-tight">
           Dashboard Utama Administrator
-        </h2>
+        </h1>
         <p class="text-xs text-slate-500 mt-1">
           Ringkasan operasional harian seluruh gerbang parkir, transaksi, dan staf.
         </p>
@@ -14,14 +14,14 @@
       <div class="flex items-center gap-2">
         <NuxtLink
           to="/admin/rekap"
-          class="px-3.5 py-2 rounded-lg bg-[#0099ff] hover:bg-[#0084de] text-white text-xs font-bold transition flex items-center gap-2"
+          class="px-3.5 py-2 rounded-lg bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold transition flex items-center gap-2"
         >
           <FileSpreadsheet class="w-4 h-4" />
           <span>Lihat Rekapitulasi</span>
         </NuxtLink>
         <NuxtLink
           to="/admin/users"
-          class="px-3.5 py-2 rounded-lg bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold transition flex items-center gap-2"
+          class="px-3.5 py-2 rounded-lg bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold transition flex items-center gap-2"
         >
           <UserPlus class="w-4 h-4" />
           <span>Kelola Petugas</span>
@@ -36,7 +36,7 @@
         <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
           Kendaraan di Dalam
         </span>
-        <div class="text-2xl font-black font-mono text-[#001a4e]">
+        <div class="text-2xl font-black font-mono text-[#0066ff]">
           {{ summary.tiket_aktif }}
         </div>
         <span class="text-[10px] text-slate-400 mt-1 block">Sesi parkir aktif</span>
@@ -96,7 +96,7 @@
         </div>
         <NuxtLink
           to="/petugas/ticket"
-          class="text-xs font-semibold text-[#0099ff] hover:underline"
+          class="text-xs font-semibold text-[#0066ff] hover:underline"
         >
           Lihat Semua Tiket &rarr;
         </NuxtLink>
@@ -125,7 +125,7 @@
               :key="t.id"
               class="hover:bg-slate-50/80 transition"
             >
-              <td class="py-3 px-4 font-mono font-bold text-[#001a4e]">
+              <td class="py-3 px-4 font-mono font-bold text-[#0066ff]">
                 {{ t.kode_tiket }}
               </td>
               <td class="py-3 px-4">

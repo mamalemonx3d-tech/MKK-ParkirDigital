@@ -1,21 +1,21 @@
 <template>
-  <div class="flex-1 flex items-center justify-center p-4 sm:p-6">
-    <div class="max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+  <div class="flex-1 flex items-center justify-center p-4 sm:p-6 font-sans">
+    <div class="max-w-md w-full bg-white rounded-2xl border-2 border-slate-200 shadow-sm p-6 sm:p-8">
       <!-- Brand & Header -->
-      <div class="text-center mb-6">
-        <div class="inline-flex justify-center mb-3">
+      <div class="text-center mb-6 space-y-2">
+        <div class="inline-flex justify-center mb-2">
           <BrandLogo :showSubtitle="false" size="lg" />
         </div>
-        <h2 class="text-xl font-bold text-[#001a4e]">
+        <h1 class="text-2xl font-normal text-slate-900 font-serif tracking-tight">
           Masuk Portal Petugas & Admin
-        </h2>
-        <p class="text-xs text-slate-500 mt-1">
-          Gunakan akun yang telah terdaftar untuk mengakses sistem.
+        </h1>
+        <p class="text-xs text-slate-500">
+          Gunakan akun yang telah terdaftar untuk mengakses sistem gerbang.
         </p>
       </div>
 
       <!-- Error Alert -->
-      <div v-if="errorMessage" class="mb-5 p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
+      <div v-if="errorMessage" class="mb-5 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
         <AlertCircle class="w-4 h-4 shrink-0 text-red-500" />
         <span>{{ errorMessage }}</span>
       </div>
@@ -23,7 +23,7 @@
       <!-- Login Form -->
       <form @submit.prevent="handleLogin" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
             Alamat Email
           </label>
           <div class="relative">
@@ -33,17 +33,17 @@
               type="email"
               required
               placeholder="nama@parkir.com"
-              class="w-full pl-9 pr-3.5 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] focus:ring-2 focus:ring-[#0099ff]/20 outline-none transition"
+              class="w-full pl-9 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none transition"
             />
           </div>
         </div>
 
         <div>
           <div class="flex items-center justify-between mb-1.5">
-            <label class="block text-xs font-semibold text-slate-700">
+            <label class="block text-xs font-bold text-slate-700">
               Kata Sandi
             </label>
-            <NuxtLink to="/forgot-password" class="text-[11px] text-[#0099ff] hover:underline font-medium">
+            <NuxtLink to="/forgot-password" class="text-[11px] text-[#0066ff] hover:underline font-bold">
               Lupa sandi?
             </NuxtLink>
           </div>
@@ -54,12 +54,12 @@
               :type="showPassword ? 'text' : 'password'"
               required
               placeholder="••••••••"
-              class="w-full pl-9 pr-10 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] focus:ring-2 focus:ring-[#0099ff]/20 outline-none transition"
+              class="w-full pl-9 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none transition"
             />
             <button
               type="button"
               @click="showPassword = !showPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
             >
               <Eye v-if="!showPassword" class="w-4 h-4" />
               <EyeOff v-else class="w-4 h-4" />
@@ -70,33 +70,33 @@
         <button
           type="submit"
           :disabled="isLoading"
-          class="w-full mt-2 py-2.5 px-4 bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
+          class="w-full mt-2 py-3 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
         >
-          <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin" />
+          <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin text-[#ffe600]" />
           <span>{{ isLoading ? 'Memverifikasi...' : 'Masuk ke Sistem' }}</span>
         </button>
       </form>
 
       <!-- Demo Accounts Helper -->
       <div class="mt-8 pt-6 border-t border-slate-100">
-        <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2 text-center">
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2 text-center">
           Akun Bawaan Sistem (Demo)
         </span>
         <div class="grid grid-cols-2 gap-2 text-[11px]">
           <button
             type="button"
             @click="fillCredentials('admin@parkir.com', 'password')"
-            class="p-2 rounded bg-slate-50 border border-slate-200 text-left hover:border-[#0099ff] transition cursor-pointer"
+            class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-[#0066ff] transition cursor-pointer"
           >
-            <span class="font-bold text-slate-700 block">Super Admin</span>
+            <span class="font-bold text-slate-800 block">Super Admin</span>
             <span class="text-slate-500 font-mono text-[10px]">admin@parkir.com</span>
           </button>
           <button
             type="button"
             @click="fillCredentials('petugas@parkir.com', 'password')"
-            class="p-2 rounded bg-slate-50 border border-slate-200 text-left hover:border-[#0099ff] transition cursor-pointer"
+            class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-[#0066ff] transition cursor-pointer"
           >
-            <span class="font-bold text-slate-700 block">Petugas Gerbang</span>
+            <span class="font-bold text-slate-800 block">Petugas Gerbang</span>
             <span class="text-slate-500 font-mono text-[10px]">petugas@parkir.com</span>
           </button>
         </div>
@@ -150,7 +150,10 @@ const handleLogin = async () => {
       errorMessage.value = res.data?.message || 'Login gagal.'
     }
   } catch (err: any) {
-    errorMessage.value = err.response?.data?.message || err.response?.data?.errors?.email?.[0] || 'Kombinasi email dan kata sandi tidak cocok.'
+    errorMessage.value =
+      err.response?.data?.message ||
+      err.response?.data?.errors?.email?.[0] ||
+      'Kombinasi email dan kata sandi tidak cocok.'
   } finally {
     isLoading.value = false
   }

@@ -3,9 +3,9 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-lg font-bold text-[#001a4e]">
+        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
           Laporan Rekapitulasi Shift Petugas
-        </h2>
+        </h1>
         <p class="text-xs text-slate-500 mt-0.5">
           Tinjau total kendaraan dan pendapatan harian sebelum pergantian shift loket.
         </p>
@@ -20,7 +20,7 @@
         />
         <button
           @click="printReport"
-          class="px-3.5 py-2 bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer shadow-xs"
+          class="px-3.5 py-2 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer shadow-xs"
         >
           <Printer class="w-4 h-4" />
           <span>Cetak Laporan</span>
@@ -89,7 +89,7 @@
               :key="item.kode_tiket"
               class="hover:bg-slate-50/80 transition"
             >
-              <td class="py-3 px-4 font-mono font-bold text-[#001a4e]">
+              <td class="py-3 px-4 font-mono font-bold text-[#0066ff]">
                 {{ item.kode_tiket }}
               </td>
               <td class="py-3 px-4 font-mono font-bold text-slate-700">

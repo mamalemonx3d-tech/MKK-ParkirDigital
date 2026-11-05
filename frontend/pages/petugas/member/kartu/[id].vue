@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between no-print">
       <NuxtLink
         to="/petugas/member"
-        class="text-xs font-semibold text-slate-600 hover:text-[#001a4e] flex items-center gap-1"
+        class="text-xs font-semibold text-slate-600 hover:text-[#0066ff] flex items-center gap-1"
       >
         <ArrowLeft class="w-4 h-4" />
         <span>Kembali ke Data Member</span>
@@ -12,7 +12,7 @@
 
       <button
         @click="printCard"
-        class="px-4 py-2 bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer shadow-xs"
+        class="px-4 py-2 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer shadow-xs"
       >
         <Printer class="w-4 h-4" />
         <span>Cetak Kartu Fisik</span>
@@ -21,7 +21,7 @@
 
     <!-- Loading State -->
     <div v-if="isLoading" class="text-center py-12 text-slate-400">
-      <Loader2 class="w-8 h-8 animate-spin mx-auto mb-2 text-[#0099ff]" />
+      <Loader2 class="w-8 h-8 animate-spin mx-auto mb-2 text-[#0066ff]" />
       <span class="text-xs">Memuat data kartu...</span>
     </div>
 
@@ -36,7 +36,7 @@
         <BrandLogo :showSubtitle="true" subtitle="Kartu Akses Parkir Berlangganan" />
         <div class="text-right">
           <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">ID KARTU</span>
-          <span class="text-base font-black font-mono text-[#001a4e]">{{ member.kode }}</span>
+          <span class="text-base font-black font-mono text-[#0066ff]">{{ member.kode }}</span>
         </div>
       </div>
 

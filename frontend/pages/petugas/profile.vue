@@ -3,16 +3,16 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-lg font-bold text-[#001a4e]">
+        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
           Kelola Profil Akun Petugas
-        </h2>
+        </h1>
         <p class="text-xs text-slate-500 mt-0.5">
           Perbarui nama lengkap, alamat email, dan kata sandi akun Anda.
         </p>
       </div>
 
       <span
-        class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0099ff] text-white font-mono"
+        class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0066ff] text-white font-mono"
       >
         Petugas Loket
       </span>
@@ -52,7 +52,7 @@
         <div class="space-y-4">
           <div class="border-b border-slate-100 pb-2">
             <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <User class="w-4 h-4 text-[#0099ff]" />
+              <User class="w-4 h-4 text-[#0066ff]" />
               <span>Informasi Pengguna</span>
             </h3>
           </div>
@@ -67,7 +67,7 @@
                 type="text"
                 required
                 placeholder="Nama Anda"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0099ff] focus:ring-1 focus:ring-[#0099ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
               />
             </div>
 
@@ -80,7 +80,7 @@
                 type="email"
                 required
                 placeholder="nama@email.com"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0099ff] focus:ring-1 focus:ring-[#0099ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
               />
             </div>
 
@@ -102,7 +102,7 @@
         <div class="space-y-4 pt-4 border-t border-slate-100">
           <div class="border-b border-slate-100 pb-2">
             <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <KeyRound class="w-4 h-4 text-[#ff9900]" />
+              <KeyRound class="w-4 h-4 text-[#ffe600]" />
               <span>Ganti Kata Sandi (Opsional)</span>
             </h3>
             <p class="text-[11px] text-slate-400">Kosongkan jika Anda tidak ingin mengubah password saat ini.</p>
@@ -117,7 +117,7 @@
                 v-model="form.current_password"
                 type="password"
                 placeholder="Password lama"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0099ff] focus:ring-1 focus:ring-[#0099ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
               />
             </div>
 
@@ -129,7 +129,7 @@
                 v-model="form.password"
                 type="password"
                 placeholder="Minimal 6 karakter"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0099ff] focus:ring-1 focus:ring-[#0099ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
               />
             </div>
 
@@ -141,7 +141,7 @@
                 v-model="form.password_confirmation"
                 type="password"
                 placeholder="Ulangi password baru"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0099ff] focus:ring-1 focus:ring-[#0099ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="px-5 py-2.5 rounded-lg bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs disabled:opacity-50"
+            class="px-5 py-2.5 rounded-lg bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs disabled:opacity-50"
           >
             <Loader2 v-if="isSubmitting" class="w-4 h-4 animate-spin" />
             <Save v-else class="w-4 h-4" />

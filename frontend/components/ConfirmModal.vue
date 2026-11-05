@@ -10,11 +10,11 @@
     >
       <div
         v-if="isOpen"
-        class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 select-none"
+        class="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-xs flex items-center justify-center p-4 select-none font-sans"
         @click.self="handleCancel"
       >
         <div
-          class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full p-6 text-center shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-200"
+          class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full p-6 text-center shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-200"
         >
           <!-- Animated Lottie Header -->
           <div class="flex justify-center -mt-2">
@@ -29,10 +29,10 @@
 
           <!-- Dialog Title & Message -->
           <div class="space-y-1.5">
-            <h3 class="text-base sm:text-lg font-black text-[#001a4e] tracking-tight">
+            <h3 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
               {{ options.title }}
             </h3>
-            <p class="text-xs text-slate-600 leading-relaxed">
+            <p class="text-xs text-slate-600 leading-relaxed font-sans">
               {{ options.message }}
             </p>
           </div>
@@ -43,7 +43,7 @@
             <div v-if="options.isAlert">
               <button
                 @click="handleConfirm"
-                class="w-full py-2.5 px-4 bg-[#001a4e] hover:bg-[#001033] text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
+                class="w-full py-2.5 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
               >
                 {{ options.confirmText || 'Mengerti' }}
               </button>
@@ -62,7 +62,7 @@
                 type="button"
                 @click="handleConfirm"
                 class="flex-1 py-2.5 px-4 text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
-                :class="options.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#001a4e] hover:bg-[#001033]'"
+                :class="options.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#0066ff] hover:bg-[#0052cc]'"
               >
                 {{ options.confirmText || 'Ya, Lanjutkan' }}
               </button>

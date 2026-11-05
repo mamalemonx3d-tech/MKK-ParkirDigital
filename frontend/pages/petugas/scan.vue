@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-center min-h-[60vh] text-slate-500 text-sm">
     <div class="flex items-center gap-2">
-      <Loader2 class="w-5 h-5 animate-spin text-[#0099ff]" />
+      <Loader2 class="w-5 h-5 animate-spin text-[#0066ff]" />
       <span>Mengalihkan ke Terminal Pintu Masuk Terpadu...</span>
     </div>
   </div>

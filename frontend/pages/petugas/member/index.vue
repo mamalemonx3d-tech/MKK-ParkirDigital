@@ -3,9 +3,9 @@
     <!-- Header -->
     <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-lg font-bold text-[#001a4e]">
+        <h1 class="text-lg font-normal text-slate-900 font-serif tracking-tight">
           Data Langganan Member Parkir
-        </h2>
+        </h1>
         <p class="text-xs text-slate-500 mt-0.5">
           Kelola pendaftaran anggota, penerbitan kartu ber-QR Code, dan masa berlaku.
         </p>
@@ -13,7 +13,7 @@
       <div class="flex items-center gap-2">
         <button
           @click="openAddModal"
-          class="px-3.5 py-2 rounded-lg bg-[#0099ff] hover:bg-[#0084de] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer"
+          class="px-3.5 py-2 rounded-lg bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer"
         >
           <UserPlus class="w-4 h-4" />
           <span>Daftar Member Baru</span>
@@ -47,7 +47,7 @@
               :key="m.id"
               class="hover:bg-slate-50/80 transition"
             >
-              <td class="py-3 px-4 font-mono font-bold text-[#001a4e]">
+              <td class="py-3 px-4 font-mono font-bold text-[#0066ff]">
                 {{ m.kode }}
               </td>
               <td class="py-3 px-4 font-bold text-slate-900">
@@ -75,7 +75,7 @@
                   <NuxtLink
                     :to="`/petugas/member/kartu/${m.id}`"
                     title="Cetak Kartu Member"
-                    class="p-1.5 rounded-md hover:bg-[#e6f4ff] text-[#0099ff] transition cursor-pointer"
+                    class="p-1.5 rounded-md hover:bg-[#e6f4ff] text-[#0066ff] transition cursor-pointer"
                   >
                     <CreditCard class="w-4 h-4" />
                   </NuxtLink>
@@ -109,7 +109,7 @@
     >
       <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <h3 class="text-sm font-bold text-[#001a4e]">Daftarkan Member Baru</h3>
+          <h3 class="text-sm font-bold text-[#0066ff]">Daftarkan Member Baru</h3>
           <button @click="isModalOpen = false" class="text-slate-400 hover:text-slate-600">
             <X class="w-4 h-4" />
           </button>
@@ -123,7 +123,7 @@
               type="text"
               required
               placeholder="Contoh: Budi Santoso"
-              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none"
             />
           </div>
 
@@ -134,7 +134,7 @@
               type="text"
               required
               placeholder="Contoh: PT Sumber Rejeki"
-              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none"
             />
           </div>
 
@@ -146,14 +146,14 @@
                 type="number"
                 required
                 placeholder="200000"
-                class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none font-mono"
+                class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none font-mono"
               />
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Status Pembayaran</label>
               <select
                 v-model="form.status"
-                class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none bg-white font-medium"
+                class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none bg-white font-medium"
               >
                 <option value="belum">Belum Lunas</option>
                 <option value="lunas">Lunas</option>
@@ -167,7 +167,7 @@
               v-model="form.expired_at"
               type="date"
               required
-              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0099ff] outline-none font-mono"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none font-mono"
             />
           </div>
 
@@ -175,7 +175,7 @@
             <button
               type="submit"
               :disabled="isSubmitting"
-              class="flex-1 py-2.5 px-4 bg-[#0099ff] hover:bg-[#0084de] text-white text-xs font-bold rounded-lg transition cursor-pointer disabled:opacity-60"
+              class="flex-1 py-2.5 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg transition cursor-pointer disabled:opacity-60"
             >
               {{ isSubmitting ? 'Menyimpan...' : 'Simpan Data Member' }}
             </button>
