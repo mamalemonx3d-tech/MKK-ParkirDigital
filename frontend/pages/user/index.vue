@@ -12,15 +12,15 @@
       </header>
 
       <!-- Main Dual Column Layout (Sebelahan: Kiri Non-Member, Kanan Member) -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         
         <!-- ======================================================== -->
         <!-- KOLOM KIRI: PENGENDARA NON-MEMBER (AMBIL TIKET PARKIR)    -->
         <!-- ======================================================== -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 flex flex-col space-y-6">
           
           <!-- STATE 1A: Standby Siap Cetak Tiket -->
-          <div v-if="!tiketData" class="flex flex-col justify-between h-full space-y-6">
+          <div v-if="!tiketData" class="flex flex-col space-y-6">
             <!-- Header Kartu Kiri -->
             <div class="text-center space-y-2">
               <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-slate-950 px-3 py-1 rounded-full bg-[#f59e0b] border border-[#d97706]">
@@ -64,7 +64,7 @@
           </div>
 
           <!-- STATE 1B: Tiket Selesai Dicetak (Preview & Countdown) -->
-          <div v-else class="space-y-5 text-center flex flex-col justify-between h-full">
+          <div v-else class="space-y-5 text-center flex flex-col">
             <div class="space-y-2 pb-4 border-b border-dashed border-slate-300 flex flex-col items-center">
               <LottieAnimation animationPath="/lottie/check.json" width="w-14" height="h-14" :loop="false" />
               <h3 class="text-xl sm:text-2xl font-normal text-[#0f172a] font-serif">
@@ -133,7 +133,7 @@
         <!-- ======================================================== -->
         <!-- KOLOM KANAN: PENGENDARA MEMBER (SCAN KARTU / QR MEMBER)   -->
         <!-- ======================================================== -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 flex flex-col space-y-6">
           
           <!-- Header Kartu Kanan -->
           <div class="text-center space-y-2">
