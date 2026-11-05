@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row text-[#0f172a] font-sans">
-    <!-- Sidebar Navigation with #1E293B Solid Slate Blue -->
+  <div class="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row text-[#0f172a] font-sans print:block print:bg-white print:min-h-0">
+    <!-- Sidebar Navigation with #1E293B Solid Slate Blue (Hidden on Print) -->
     <aside
-      class="bg-[#1e293b] text-white flex flex-col shrink-0 md:min-h-screen transition-all duration-300 ease-in-out relative z-40 border-r border-slate-700/60"
+      class="bg-[#1e293b] text-white flex flex-col shrink-0 md:min-h-screen transition-all duration-300 ease-in-out relative z-40 border-r border-slate-700/60 print:hidden"
       :class="isCollapsed ? 'w-full md:w-16' : 'w-full md:w-64'"
     >
       <!-- Brand Header & Toggle Button -->
@@ -203,9 +203,9 @@
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0">
-      <!-- Topbar Header -->
-      <header class="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between sticky top-0 z-30 shadow-2xs">
+    <div class="flex-1 flex flex-col min-w-0 print:block print:w-full">
+      <!-- Topbar Header (Hidden on Print) -->
+      <header class="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between sticky top-0 z-30 shadow-2xs print:hidden">
         <div class="flex items-center gap-3">
           <!-- Quick Sidebar Toggle on Topbar -->
           <button
@@ -237,7 +237,7 @@
       </header>
 
       <!-- Page Content Canvas -->
-      <main class="flex-1 p-4 sm:p-6 overflow-y-auto bg-[#f8fafc]">
+      <main class="flex-1 p-4 sm:p-6 overflow-y-auto bg-[#f8fafc] print:p-0 print:m-0 print:bg-white print:overflow-visible print:block">
         <slot />
       </main>
     </div>

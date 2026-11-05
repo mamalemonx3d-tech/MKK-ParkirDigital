@@ -1,10 +1,10 @@
 <template>
-  <div class="max-w-xl mx-auto space-y-6">
-    <!-- Header -->
-    <div class="flex items-center justify-between no-print">
+  <div class="max-w-xl mx-auto space-y-6 print:m-0 print:p-0 print:max-w-none print:w-full">
+    <!-- Header Controls (Hidden on Print) -->
+    <div class="flex items-center justify-between no-print print:hidden">
       <NuxtLink
         to="/petugas/member"
-        class="text-xs font-semibold text-slate-600 hover:text-[#3b82f6] flex items-center gap-1"
+        class="text-xs font-semibold text-slate-600 hover:text-[#3b82f6] flex items-center gap-1 transition"
       >
         <ArrowLeft class="w-4 h-4" />
         <span>Kembali ke Data Member</span>
@@ -20,55 +20,57 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="isLoading" class="text-center py-12 text-slate-400">
+    <div v-if="isLoading" class="text-center py-12 text-slate-400 no-print print:hidden">
       <Loader2 class="w-8 h-8 animate-spin mx-auto mb-2 text-[#3b82f6]" />
       <span class="text-xs">Memuat data kartu...</span>
     </div>
 
-    <!-- Physical Member Access Card Preview -->
-    <div
-      v-else-if="member"
-      id="printable-card"
-      class="bg-white rounded-2xl border-2 border-slate-200 shadow-xl overflow-hidden aspect-16/10 flex flex-col justify-between p-6 relative print:border-none print:shadow-none"
-    >
-      <!-- Top Card Strip with Secure Parking Branding -->
-      <div class="flex items-start justify-between">
-        <BrandLogo :showSubtitle="true" subtitle="Kartu Akses Parkir Berlangganan" />
-        <div class="text-right">
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">ID KARTU</span>
-          <span class="text-base font-black font-mono text-[#3b82f6]">{{ member.kode }}</span>
-        </div>
-      </div>
-
-      <!-- Center Card Info & QR Code -->
-      <div class="my-auto flex items-center justify-between gap-6 py-4">
-        <div class="space-y-1">
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Pemegang Kartu</span>
-          <h3 class="text-xl font-black text-slate-900 tracking-tight leading-tight">
-            {{ member.nama }}
-          </h3>
-          <p class="text-xs font-semibold text-slate-600">
-            {{ member.perusahaan }}
-          </p>
-
-          <div class="pt-3">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Berlaku Hingga</span>
-            <span class="text-xs font-mono font-bold text-emerald-700">
-              {{ member.expired_at }}
-            </span>
+    <!-- Physical Member Access Card Wrapper -->
+    <div v-else-if="member" class="card-print-container flex justify-center">
+      <!-- Physical Member Access Card (Preserved Exactly Like Preview on Print) -->
+      <div
+        id="printable-card"
+        class="bg-white rounded-2xl border-2 border-slate-300 shadow-xl overflow-hidden aspect-16/10 flex flex-col justify-between p-6 relative w-full"
+      >
+        <!-- Top Card Strip with Secure Parking Branding -->
+        <div class="flex items-start justify-between">
+          <BrandLogo :showSubtitle="true" subtitle="Kartu Akses Parkir Berlangganan" />
+          <div class="text-right">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">ID KARTU</span>
+            <span class="text-base font-black font-mono text-[#3b82f6]">{{ member.kode }}</span>
           </div>
         </div>
 
-        <!-- QR Code for Gate Scanner -->
-        <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs shrink-0">
-          <QrcodeVue :value="member.qr_code" :size="120" level="M" />
-        </div>
-      </div>
+        <!-- Center Card Info & QR Code -->
+        <div class="my-auto flex items-center justify-between gap-6 py-4">
+          <div class="space-y-1">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Pemegang Kartu</span>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight leading-tight">
+              {{ member.nama }}
+            </h3>
+            <p class="text-xs font-semibold text-slate-600">
+              {{ member.perusahaan }}
+            </p>
 
-      <!-- Bottom Card Strip -->
-      <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-medium">
-        <span>Arahkan kode QR ke kamera pintu gerbang masuk.</span>
-        <span class="font-mono">STATUS: AKTIF</span>
+            <div class="pt-3">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Berlaku Hingga</span>
+              <span class="text-xs font-mono font-bold text-emerald-700">
+                {{ formatDate(member.expired_at) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- QR Code for Gate Scanner -->
+          <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs shrink-0">
+            <QrcodeVue :value="member.qr_code" :size="120" level="M" />
+          </div>
+        </div>
+
+        <!-- Bottom Card Strip -->
+        <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-400 font-medium">
+          <span>Arahkan kode QR ke kamera pintu gerbang masuk.</span>
+          <span class="font-mono font-bold text-slate-600">STATUS: AKTIF</span>
+        </div>
       </div>
     </div>
   </div>
@@ -79,6 +81,7 @@ import { ref, onMounted } from 'vue'
 import { ArrowLeft, Printer, Loader2 } from 'lucide-vue-next'
 import QrcodeVue from 'qrcode.vue'
 import BrandLogo from '~/components/BrandLogo.vue'
+import { formatDate } from '~/utils/formatters'
 
 definePageMeta({
   layout: 'petugas',
@@ -111,13 +114,54 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style>
 @media print {
-  .no-print {
+  @page {
+    size: auto;
+    margin: 15mm;
+  }
+
+  /* Sembunyikan semua elemen navigasi luar */
+  aside,
+  header,
+  nav,
+  .no-print,
+  .print\:hidden {
     display: none !important;
   }
-  body {
-    background: white !important;
+
+  body, html {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Posisikan kartu di tengah halaman cetak */
+  .card-print-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding-top: 15mm !important;
+    margin: 0 auto !important;
+  }
+
+  #printable-card {
+    width: 105mm !important;
+    max-width: 105mm !important;
+    min-height: 65.6mm !important;
+    aspect-ratio: 16 / 10 !important;
+    margin: 0 auto !important;
+    border: 2px solid #cbd5e1 !important;
+    border-radius: 16px !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }
 </style>
