@@ -25,12 +25,6 @@
         <span>{{ successMessage }}</span>
       </div>
 
-      <!-- Dev OTP helper if available -->
-      <div v-if="devOtp" class="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-300 text-xs text-amber-900">
-        <span class="font-bold">Mode Pengujian:</span> Kode OTP Anda adalah:
-        <span class="font-mono font-black text-sm ml-1">{{ devOtp }}</span>
-      </div>
-
       <!-- Step 1: Input Email -->
       <form v-if="step === 1" @submit.prevent="submitEmail" class="space-y-4">
         <div>
@@ -157,7 +151,6 @@ const confirmPassword = ref('')
 const isLoading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
-const devOtp = ref('')
 
 const submitEmail = async () => {
   isLoading.value = true
@@ -169,9 +162,6 @@ const submitEmail = async () => {
     if (res.data?.success) {
       step.value = 2
       successMessage.value = res.data.message
-      if (res.data.dev_otp) {
-        devOtp.value = res.data.dev_otp
-      }
     }
   } catch (err: any) {
     errorMessage.value = err.response?.data?.message || err.customMessage || err.message || 'Gagal memproses verifikasi email.'

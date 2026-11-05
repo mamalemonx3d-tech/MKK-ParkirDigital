@@ -42,7 +42,6 @@ class ForgotPasswordController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => "Kode OTP 6-digit telah dikirimkan ke email resmi Anda ({$email}). Silakan periksa inbox atau folder spam.",
-                'dev_otp' => config('app.debug') ? $otp : null,
             ]);
         } catch (\Throwable $e) {
             Log::error("Gagal mengirim email OTP ke {$email}: " . $e->getMessage());
