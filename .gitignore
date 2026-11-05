@@ -35,3 +35,7 @@ backend/storage/framework/views/*
 !backend/storage/framework/cache/.gitignore
 !backend/storage/framework/sessions/.gitignore
 !backend/storage/framework/views/.gitignore
+
+# Database dumps (Local private use only)
+*.sql
+**/*.sql
