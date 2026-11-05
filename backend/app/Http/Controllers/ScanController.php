@@ -76,6 +76,7 @@ class ScanController extends Controller
             'waktu_masuk' => now(),
             'waktu_keluar' => null,
             'total_bayar' => 0,
+            'petugas_nama' => 'Kiosk Mandiri',
         ]);
 
         return response()->json([

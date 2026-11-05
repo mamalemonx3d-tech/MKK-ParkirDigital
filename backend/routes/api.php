@@ -100,5 +100,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/mingguan', [RekapController::class, 'mingguan']);
             Route::get('/bulanan', [RekapController::class, 'bulanan']);
             Route::get('/petugas', [RekapController::class, 'petugas']);
+            Route::get('/chart', [RekapController::class, 'chart']);
         });
 });

@@ -21,6 +21,7 @@ class TiketParkir extends Model
         'waktu_masuk',
         'waktu_keluar',
         'total_bayar',
+        'petugas_nama',
         'jenis_kendaraan',
     ];
 

@@ -154,12 +154,15 @@ class ExitController extends Controller
                 ], 422);
             }
 
+            $petugasNama = $request->input('petugas_nama') ?: ($request->user() ? $request->user()->name : 'Petugas 1');
+
             $tiket->update([
                 'status' => 'keluar',
                 'waktu_keluar' => now(),
                 'nomor_polisi' => strtoupper($request->plat_nomor),
                 'jenis_kendaraan' => $request->jenis_kendaraan,
                 'total_bayar' => 0,
+                'petugas_nama' => $petugasNama,
             ]);
 
             return response()->json([
@@ -205,12 +208,15 @@ class ExitController extends Controller
             $durasiJam = max(1, (int) ceil($durasiMenit / 60));
             $totalBayar = $durasiJam * $this->tarifPerJam;
 
+            $petugasNama = $request->input('petugas_nama') ?: ($request->user() ? $request->user()->name : 'Petugas 1');
+
             $tiket->update([
                 'status' => 'keluar',
                 'waktu_keluar' => now(),
                 'nomor_polisi' => strtoupper($request->plat_nomor),
                 'jenis_kendaraan' => $request->jenis_kendaraan,
                 'total_bayar' => $totalBayar,
+                'petugas_nama' => $petugasNama,
             ]);
 
             return response()->json([

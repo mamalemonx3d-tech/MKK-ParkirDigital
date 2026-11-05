@@ -1,20 +1,20 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-lg font-normal text-[#0f172a] font-serif tracking-tight">
+        <h1 class="text-xl font-normal text-[#0f172a] font-serif tracking-tight">
           Laporan Rekapitulasi & Kinerja Parkir
         </h1>
         <p class="text-xs text-slate-500 mt-0.5">
-          Tinjau performa transaksi, pendapatan non-member & member, serta evaluasi seluruh petugas loket.
+          Tinjau performa transaksi, waktu masuk & keluar kendaraan, pendapatan non-member & member, serta evaluasi seluruh petugas loket.
         </p>
       </div>
 
       <div class="flex items-center gap-2">
         <button
           @click="exportPdf"
-          class="px-3.5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
+          class="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs active:scale-[0.98]"
         >
           <FileDown class="w-4 h-4" />
           <span>Export PDF</span>
@@ -23,14 +23,14 @@
     </div>
 
     <!-- Period Tabs & Date Filter Strip -->
-    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
       <!-- Tabs -->
-      <div class="inline-flex rounded-lg bg-slate-100 p-1 flex-wrap gap-1">
+      <div class="inline-flex rounded-xl bg-slate-100 p-1 flex-wrap gap-1">
         <button
           v-for="tab in tabs"
           :key="tab.id"
           @click="changeTab(tab.id)"
-          class="px-3.5 py-1.5 rounded-md text-xs font-bold transition cursor-pointer"
+          class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer"
           :class="activeTab === tab.id ? 'bg-white text-[#3b82f6] shadow-xs' : 'text-slate-500 hover:text-slate-800'"
         >
           {{ tab.label }}
@@ -44,14 +44,14 @@
           v-model="selectedDate"
           type="date"
           @change="fetchReport"
-          class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 font-mono font-bold bg-white text-slate-800"
+          class="px-3.5 py-1.5 text-xs rounded-xl border border-slate-300 font-mono font-bold bg-white text-slate-800 focus:border-[#3b82f6] outline-none"
         />
       </div>
     </div>
 
     <!-- Summary Metrics Grid (4-box layout) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
           Total Masuk Periode Ini
         </span>
@@ -63,7 +63,7 @@
         </p>
       </div>
 
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
           Pendapatan Non-Member
         </span>
@@ -73,7 +73,7 @@
         <p class="text-[11px] text-slate-500 mt-1">Tarif parkir per jam (karcis)</p>
       </div>
 
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
           Pendapatan Iuran Member
         </span>
@@ -83,7 +83,7 @@
         <p class="text-[11px] text-slate-500 mt-1">Pelunasan langganan bulanan</p>
       </div>
 
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
           Total Omset Akumulasi
         </span>
@@ -95,7 +95,7 @@
     </div>
 
     <!-- TAB 1: KINERJA SEMUA PETUGAS -->
-    <div v-if="activeTab === 'petugas'" class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+    <div v-if="activeTab === 'petugas'" class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
       <div class="p-4 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between">
         <div>
           <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">
@@ -105,7 +105,7 @@
         </div>
         <button
           @click="fetchReport"
-          class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+          class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
         >
           <RefreshCw class="w-3.5 h-3.5" :class="isLoading ? 'animate-spin' : ''" />
           <span>Perbarui Data</span>
@@ -115,10 +115,10 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
-            <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+            <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
               <th class="py-3 px-4">Nama Petugas</th>
               <th class="py-3 px-4">Alamat Email</th>
-                            <th class="py-3 px-4">Jadwal Shift</th>
+              <th class="py-3 px-4">Jadwal Shift</th>
               <th class="py-3 px-4">Tiket Shift Ini</th>
               <th class="py-3 px-4">Koleksi Shift</th>
               <th class="py-3 px-4 text-center">Status</th>
@@ -138,7 +138,7 @@
                 <span>{{ p.name }}</span>
               </td>
               <td class="py-3 px-4 font-mono text-slate-700">{{ p.email }}</td>
-                            <td class="py-3 px-4">
+              <td class="py-3 px-4">
                 <span class="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700">
                   {{ p.shift }}
                 </span>
@@ -161,7 +161,7 @@
     <div v-else-if="activeTab === 'kategori'" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Kartu 1: Non-Member -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
               <Ticket class="w-4 h-4 text-[#f59e0b]" />
@@ -173,11 +173,11 @@
           </div>
 
           <div class="grid grid-cols-2 gap-3 text-xs">
-            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
               <span class="text-slate-400 block text-[10px] font-bold uppercase">Volume Masuk</span>
               <span class="text-xl font-black font-mono text-slate-900">{{ summaryTotals.masuk_non_member }}</span>
             </div>
-            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
               <span class="text-slate-400 block text-[10px] font-bold uppercase">Volume Keluar</span>
               <span class="text-xl font-black font-mono text-slate-900">{{ summaryTotals.keluar_non_member }}</span>
             </div>
@@ -190,7 +190,7 @@
         </div>
 
         <!-- Kartu 2: Member -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 class="text-sm font-bold text-[#3b82f6] flex items-center gap-2">
               <CreditCard class="w-4 h-4 text-[#3b82f6]" />
@@ -202,11 +202,11 @@
           </div>
 
           <div class="grid grid-cols-2 gap-3 text-xs">
-            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
               <span class="text-slate-400 block text-[10px] font-bold uppercase">Kunjungan Masuk</span>
               <span class="text-xl font-black font-mono text-slate-900">{{ summaryTotals.masuk_member }}</span>
             </div>
-            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
               <span class="text-slate-400 block text-[10px] font-bold uppercase">Kunjungan Keluar</span>
               <span class="text-xl font-black font-mono text-slate-900">{{ summaryTotals.keluar_member }}</span>
             </div>
@@ -220,7 +220,7 @@
       </div>
 
       <!-- Detail Table for Kategori -->
-      <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
         <div class="p-4 border-b border-slate-200 bg-slate-50/50">
           <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">
             Rincian Sesi Parkir Menurut Kategori ({{ selectedDate }})
@@ -230,19 +230,21 @@
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs border-collapse">
             <thead>
-              <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+              <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
                 <th class="py-3 px-4">Kode Tiket</th>
                 <th class="py-3 px-4">Jenis Akun</th>
                 <th class="py-3 px-4">Nomor Polisi</th>
                 <th class="py-3 px-4">Kendaraan</th>
                 <th class="py-3 px-4">Waktu Masuk</th>
+                <th class="py-3 px-4">Waktu Keluar</th>
+                <th class="py-3 px-4">Petugas Parkir</th>
                 <th class="py-3 px-4">Status</th>
                 <th class="py-3 px-4 text-right">Tarif</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
               <tr v-if="!reportData.detail || reportData.detail.length === 0">
-                <td colspan="7" class="text-center py-8 text-slate-400">
+                <td colspan="9" class="text-center py-8 text-slate-400">
                   Tidak ada transaksi parkir pada tanggal ini.
                 </td>
               </tr>
@@ -259,6 +261,19 @@
                 <td class="py-3 px-4 font-mono font-bold text-slate-700">{{ item.nomor_polisi || '-' }}</td>
                 <td class="py-3 px-4 capitalize">{{ item.jenis_kendaraan || '-' }}</td>
                 <td class="py-3 px-4 font-mono text-slate-600 text-[11px]">{{ formatTime(item.waktu_masuk) }}</td>
+                <td class="py-3 px-4 font-mono text-[11px]">
+                  <span v-if="item.waktu_keluar" class="text-slate-700 font-semibold">{{ formatTime(item.waktu_keluar) }}</span>
+                  <span v-else class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse"></span>
+                    Di Dalam
+                  </span>
+                </td>
+                <td class="py-3 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200">
+                    <User class="w-3 h-3 text-[#3b82f6]" />
+                    {{ item.petugas || 'Petugas 1' }}
+                  </span>
+                </td>
                 <td class="py-3 px-4 uppercase text-[10px] font-bold" :class="item.status === 'keluar' ? 'text-slate-400' : 'text-emerald-600'">
                   {{ item.status }}
                 </td>
@@ -271,7 +286,7 @@
     </div>
 
     <!-- TAB 3, 4, 5: HARIAN, MINGGUAN, BULANAN -->
-    <div v-else class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+    <div v-else class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
       <div class="p-4 border-b border-slate-200 bg-slate-50/50">
         <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">
           Tabel Rincian Periode ({{ activeTabLabel }})
@@ -281,11 +296,22 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
-            <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
-              <th class="py-3 px-4">{{ activeTab === 'harian' ? 'Kode Tiket' : 'Tanggal / Periode' }}</th>
-              <th class="py-3 px-4">{{ activeTab === 'harian' ? 'Plat Nomor' : 'Hari' }}</th>
-              <th class="py-3 px-4">{{ activeTab === 'harian' ? 'Kendaraan' : 'Total Masuk' }}</th>
-              <th class="py-3 px-4">{{ activeTab === 'harian' ? 'Waktu Masuk' : 'Total Keluar' }}</th>
+            <!-- Header untuk Rekap Harian: menampilkan Waktu Keluar & Petugas Parkir -->
+            <tr v-if="activeTab === 'harian'" class="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+              <th class="py-3 px-4">Kode Tiket</th>
+              <th class="py-3 px-4">Plat Nomor</th>
+              <th class="py-3 px-4">Kendaraan</th>
+              <th class="py-3 px-4">Waktu Masuk</th>
+              <th class="py-3 px-4">Waktu Keluar</th>
+              <th class="py-3 px-4">Petugas Parkir</th>
+              <th class="py-3 px-4 text-right">Pendapatan</th>
+            </tr>
+            <!-- Header untuk Rekap Mingguan & Bulanan -->
+            <tr v-else class="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+              <th class="py-3 px-4">Tanggal / Periode</th>
+              <th class="py-3 px-4">Hari</th>
+              <th class="py-3 px-4">Total Masuk</th>
+              <th class="py-3 px-4">Total Keluar</th>
               <th class="py-3 px-4 text-right">Pendapatan</th>
             </tr>
           </thead>
@@ -293,7 +319,7 @@
             <!-- Harian Detail Row -->
             <template v-if="activeTab === 'harian'">
               <tr v-if="!reportData.detail || reportData.detail.length === 0">
-                <td colspan="5" class="text-center py-8 text-slate-400">
+                <td colspan="7" class="text-center py-8 text-slate-400">
                   Tidak ada transaksi parkir pada tanggal ini.
                 </td>
               </tr>
@@ -302,6 +328,21 @@
                 <td class="py-3 px-4 font-mono font-bold text-slate-700">{{ item.nomor_polisi || '-' }}</td>
                 <td class="py-3 px-4 capitalize">{{ item.jenis_kendaraan || '-' }}</td>
                 <td class="py-3 px-4 font-mono text-slate-600 text-[11px]">{{ formatTime(item.waktu_masuk) }}</td>
+                <!-- Waktu Keluar -->
+                <td class="py-3 px-4 font-mono text-[11px]">
+                  <span v-if="item.waktu_keluar" class="text-slate-700 font-semibold">{{ formatTime(item.waktu_keluar) }}</span>
+                  <span v-else class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse"></span>
+                    Di Dalam
+                  </span>
+                </td>
+                <!-- Keterangan Petugas Parkir -->
+                <td class="py-3 px-4">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200">
+                    <User class="w-3 h-3 text-[#3b82f6]" />
+                    {{ item.petugas || 'Petugas 1' }}
+                  </span>
+                </td>
                 <td class="py-3 px-4 text-right font-mono font-bold text-emerald-700">{{ formatRupiah(item.biaya) }}</td>
               </tr>
             </template>
@@ -330,7 +371,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { FileDown, Ticket, CreditCard, RefreshCw } from 'lucide-vue-next'
+import { FileDown, Ticket, CreditCard, RefreshCw, User } from 'lucide-vue-next'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
@@ -455,13 +496,15 @@ const exportPdf = () => {
       p.status,
     ])
   } else if (activeTab.value === 'harian' || activeTab.value === 'kategori') {
-    tableHeaders = [['Kode', 'Jenis', 'Plat Nomor', 'Kendaraan', 'Waktu Masuk', 'Tarif']]
+    tableHeaders = [['Kode', 'Jenis', 'Plat Nomor', 'Kendaraan', 'Waktu Masuk', 'Waktu Keluar', 'Petugas Parkir', 'Tarif']]
     tableData = (reportData.value?.detail || []).map((d: any) => [
       d.kode_tiket,
       d.jenis === 'member' ? 'Member' : 'Non-Member',
       d.nomor_polisi || '-',
       d.jenis_kendaraan || '-',
-      d.waktu_masuk,
+      formatTime(d.waktu_masuk),
+      d.waktu_keluar ? formatTime(d.waktu_keluar) : 'Di Dalam',
+      d.petugas || 'Petugas 1',
       formatRupiah(d.biaya),
     ])
   } else {
@@ -481,7 +524,7 @@ const exportPdf = () => {
     body: tableData,
     theme: 'grid',
     styles: { fontSize: 8 },
-    headStyles: { fillColor: [0, 26, 78] },
+    headStyles: { fillColor: [30, 41, 59] },
   })
 
   doc.save(`Laporan_Parkir_${activeTab.value}_${selectedDate.value}.pdf`)
@@ -491,7 +534,6 @@ const formatTime = (str: string) => {
   if (!str) return '-'
   return new Date(str).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
 }
-
 
 onMounted(() => {
   fetchReport()

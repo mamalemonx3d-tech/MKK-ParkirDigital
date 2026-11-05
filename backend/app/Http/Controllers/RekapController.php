@@ -54,9 +54,10 @@ class RekapController extends Controller
             ->map(function ($t) {
                 $durasi = $t->waktu_keluar
                     ? max(1, (int) round(Carbon::parse($t->waktu_masuk)->diffInMinutes(Carbon::parse($t->waktu_keluar))))
-                    : null;
+                    : max(1, (int) round(Carbon::parse($t->waktu_masuk)->diffInMinutes(Carbon::now())));
 
-                $jam = $durasi !== null ? max(1, (int) ceil($durasi / 60)) : 0;
+                // Pembulatan ke atas (ceil) jam penuh: < 1 jam -> 1 jam; 1 jam 30 menit -> 2 jam
+                $jam = max(1, (int) ceil($durasi / 60));
 
                 $biaya = (float) $t->total_bayar;
                 if ($biaya == 0 && $t->jenis === 'non_member' && $t->status === 'keluar') {
@@ -70,11 +71,14 @@ class RekapController extends Controller
                     'jenis_kendaraan' => $t->jenis_kendaraan,
                     'waktu_masuk' => $t->waktu_masuk,
                     'waktu_keluar' => $t->waktu_keluar,
+                    'petugas' => $t->petugas_nama ?: ($t->status === 'keluar' ? 'Petugas 1' : 'Kiosk Mandiri'),
                     'status' => $t->status,
                     'jenis' => $t->jenis,
                     'member_id' => $t->member_id,
                     'durasi_menit' => $durasi,
                     'jam' => $jam,
+                    'durasi_jam' => $jam,
+                    'durasi_teks' => "{$jam} Jam",
                     'biaya' => $biaya,
                     'total_pendapatan' => $biaya,
                 ];
@@ -297,6 +301,83 @@ class RekapController extends Controller
         return response()->json([
             'success' => true,
             'data' => $petugasList,
+        ]);
+    }
+
+    public function chart(Request $request)
+    {
+        $dateStr = $request->get('date', Carbon::today()->toDateString());
+        $start = Carbon::parse($dateStr)->startOfDay();
+        $end = Carbon::parse($dateStr)->endOfDay();
+
+        // 1. Ambil seluruh tiket pada tanggal ini
+        $allTiket = TiketParkir::where(function ($q) use ($start, $end) {
+            $q->whereBetween('waktu_masuk', [$start, $end])
+                ->orWhere(function ($sub) use ($start, $end) {
+                    $sub->whereBetween('waktu_keluar', [$start, $end])
+                        ->where('status', 'keluar');
+                });
+        })->get();
+
+        // 2. Tagihan member pada tanggal ini
+        $tagihanMember = TagihanMember::where('status', 'lunas')
+            ->whereBetween('tanggal_bayar', [$start->toDateString(), $end->toDateString()])
+            ->sum('jumlah');
+
+        $hourly = [];
+        $maxActivity = 0;
+        $peakHourLabel = '-';
+
+        // 24 jam: 00:00 s.d 23:00
+        for ($h = 0; $h < 24; $h++) {
+            $hStart = $start->copy()->hour($h)->minute(0)->second(0);
+            $hEnd = $start->copy()->hour($h)->minute(59)->second(59);
+
+            $masukCount = $allTiket->filter(function ($t) use ($hStart, $hEnd) {
+                return $t->waktu_masuk && Carbon::parse($t->waktu_masuk)->between($hStart, $hEnd);
+            })->count();
+
+            $keluarCount = $allTiket->filter(function ($t) use ($hStart, $hEnd) {
+                return $t->waktu_keluar && $t->status === 'keluar' && Carbon::parse($t->waktu_keluar)->between($hStart, $hEnd);
+            })->count();
+
+            $pendapatanTiket = (float) $allTiket->filter(function ($t) use ($hStart, $hEnd) {
+                return $t->waktu_keluar && $t->status === 'keluar' && $t->jenis === 'non_member' && Carbon::parse($t->waktu_keluar)->between($hStart, $hEnd);
+            })->sum('total_bayar');
+
+            $totalActivity = $masukCount + $keluarCount;
+            if ($totalActivity > $maxActivity) {
+                $maxActivity = $totalActivity;
+                $peakHourLabel = sprintf('%02d:00 - %02d:00', $h, ($h + 1) % 24);
+            }
+
+            $hourly[] = [
+                'hour' => sprintf('%02d:00', $h),
+                'hour_num' => $h,
+                'masuk' => $masukCount,
+                'keluar' => $keluarCount,
+                'total_kendaraan' => $totalActivity,
+                'pendapatan' => $pendapatanTiket,
+            ];
+        }
+
+        $totalMasuk = $allTiket->filter(fn ($t) => $t->waktu_masuk && Carbon::parse($t->waktu_masuk)->between($start, $end))->count();
+        $totalKeluar = $allTiket->filter(fn ($t) => $t->waktu_keluar && $t->status === 'keluar' && Carbon::parse($t->waktu_keluar)->between($start, $end))->count();
+        $totalPendapatanNonMember = (float) $allTiket->filter(fn ($t) => $t->status === 'keluar' && $t->jenis === 'non_member' && $t->waktu_keluar && Carbon::parse($t->waktu_keluar)->between($start, $end))->sum('total_bayar');
+        $totalPendapatanSemua = $totalPendapatanNonMember + (float) $tagihanMember;
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'date' => $dateStr,
+                'total_masuk' => $totalMasuk,
+                'total_keluar' => $totalKeluar,
+                'total_pendapatan' => $totalPendapatanSemua,
+                'pendapatan_non_member' => $totalPendapatanNonMember,
+                'pendapatan_member' => (float) $tagihanMember,
+                'peak_hour' => $peakHourLabel,
+                'hourly' => $hourly,
+            ],
         ]);
     }
 }

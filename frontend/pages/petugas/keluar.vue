@@ -608,6 +608,7 @@ const submitCheckout = async () => {
         tiket_id: activeTicket.value.data.tiket_id,
         plat_nomor: checkoutForm.plat_nomor,
         jenis_kendaraan: checkoutForm.jenis_kendaraan,
+        petugas_nama: auth.user.value?.name || 'Petugas 1',
       })
       if (res.data?.success) {
         successPayment.value = {
@@ -623,6 +624,7 @@ const submitCheckout = async () => {
         tiket_id: activeTicket.value.data.id,
         plat_nomor: checkoutForm.plat_nomor,
         jenis_kendaraan: checkoutForm.jenis_kendaraan,
+        petugas_nama: auth.user.value?.name || 'Petugas 1',
       })
       if (res.data?.success) {
         successPayment.value = {

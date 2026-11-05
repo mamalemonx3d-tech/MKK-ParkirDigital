@@ -52,6 +52,35 @@ export const formatDate = (dateStr: string | null | undefined): string => {
   }).format(d)
 }
 
+/**
+ * Pembulatan durasi parkir ke jam penuh (Ceil Rounding):
+ * - Di bawah 1 jam (misal 15m, 45m, 60m) -> dibulatkan jadi 1 Jam
+ * - Di atas 1 jam (misal 1 jam 30 menit / 90m) -> dibulatkan jadi 2 Jam
+ * - 2 jam 15 menit -> dibulatkan jadi 3 Jam
+ */
+export const formatDurasiJam = (
+  durasiMenit?: number | string | null,
+  waktuMasuk?: string | null,
+  waktuKeluar?: string | null
+): string => {
+  let minutes: number | null = null
+
+  if (durasiMenit !== null && durasiMenit !== undefined && durasiMenit !== '') {
+    minutes = typeof durasiMenit === 'string' ? parseFloat(durasiMenit) : Number(durasiMenit)
+  } else if (waktuMasuk) {
+    const start = new Date(waktuMasuk).getTime()
+    const end = waktuKeluar ? new Date(waktuKeluar).getTime() : Date.now()
+    if (!isNaN(start) && !isNaN(end)) {
+      minutes = Math.max(1, Math.round((end - start) / 60000))
+    }
+  }
+
+  if (minutes === null || isNaN(minutes)) return '-'
+
+  const jam = Math.max(1, Math.ceil(minutes / 60))
+  return `${jam} Jam`
+}
+
 export const formatDurasiMenit = (menit: number | string | null | undefined): string => {
   if (menit === null || menit === undefined || menit === '') return '-'
   const num = typeof menit === 'string' ? parseFloat(menit) : Number(menit)

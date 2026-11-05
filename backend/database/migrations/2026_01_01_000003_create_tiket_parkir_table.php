@@ -23,6 +23,7 @@ return new class extends Migration
             $table->timestamp('waktu_masuk')->nullable();
             $table->timestamp('waktu_keluar')->nullable();
             $table->decimal('total_bayar', 12, 2)->default(0);
+            $table->string('petugas_nama')->nullable();
             $table->timestamps();
         });
     }

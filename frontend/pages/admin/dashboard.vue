@@ -7,7 +7,7 @@
           Dashboard Monitoring & Manajemen
         </h1>
         <p class="text-xs text-slate-500 mt-1">
-          Pantau arus lalu lintas kendaraan (sedang parkir, masuk, dan keluar), rekapitulasi transaksi, serta staf petugas.
+          Pantau arus lalu lintas kendaraan (sedang parkir, masuk, dan keluar), grafik tren transaksi, serta staf petugas.
         </p>
       </div>
 
@@ -91,6 +91,9 @@
       </div>
     </div>
 
+    <!-- Dribbble-Style Interactive Traffic & Revenue Chart with Date Filter -->
+    <TrafficRevenueChart />
+
     <!-- Recent Traffic & Vehicles Table with Filter Tabs -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
       <!-- Table Header & Status Filter Tabs -->
@@ -98,7 +101,7 @@
         <div>
           <h3 class="text-sm font-bold text-slate-900">Arus Kendaraan & Status Parkir Terkini</h3>
           <p class="text-xs text-slate-500 mt-0.5">
-            Daftar kendaraan yang sedang berada di dalam area maupun yang sudah menyelesaikan checkout.
+            Daftar kendaraan dengan pembulatan durasi jam, waktu keluar, dan staf petugas loket.
           </p>
         </div>
 
@@ -140,16 +143,18 @@
               <th class="py-3.5 px-4">Kode Tiket</th>
               <th class="py-3.5 px-4">Tipe Akses</th>
               <th class="py-3.5 px-4">Plat Nomor</th>
-              <th class="py-3.5 px-4">Jenis</th>
+              <th class="py-3.5 px-4">Kendaraan</th>
               <th class="py-3.5 px-4">Waktu Masuk</th>
               <th class="py-3.5 px-4">Waktu Keluar</th>
+              <th class="py-3.5 px-4">Durasi Parkir</th>
+              <th class="py-3.5 px-4">Petugas</th>
               <th class="py-3.5 px-4">Total Biaya</th>
-              <th class="py-3.5 px-4 text-center">Status Parkir</th>
+              <th class="py-3.5 px-4 text-center">Status</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             <tr v-if="filteredTickets.length === 0">
-              <td colspan="8" class="text-center py-10 text-slate-400">
+              <td colspan="10" class="text-center py-10 text-slate-400">
                 Tidak ada data kendaraan pada filter ini.
               </td>
             </tr>
@@ -179,7 +184,21 @@
                 {{ formatDateTime(t.waktu_masuk) }}
               </td>
               <td class="py-3 px-4 text-slate-600 font-mono text-[11px]">
-                {{ t.waktu_keluar ? formatDateTime(t.waktu_keluar) : '-' }}
+                <span v-if="t.waktu_keluar" class="text-slate-700 font-semibold">{{ formatDateTime(t.waktu_keluar) }}</span>
+                <span v-else class="text-slate-400 font-medium">-</span>
+              </td>
+              <!-- Durasi Parkir (Ceil Rounding: <1h -> 1 Jam; 1h30m -> 2 Jam) -->
+              <td class="py-3 px-4 font-mono text-slate-700 font-bold">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[11px]">
+                  {{ formatDurasiJam(t.durasi_menit, t.waktu_masuk, t.waktu_keluar) }}
+                </span>
+              </td>
+              <!-- Petugas Parkir -->
+              <td class="py-3 px-4">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200">
+                  <User class="w-3 h-3 text-[#3b82f6]" />
+                  {{ t.petugas_nama || (t.status === 'keluar' ? 'Petugas 1' : 'Kiosk Mandiri') }}
+                </span>
               </td>
               <td class="py-3 px-4 font-mono font-bold text-slate-800">
                 {{ t.total_bayar ? formatRupiah(t.total_bayar) : (t.jenis === 'member' ? 'Gratis (Member)' : '-') }}
@@ -223,8 +242,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { FileSpreadsheet, UserPlus } from 'lucide-vue-next'
-import { formatRupiah, formatDateTime } from '~/utils/formatters'
+import { FileSpreadsheet, UserPlus, User } from 'lucide-vue-next'
+import { formatRupiah, formatDateTime, formatDurasiJam } from '~/utils/formatters'
+import TrafficRevenueChart from '~/components/TrafficRevenueChart.vue'
 
 definePageMeta({
   layout: 'admin',

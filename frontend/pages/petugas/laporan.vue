@@ -1,13 +1,13 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-lg font-normal text-[#0f172a] font-serif tracking-tight">
+        <h1 class="text-xl font-normal text-[#0f172a] font-serif tracking-tight">
           Laporan Rekapitulasi Shift Petugas
         </h1>
         <p class="text-xs text-slate-500 mt-0.5">
-          Tinjau total kendaraan dan pendapatan harian sebelum pergantian shift loket.
+          Tinjau total kendaraan, waktu masuk/keluar, dan pendapatan harian sebelum pergantian shift loket.
         </p>
       </div>
 
@@ -16,11 +16,11 @@
           v-model="selectedDate"
           type="date"
           @change="fetchDailyReport"
-          class="px-3 py-2 text-xs rounded-lg border border-slate-300 font-mono font-bold bg-white"
+          class="px-3.5 py-2 text-xs rounded-xl border border-slate-300 font-mono font-bold bg-white focus:border-[#3b82f6] outline-none"
         />
         <button
           @click="printReport"
-          class="px-3.5 py-2 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer shadow-xs"
+          class="px-4 py-2 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold rounded-xl transition flex items-center gap-2 cursor-pointer shadow-xs active:scale-[0.98]"
         >
           <Printer class="w-4 h-4" />
           <span>Cetak Laporan</span>
@@ -30,7 +30,7 @@
 
     <!-- Summary Metrics -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
           Total Masuk Hari Ini
         </span>
@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
           Total Keluar Selesai
         </span>
@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
         <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1">
           Total Pendapatan Tunai/Kasir
         </span>
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Detail Table -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
       <div class="p-4 border-b border-slate-200 bg-slate-50/50">
         <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">
           Rincian Transaksi Selesai ({{ selectedDate }})
@@ -68,19 +68,20 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
-            <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+            <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
               <th class="py-3 px-4">Kode Tiket</th>
               <th class="py-3 px-4">Nomor Polisi</th>
               <th class="py-3 px-4">Kendaraan</th>
               <th class="py-3 px-4">Waktu Masuk</th>
               <th class="py-3 px-4">Waktu Keluar</th>
+              <th class="py-3 px-4">Petugas Parkir</th>
               <th class="py-3 px-4">Durasi</th>
               <th class="py-3 px-4 text-right">Tarif</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             <tr v-if="!reportData.detail || reportData.detail.length === 0">
-              <td colspan="7" class="text-center py-8 text-slate-400">
+              <td colspan="8" class="text-center py-8 text-slate-400">
                 Belum ada transaksi keluar pada tanggal ini.
               </td>
             </tr>
@@ -101,8 +102,15 @@
               <td class="py-3 px-4 font-mono text-slate-600 text-[11px]">
                 {{ formatTime(item.waktu_masuk) }}
               </td>
-              <td class="py-3 px-4 font-mono text-slate-600 text-[11px]">
-                {{ formatTime(item.waktu_keluar) }}
+              <td class="py-3 px-4 font-mono text-[11px]">
+                <span v-if="item.waktu_keluar" class="text-slate-700 font-semibold">{{ formatTime(item.waktu_keluar) }}</span>
+                <span v-else class="text-slate-400">-</span>
+              </td>
+              <td class="py-3 px-4">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200">
+                  <User class="w-3 h-3 text-[#3b82f6]" />
+                  {{ item.petugas || 'Petugas 1' }}
+                </span>
               </td>
               <td class="py-3 px-4 font-mono text-slate-700">
                 {{ item.durasi_menit !== null ? Math.max(1, Math.round(Number(item.durasi_menit))) + ' m' : '-' }}
@@ -120,7 +128,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Printer } from 'lucide-vue-next'
+import { Printer, User } from 'lucide-vue-next'
+import { formatRupiah } from '~/utils/formatters'
 
 definePageMeta({
   layout: 'petugas',
@@ -155,7 +164,6 @@ const formatTime = (str: string) => {
   if (!str) return '-'
   return new Date(str).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
 }
-
 
 onMounted(() => {
   fetchDailyReport()
