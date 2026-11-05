@@ -263,7 +263,7 @@
               <div class="flex items-center justify-between pb-2 border-b border-blue-200 font-bold text-xs text-[#3b82f6]">
                 <div class="flex items-center gap-1.5">
                   <LottieAnimation animationPath="/lottie/check.json" width="w-5" height="h-5" :loop="false" />
-                  <span>MEMBER ASLI & AKTIF &mdash; PALANG TERBUKA</span>
+                  <span>Member Aktif</span>
                 </div>
                 <span class="font-mono bg-[#f59e0b] text-slate-950 px-2 py-0.5 rounded-lg text-[10px] font-bold">
                   {{ memberSuccessResult.tiket.kode_tiket }}
