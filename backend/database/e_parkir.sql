@@ -183,7 +183,7 @@ CREATE TABLE `members` (
 
 LOCK TABLES `members` WRITE;
 /*!40000 ALTER TABLE `members` DISABLE KEYS */;
-INSERT INTO `members` VALUES (1,'MBR-26001','MBR-QR-SAMPLE01','Abhista Bhanu Hermawan','PT RUAS DIGITAL',150000.00,300000.00,'lunas','2027-01-05','2026-11-04 19:20:11','2026-11-04 19:20:11'),(2,'MBR-26002','MBR-QR-SAMPLE02','Budi Santoso','PT Maju Bersama',150000.00,150000.00,'lunas','2026-12-05','2026-11-04 19:20:11','2026-11-04 19:20:11'),(3,'MBR-26003','MBR-QR-SAMPLE03','Siti Rahmawati','CV Karya Gemilang',150000.00,0.00,'belum','2026-11-19','2026-11-04 19:20:11','2026-11-04 19:20:11'),(4,'MBR-26004','MBR-QR-SAMPLE04','Hendra Wijaya','PT Cipta Kreasi',150000.00,150000.00,'expired','2026-10-31','2026-11-04 19:20:11','2026-11-04 19:20:11');
+INSERT INTO `members` VALUES (1,'MBR-26001','MBR-QR-SAMPLE01','Abhista Bhanu Hermawan','PT RUAS',150000.00,300000.00,'lunas','2027-01-05','2026-11-04 19:37:53','2026-11-04 19:37:53'),(2,'MBR-26002','MBR-QR-SAMPLE02','Radekha Yona Pratama','PT Traspac',150000.00,150000.00,'lunas','2026-12-05','2026-11-04 19:37:53','2026-11-04 19:37:53'),(3,'MBR-26003','MBR-QR-SAMPLE03','Aria Renaldi','RSKD Pasar Belantong',150000.00,150000.00,'lunas','2026-12-05','2026-11-04 19:37:53','2026-11-04 19:37:53'),(4,'MBR-26EUDYXJ','MBR-QR-SAMPLE04','Rakha Al-Rifad','PT Equity',150000.00,150000.00,'lunas','2026-12-05','2026-11-04 19:37:53','2026-11-04 19:37:53');
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,7 +267,7 @@ CREATE TABLE `personal_access_tokens` (
 
 LOCK TABLES `personal_access_tokens` WRITE;
 /*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
-INSERT INTO `personal_access_tokens` VALUES (1,'App\\Models\\User',2,'auth-token','444f93d1ee84cd191dbf73f6abb2e1939a8ba8367c6dedfe18b5c20fdf988c8f','[\"*\"]','2026-11-04 19:24:51',NULL,'2026-11-04 19:22:09','2026-11-04 19:24:51');
+INSERT INTO `personal_access_tokens` VALUES (1,'App\\Models\\User',2,'auth-token','bc17d75efbb755582e95c56e06214a04ddcdbd40d1621f097d20bfe6e29f2f74','[\"*\"]','2026-11-04 19:39:05',NULL,'2026-11-04 19:38:57','2026-11-04 19:39:05');
 /*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,7 +319,7 @@ CREATE TABLE `tagihan_members` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `tagihan_members_member_id_tanggal_tagihan_unique` (`member_id`,`tanggal_tagihan`),
   CONSTRAINT `tagihan_members_member_id_foreign` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -328,7 +328,7 @@ CREATE TABLE `tagihan_members` (
 
 LOCK TABLES `tagihan_members` WRITE;
 /*!40000 ALTER TABLE `tagihan_members` DISABLE KEYS */;
-INSERT INTO `tagihan_members` VALUES (1,1,300000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 19:20:11','2026-11-04 19:20:11'),(2,2,150000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 19:20:11','2026-11-04 19:20:11'),(3,3,150000.00,'belum','2026-11-05',NULL,'2026-11-04 19:20:11','2026-11-04 19:20:11');
+INSERT INTO `tagihan_members` VALUES (1,1,300000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 19:37:53','2026-11-04 19:37:53'),(2,2,150000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 19:37:53','2026-11-04 19:37:53'),(3,3,150000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 19:37:53','2026-11-04 19:37:53'),(4,4,150000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 19:37:53','2026-11-04 19:37:53');
 /*!40000 ALTER TABLE `tagihan_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -399,7 +399,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Super Admin','admin@parkir.com','super_admin',NULL,'$2y$12$8hLihnMcovlFHHLkMo0xyOILw9VDS06E9PGHhQd3SvHA1nlPa2W3C',NULL,'2026-11-04 19:20:11','2026-11-04 19:20:11'),(2,'Petugas 1','petugas@parkir.com','petugas',NULL,'$2y$12$xMFg6PcPgSH97fekOIUxc.TxS3792Su9fndQgzdXU8dZfGR3zpdLe',NULL,'2026-11-04 19:20:11','2026-11-04 19:20:11');
+INSERT INTO `users` VALUES (1,'Super Admin','admin@parkir.com','super_admin',NULL,'$2y$12$Eqjw8E9G5KOTPnociWjtLuJSAramvd8Vaz8azM0jIz07oTibSzrf6',NULL,'2026-11-04 19:37:53','2026-11-04 19:37:53'),(2,'Petugas 1','petugas@parkir.com','petugas',NULL,'$2y$12$XadenxKTmoMhXywBnZPnUu58IzwlA.DRgPVxPhk3PgHoll3G8WgL6',NULL,'2026-11-04 19:37:53','2026-11-04 19:37:53');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -412,4 +412,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-05  9:26:28
+-- Dump completed on 2026-11-05  9:39:55
