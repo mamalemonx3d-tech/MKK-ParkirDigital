@@ -25,9 +25,10 @@ Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPa
 // Health check endpoint
 Route::get('/health', fn () => response()->json(['status' => 'ok']));
 
-// Kiosk / User: ambil tiket tanpa login
+// Kiosk / User: ambil tiket & scan member tanpa login
 Route::post('/tiket', [TiketController::class, 'create']);
 Route::post('/member/check-status', [MemberController::class, 'checkStatus']);
+Route::post('/scan', [ScanController::class, 'scan']);
 
 
 // =========================
@@ -53,10 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tiket/masuk', [TiketController::class, 'masuk']);
 
     // =========================
-    // Transaksi Gerbang
+    // Transaksi Gerbang Keluar
     // =========================
-    Route::post('/scan', [ScanController::class, 'scan']);
-
     Route::prefix('keluar')->group(function () {
         Route::post('/scan', [ExitController::class, 'scan']);
         Route::post('/member', [ExitController::class, 'member']);

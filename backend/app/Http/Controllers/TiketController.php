@@ -18,12 +18,12 @@ class TiketController extends Controller
 
     public function create(Request $request)
     {
-        // Eksekusi super cepat & ringan (< 5ms)
-        $last = TiketParkir::orderByDesc('id')->first();
-        $lastNumber = $last ? (int) preg_replace('/\D+/', '', $last->kode_tiket) : 0;
-        $nomor = $lastNumber + 1;
-        $kode = 'A' . str_pad($nomor, 2, '0', STR_PAD_LEFT);
-        $qrCode = Str::random(32);
+        // Generate kode unik kriptografis yang aman dan tidak dapat ditebak
+        do {
+            $kode = 'TKT-' . date('ymd') . '-' . strtoupper(Str::random(6));
+        } while (TiketParkir::where('kode_tiket', $kode)->exists());
+
+        $qrCode = 'QR-' . strtoupper(Str::random(24));
 
         $tiket = TiketParkir::create([
             "kode_tiket" => $kode,
@@ -37,7 +37,7 @@ class TiketController extends Controller
 
         return response()->json([
             "success" => true,
-            "message" => "Tiket berhasil dibuat",
+            "message" => "Tiket berhasil dibuat dan tersimpan di database sistem.",
             "data" => $tiket,
         ], 201);
     }
@@ -48,19 +48,30 @@ class TiketController extends Controller
             "qr_code" => "required|string",
         ]);
 
-        $tiket = TiketParkir::where("qr_code", $request->qr_code)->first();
+        $input = trim($request->qr_code);
+
+        $tiket = TiketParkir::where("qr_code", $input)
+            ->orWhere("kode_tiket", $input)
+            ->first();
 
         if (!$tiket) {
             return response()->json([
                 "success" => false,
-                "message" => "QR tidak terdaftar",
+                "message" => "Tiket tidak terdaftar dalam sistem.",
             ], 404);
+        }
+
+        if ($tiket->status === "keluar") {
+            return response()->json([
+                "success" => false,
+                "message" => "Tiket sudah digunakan! Transaksi pembayaran tiket ini telah selesai dan tiket sudah hangus/tidak berlaku.",
+            ], 422);
         }
 
         if ($tiket->status === "masuk") {
             return response()->json([
                 "success" => false,
-                "message" => "Kendaraan dengan QR ini sudah masuk",
+                "message" => "Kendaraan dengan tiket ini sudah berada di dalam area parkir.",
                 "data" => $tiket,
             ], 400);
         }
@@ -73,22 +84,38 @@ class TiketController extends Controller
 
         return response()->json([
             "success" => true,
-            "message" => "Kendaraan berhasil masuk",
+            "message" => "Kendaraan berhasil masuk.",
             "data" => $tiket,
         ], 200);
     }
 
     public function cek($qrCode)
     {
-        $tiket = TiketParkir::where("qr_code", $qrCode)
-            ->where("status", "masuk")
+        $input = trim($qrCode);
+
+        $tiket = TiketParkir::where("qr_code", $input)
+            ->orWhere("kode_tiket", $input)
             ->first();
 
         if (!$tiket) {
             return response()->json([
                 "success" => false,
-                "message" => "Tiket tidak ditemukan atau kendaraan sudah keluar.",
+                "message" => "Tiket tidak ditemukan atau kode tidak valid dalam sistem.",
             ], 404);
+        }
+
+        if ($tiket->status === "keluar") {
+            return response()->json([
+                "success" => false,
+                "message" => "Tiket sudah digunakan! Transaksi pembayaran tiket ini telah selesai dan tiket sudah hangus/tidak berlaku.",
+            ], 422);
+        }
+
+        if ($tiket->status !== "masuk") {
+            return response()->json([
+                "success" => false,
+                "message" => "Status tiket tidak valid (" . $tiket->status . ").",
+            ], 422);
         }
 
         $waktuMasuk = Carbon::parse($tiket->waktu_masuk);
@@ -103,6 +130,7 @@ class TiketController extends Controller
             "data" => [
                 "id" => $tiket->id,
                 "kode_tiket" => $tiket->kode_tiket,
+                "qr_code" => $tiket->qr_code,
                 "jenis" => $tiket->jenis,
                 "member" => $tiket->jenis === "member",
                 "status" => $tiket->status,

@@ -22,13 +22,6 @@
           <span>Perbarui</span>
         </button>
         <NuxtLink
-          to="/user"
-          class="px-4 py-2 rounded-xl bg-[#f59e0b] hover:bg-[#d97706] text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow-xs border border-[#d97706]"
-        >
-          <Camera class="w-3.5 h-3.5" />
-          <span>Pintu Masuk (Kiosk)</span>
-        </NuxtLink>
-        <NuxtLink
           to="/petugas/keluar"
           class="px-4 py-2 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
         >

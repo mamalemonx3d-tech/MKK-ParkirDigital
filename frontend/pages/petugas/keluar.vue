@@ -135,13 +135,23 @@
 
       <!-- Right Column: Cashier Terminal & Transaction (7 cols) -->
       <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-5">
-        <!-- Error Message Notification -->
-        <div v-if="errorMessage" class="p-3.5 rounded-lg bg-red-50 border border-red-200 text-xs text-red-800 flex items-center justify-between gap-2">
-          <div class="flex items-center gap-2">
-            <AlertCircle class="w-4 h-4 shrink-0 text-red-600" />
-            <span class="font-medium">{{ errorMessage }}</span>
+        <!-- Error Message Notification (Tiket Hangus / Kendala) -->
+        <div
+          v-if="errorMessage"
+          class="p-4 rounded-xl border-2 text-xs flex items-start justify-between gap-3 shadow-xs animate-in fade-in"
+          :class="errorMessage.includes('sudah digunakan') || errorMessage.includes('hangus') ? 'bg-amber-50 border-amber-400 text-amber-950' : 'bg-red-50 border-red-300 text-red-900'"
+        >
+          <div class="flex items-start gap-2.5">
+            <AlertTriangle v-if="errorMessage.includes('sudah digunakan') || errorMessage.includes('hangus')" class="w-5 h-5 shrink-0 text-amber-600 mt-0.5" />
+            <AlertCircle v-else class="w-5 h-5 shrink-0 text-red-600 mt-0.5" />
+            <div class="space-y-1">
+              <p class="font-bold text-sm" :class="errorMessage.includes('sudah digunakan') || errorMessage.includes('hangus') ? 'text-amber-900' : 'text-red-900'">
+                {{ errorMessage.includes('sudah digunakan') || errorMessage.includes('hangus') ? 'TIKET TIDAK BERLAKU / HANGUS' : 'KENDALA TRANSAKSI' }}
+              </p>
+              <p class="leading-relaxed font-medium">{{ errorMessage }}</p>
+            </div>
           </div>
-          <button @click="errorMessage = ''" class="text-red-500 hover:text-red-700 font-bold text-xs cursor-pointer">&times;</button>
+          <button @click="errorMessage = ''" class="text-slate-400 hover:text-slate-700 font-bold text-sm cursor-pointer">&times;</button>
         </div>
 
         <!-- ========================================== -->

@@ -2,7 +2,7 @@
   <div class="flex items-center justify-center min-h-[60vh] text-slate-500 text-sm">
     <div class="flex items-center gap-2">
       <Loader2 class="w-5 h-5 animate-spin text-[#3b82f6]" />
-      <span>Mengalihkan ke Terminal Pintu Masuk Terpadu...</span>
+      <span>Mengalihkan ke Pos Kasir Keluar...</span>
     </div>
   </div>
 </template>
@@ -15,5 +15,5 @@ definePageMeta({
   middleware: 'auth',
 })
 
-await navigateTo('/user', { replace: true })
+await navigateTo('/petugas/keluar', { replace: true })
 </script>

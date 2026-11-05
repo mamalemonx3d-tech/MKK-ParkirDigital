@@ -26,23 +26,16 @@ class MemberController extends Controller
             'expired_at' => 'required|date',
         ]);
 
-        $kodeTerakhir = Member::where('kode', 'like', 'MBR-%')
-            ->get()
-            ->map(function ($member) {
-                return (int) str_replace('MBR-', '', $member->kode);
-            })
-            ->max() ?? 0;
+        // Generate kode member unik kriptografis yang aman dan tidak dapat dipalsukan
+        do {
+            $kodeBaru = 'MBR-' . date('y') . strtoupper(Str::random(6));
+        } while (Member::where('kode', $kodeBaru)->exists());
 
-        $kodeBaru = 'MBR-' . str_pad(
-            $kodeTerakhir + 1,
-            3,
-            '0',
-            STR_PAD_LEFT
-        );
+        $qrCode = 'MBR-QR-' . strtoupper(Str::random(24));
 
         $member = Member::create([
             'kode' => $kodeBaru,
-            'qr_code' => Str::random(60),
+            'qr_code' => $qrCode,
             'nama' => $request->nama,
             'perusahaan' => $request->perusahaan,
             'harga' => $request->harga,

@@ -1,39 +1,39 @@
 <template>
-  <div class="space-y-6 max-w-6xl mx-auto select-none font-sans pb-8">
-    <!-- Top Kiosk Operational Banner -->
-    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-[#3b82f6] animate-pulse"></span>
-          <h1 class="text-xl sm:text-2xl font-normal text-[#0f172a] font-serif tracking-tight">
-            Terminal Masuk Gerbang
-          </h1>
-          <span class="px-2.5 py-0.5 rounded-full bg-[#fef3c7] text-slate-900 border border-[#f59e0b] text-[10px] font-bold">
-            Kiosk Mandiri & Member
-          </span>
-        </div>
-        <p class="text-xs text-slate-500 mt-1">
-          Layanan terpadu: cetak tiket karcis pengunjung umum dan validasi pemindaian kartu member aktif.
-        </p>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-3">
-        <!-- Live Date & Clock -->
-        <div class="text-right hidden sm:block text-xs">
-          <div class="text-slate-500 font-medium">Petugas: <strong class="text-slate-800">{{ auth.user.value?.name || 'Petugas 1' }}</strong></div>
-          <div class="font-mono font-bold text-slate-800 text-[11px]">{{ liveDate }} &bull; {{ liveTime }} WIB</div>
+  <div class="min-h-screen bg-[#f8fafc] flex flex-col justify-between p-4 sm:p-6 lg:p-8 font-sans select-none">
+    <div class="space-y-6 max-w-6xl mx-auto w-full">
+      <!-- Top Kiosk Operational Banner (Layar Mandiri Tanpa Shortcut Login) -->
+      <header class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <BrandLogo :showSubtitle="false" size="md" />
+          <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-xl sm:text-2xl font-normal text-[#0f172a] font-serif tracking-tight">
+                Terminal Gerbang Masuk Mandiri
+              </h1>
+              <span class="px-2.5 py-0.5 rounded-full bg-[#fef3c7] text-slate-900 border border-[#f59e0b] text-[10px] font-bold">
+                Kiosk Mandiri & Member
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Layanan mandiri: cetak tiket karcis pengunjung umum atau scan kartu QR member aktif.
+            </p>
+          </div>
         </div>
 
-        <!-- Tombol Cepat Kembali ke Dashboard -->
-        <NuxtLink
-          to="/petugas"
-          class="flex items-center gap-2 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition border border-slate-300 shadow-2xs cursor-pointer"
-        >
-          <ArrowLeft class="w-3.5 h-3.5 text-slate-950 bg-[#eff6ff] px-3 py-1 rounded-xl border border-blue-300 inline-block" />
-          <span>Dashboard Petugas</span>
-        </NuxtLink>
-      </div>
-    </div>
+        <!-- Live Date & Clock + Barrier Status -->
+        <div class="flex items-center gap-3 self-end sm:self-auto">
+          <div class="text-right text-xs">
+            <div class="flex items-center gap-1.5 justify-end">
+              <span class="w-2 h-2 rounded-full bg-[#3b82f6] animate-pulse"></span>
+              <span class="text-slate-600 font-semibold text-[11px]">Palang: Otomatis</span>
+            </div>
+            <div class="font-mono font-bold text-slate-800 text-[11px] mt-0.5">
+              {{ liveDate }} &bull; {{ liveTime }} WIB
+            </div>
+          </div>
+        </div>
+      </header>
 
     <!-- Main Dual Column Layout (Sebelahan: Kiri Non-Member, Kanan Member) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
@@ -128,8 +128,8 @@
                 <span class="font-bold text-[#3b82f6]">Rp 3.000 / Jam</span>
               </div>
               <div class="flex justify-between text-slate-600">
-                <span>Petugas Pos:</span>
-                <span class="font-bold text-slate-800">{{ auth.user.value?.name || 'Petugas 1' }}</span>
+                <span>Terminal Pos:</span>
+                <span class="font-bold text-slate-800">Gerbang Masuk 01 (Mandiri)</span>
               </div>
             </div>
           </div>
@@ -334,13 +334,16 @@
 
     </div>
 
-    <!-- Minimalist Footer Status -->
-    <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-200">
-      <div class="font-medium">Sistem Gerbang Masuk Terpadu &bull; Pos Operasional</div>
-      <div class="flex items-center gap-3 font-mono text-[11px]">
-        <span class="text-slate-600 font-bold">Palang Pintu: Siap Beroperasi</span>
-      </div>
     </div>
+
+    <!-- Minimalist Public Kiosk Footer (Tanpa Tombol/Shortcut ke Login) -->
+    <footer class="max-w-6xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 pt-6 border-t border-slate-200 gap-2">
+      <div class="font-medium">&copy; 2026 Secure Parking System &bull; Terminal Gerbang Masuk Mandiri</div>
+      <div class="flex items-center gap-2 font-mono text-[11px]">
+        <span class="w-2 h-2 rounded-full bg-[#3b82f6]"></span>
+        <span class="text-slate-600 font-bold">Sistem Kiosk: Siap Melayani Kendaraan</span>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -352,21 +355,19 @@ import {
   AlertTriangle,
   Camera,
   CameraOff,
-  ArrowLeft,
   ScanLine,
 } from 'lucide-vue-next'
 import { Html5Qrcode } from 'html5-qrcode'
 import QrcodeVue from 'qrcode.vue'
 import LottieAnimation from '~/components/LottieAnimation.vue'
+import BrandLogo from '~/components/BrandLogo.vue'
 import { formatDateTime } from '~/utils/formatters'
 
-// Terintegrasi dalam layout Petugas dengan sidebar yang tertutup secara default
+// Layar Kiosk Mandiri berdiri sendiri tanpa layout petugas dan tanpa login
 definePageMeta({
-  layout: 'petugas',
-  middleware: 'auth',
+  layout: false,
 })
 
-const auth = useAuth()
 const api = useApi()
 
 // Realtime Date & Clock
@@ -619,7 +620,6 @@ const handleGlobalKeyDown = (e: KeyboardEvent) => {
 
 // Lifecycle Hooks
 onMounted(() => {
-  auth.initAuth()
   updateClock()
   clockTimer = setInterval(updateClock, 1000)
 

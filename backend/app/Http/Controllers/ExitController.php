@@ -23,10 +23,12 @@ class ExitController extends Controller
             'qr_code' => 'required|string',
         ]);
 
-        $qrCode = $request->qr_code;
+        $input = trim($request->qr_code);
 
-        // 1. Cek apakah ini QR kartu member
-        $member = Member::where('qr_code', $qrCode)->first();
+        // 1. Cek apakah ini QR kartu member atau kode member
+        $member = Member::where('qr_code', $input)
+            ->orWhere('kode', $input)
+            ->first();
 
         if ($member) {
             $tiket = TiketParkir::where('member_id', $member->id)
@@ -35,9 +37,21 @@ class ExitController extends Controller
                 ->first();
 
             if (!$tiket) {
+                // Cek apakah member baru saja menyelesaikan sesi keluar sebelumnya
+                $lastSesi = TiketParkir::where('member_id', $member->id)
+                    ->latest('waktu_keluar')
+                    ->first();
+
+                if ($lastSesi && $lastSesi->status === 'keluar') {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Member ini sudah menyelesaikan transaksi keluar sebelumnya dan tidak memiliki sesi parkir aktif di dalam area.',
+                    ], 422);
+                }
+
                 return response()->json([
                     'success' => false,
-                    'message' => 'Member ini tidak memiliki sesi parkir aktif.',
+                    'message' => 'Member ini tidak memiliki sesi parkir aktif di dalam area.',
                 ], 404);
             }
 
@@ -57,16 +71,31 @@ class ExitController extends Controller
             ]);
         }
 
-        // 2. Kalau bukan member, cek sebagai tiket non-member
-        $tiket = TiketParkir::where('qr_code', $qrCode)
-            ->where('status', 'masuk')
+        // 2. Kalau bukan member, cek sebagai tiket non-member di database
+        $tiket = TiketParkir::where('qr_code', $input)
+            ->orWhere('kode_tiket', $input)
             ->first();
 
         if (!$tiket) {
             return response()->json([
                 'success' => false,
-                'message' => 'Kode tidak ditemukan atau kendaraan sudah keluar.',
+                'message' => 'Tiket tidak ditemukan atau kode tidak terdaftar dalam database sistem.',
             ], 404);
+        }
+
+        // Validasi tiket hangus / sudah pernah keluar
+        if ($tiket->status === 'keluar') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tiket sudah digunakan! Transaksi pembayaran tiket ini telah selesai dan tiket sudah hangus/tidak berlaku.',
+            ], 422);
+        }
+
+        if ($tiket->status !== 'masuk') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Status tiket tidak valid (' . $tiket->status . ').',
+            ], 422);
         }
 
         $durasiMenit = max(1, (int) round(Carbon::parse($tiket->waktu_masuk)->diffInMinutes(now())));
@@ -76,7 +105,7 @@ class ExitController extends Controller
         return response()->json([
             'success' => true,
             'type' => 'ticket',
-            'message' => 'Tiket ditemukan.',
+            'message' => 'Tiket valid ditemukan di database sistem.',
             'data' => [
                 'id' => $tiket->id,
                 'kode_tiket' => $tiket->kode_tiket,
@@ -121,7 +150,7 @@ class ExitController extends Controller
             if ($tiket->status !== 'masuk') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Tiket ini sudah diproses sebelumnya.',
+                    'message' => 'Tiket sudah digunakan! Transaksi pembayaran tiket ini telah selesai dan tiket sudah hangus/tidak berlaku.',
                 ], 422);
             }
 
@@ -168,7 +197,7 @@ class ExitController extends Controller
             if ($tiket->status !== 'masuk') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Tiket ini sudah diproses sebelumnya.',
+                    'message' => 'Tiket sudah digunakan! Transaksi pembayaran tiket ini telah selesai dan tiket sudah hangus/tidak berlaku.',
                 ], 422);
             }
 

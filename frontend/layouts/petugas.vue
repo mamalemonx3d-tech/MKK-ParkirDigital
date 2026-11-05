@@ -56,22 +56,6 @@
         </div>
         <div v-else class="my-2 border-t border-slate-700/60"></div>
 
-        <!-- Kiosk Tiket & Member -->
-        <NuxtLink
-          to="/user"
-          :title="isCollapsed ? 'Pintu Masuk (Kiosk & Member)' : undefined"
-          class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
-          :class="[
-            isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2.5',
-            ['/user', '/petugas/scan'].includes($route.path)
-              ? 'bg-[#f59e0b] text-slate-950 shadow-xs'
-              : 'text-slate-300 hover:bg-slate-700/60 hover:text-white'
-          ]"
-        >
-          <Camera class="w-4 h-4 shrink-0" />
-          <span v-if="!isCollapsed" class="truncate">Pintu Masuk (Kiosk & Member)</span>
-        </NuxtLink>
-
         <!-- Pos Kasir Keluar -->
         <NuxtLink
           to="/petugas/keluar"
@@ -289,17 +273,6 @@ const isCollapsed = useState<boolean>('petugas-sidebar-collapsed', () => false)
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value
 }
-
-// Automatically collapse sidebar on /user (Kiosk page) as requested: "agar tetap ada sidebar namun sidebarnya hanya menutup"
-watch(
-  () => route.path,
-  (newPath) => {
-    if (newPath === '/user') {
-      isCollapsed.value = true
-    }
-  },
-  { immediate: true }
-)
 
 onMounted(() => {
   auth.initAuth()

@@ -65,33 +65,20 @@ class ScanController extends Controller
             ], 422);
         }
 
-        $kodeTiket = TiketParkir::pluck('kode_tiket');
-        $nomorTerbesar = 0;
-
-        foreach ($kodeTiket as $kodeLama) {
-            if (preg_match('/^A(\d+)$/', $kodeLama, $matches)) {
-                $nomor = (int) $matches[1];
-                if ($nomor > $nomorTerbesar) {
-                    $nomorTerbesar = $nomor;
-                }
-            }
-        }
-
-        $nomor = $nomorTerbesar + 1;
-
+        // Generate kode tiket unik yang aman dan tidak dapat dipalsukan
         do {
-            $kode = 'A' . str_pad($nomor, 2, '0', STR_PAD_LEFT);
-            $nomor++;
+            $kode = 'MBR-TKT-' . date('ymd') . '-' . strtoupper(Str::random(6));
         } while (TiketParkir::where('kode_tiket', $kode)->exists());
 
         $tiket = TiketParkir::create([
             'member_id' => $member->id,
             'kode_tiket' => $kode,
-            'qr_code' => Str::random(60),
+            'qr_code' => 'QR-' . strtoupper(Str::random(24)),
             'jenis' => 'member',
             'status' => 'masuk',
             'waktu_masuk' => now(),
             'waktu_keluar' => null,
+            'total_bayar' => 0,
         ]);
 
         return response()->json([
