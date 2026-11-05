@@ -14,8 +14,9 @@ return new class extends Migration
             $table->string('qr_code')->nullable()->unique();
             $table->string('nama');
             $table->string('perusahaan');
-            $table->decimal('harga', 12, 2);
-            $table->enum('status', ['lunas', 'belum'])->default('belum');
+            $table->decimal('harga', 12, 2); // Harga 1 bulan kartu member
+            $table->decimal('total_terbayar', 12, 2)->default(0); // Total terbayarkan (misal bayar 2 bulan)
+            $table->enum('status', ['lunas', 'belum', 'expired'])->default('belum');
             $table->date('expired_at');
             $table->timestamps();
         });

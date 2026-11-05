@@ -16,14 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `e_parkir`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `e_parkir` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-
-USE `e_parkir`;
-
---
 -- Table structure for table `cache`
 --
 
@@ -174,14 +166,15 @@ CREATE TABLE `members` (
   `nama` varchar(255) NOT NULL,
   `perusahaan` varchar(255) NOT NULL,
   `harga` decimal(12,2) NOT NULL,
-  `status` enum('lunas','belum') NOT NULL DEFAULT 'belum',
+  `total_terbayar` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `status` enum('lunas','belum','expired') NOT NULL DEFAULT 'belum',
   `expired_at` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `members_kode_unique` (`kode`),
   UNIQUE KEY `members_qr_code_unique` (`qr_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,7 +183,7 @@ CREATE TABLE `members` (
 
 LOCK TABLES `members` WRITE;
 /*!40000 ALTER TABLE `members` DISABLE KEYS */;
-INSERT INTO `members` VALUES (1,'MBR-26001','MBR-QR-SAMPLE01','Abhista Bhanu Hermawan','PT RUAS DIGITAL',150000.00,'lunas','2026-12-05','2026-11-04 18:07:39','2026-11-04 18:07:39'),(2,'MBR-26002','MBR-QR-SAMPLE02','Budi Santoso','PT Maju Bersama',50000.00,'lunas','2026-12-05','2026-11-04 18:07:39','2026-11-04 18:07:39');
+INSERT INTO `members` VALUES (1,'MBR-26001','MBR-QR-SAMPLE01','Abhista Bhanu Hermawan','PT RUAS DIGITAL',150000.00,300000.00,'lunas','2027-01-05','2026-11-04 18:55:54','2026-11-04 18:55:54'),(2,'MBR-26002','MBR-QR-SAMPLE02','Budi Santoso','PT Maju Bersama',150000.00,150000.00,'lunas','2026-12-05','2026-11-04 18:55:54','2026-11-04 18:59:33'),(3,'MBR-26003','MBR-QR-SAMPLE03','Siti Rahmawati','CV Karya Gemilang',150000.00,0.00,'belum','2026-11-19','2026-11-04 18:55:54','2026-11-04 18:59:33'),(4,'MBR-26004','MBR-QR-SAMPLE04','Hendra Wijaya','PT Cipta Kreasi',150000.00,150000.00,'expired','2026-10-31','2026-11-04 18:55:54','2026-11-04 18:55:54');
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +258,7 @@ CREATE TABLE `personal_access_tokens` (
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`),
   KEY `personal_access_tokens_expires_at_index` (`expires_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +267,6 @@ CREATE TABLE `personal_access_tokens` (
 
 LOCK TABLES `personal_access_tokens` WRITE;
 /*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
-INSERT INTO `personal_access_tokens` VALUES (3,'App\\Models\\User',1,'auth-token','06c3f0ab70e524110d7efe81e9002528f261f4d104eeb2185320208974cfaeec','[\"*\"]','2026-11-04 18:08:51',NULL,'2026-11-04 18:08:39','2026-11-04 18:08:51');
 /*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -326,7 +318,7 @@ CREATE TABLE `tagihan_members` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `tagihan_members_member_id_tanggal_tagihan_unique` (`member_id`,`tanggal_tagihan`),
   CONSTRAINT `tagihan_members_member_id_foreign` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -335,7 +327,7 @@ CREATE TABLE `tagihan_members` (
 
 LOCK TABLES `tagihan_members` WRITE;
 /*!40000 ALTER TABLE `tagihan_members` DISABLE KEYS */;
-INSERT INTO `tagihan_members` VALUES (1,1,150000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 18:07:39','2026-11-04 18:07:39'),(2,2,50000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 18:07:39','2026-11-04 18:07:39');
+INSERT INTO `tagihan_members` VALUES (1,1,300000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 18:55:54','2026-11-04 18:55:54'),(2,2,50000.00,'lunas','2026-11-05','2026-11-05','2026-11-04 18:55:54','2026-11-04 18:55:54'),(3,3,50000.00,'belum','2026-11-05',NULL,'2026-11-04 18:55:54','2026-11-04 18:55:54');
 /*!40000 ALTER TABLE `tagihan_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -388,7 +380,6 @@ CREATE TABLE `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `no_hp` varchar(255) DEFAULT NULL,
   `role` varchar(255) NOT NULL DEFAULT 'petugas',
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
@@ -406,7 +397,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Super Admin','admin@parkir.com','081234567890','super_admin',NULL,'$2y$12$oIwRMRspzS58zym1r8pgCeYD8UTzPE0KdDVJekgOkB2LhVn98zcDe',NULL,'2026-11-04 18:06:04','2026-11-04 18:07:38'),(2,'Petugas 1','petugas@parkir.com','081234567891','petugas',NULL,'$2y$12$P8bv82o6tmmnRDA65htSUupeB3zvwiQzgQEu4ZkeqDPSWCY/vyZBK',NULL,'2026-11-04 18:06:05','2026-11-04 18:07:39');
+INSERT INTO `users` VALUES (1,'Super Admin','admin@parkir.com','super_admin',NULL,'$2y$12$8PVw.haydiPuebs30oA0JeMO/mM/yVdYAUgDyVz9KqInVZbZ.MONC',NULL,'2026-11-04 18:55:54','2026-11-04 18:59:32'),(2,'Petugas 1','petugas@parkir.com','petugas',NULL,'$2y$12$rKVl3Hhh19orfW.Iq2hi7OZ9nJ2Y7dRJ.UCOmImvs.3f78qe7sNj2',NULL,'2026-11-04 18:55:54','2026-11-04 18:59:33');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -419,4 +410,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-05  8:09:20
+-- Dump completed on 2026-11-05  8:59:33

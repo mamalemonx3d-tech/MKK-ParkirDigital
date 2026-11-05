@@ -28,6 +28,21 @@ export const formatDateTime = (dateStr: string | null | undefined): string => {
 
 export const formatDate = (dateStr: string | null | undefined): string => {
   if (!dateStr) return '-'
+  const cleanStr = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr.split(' ')[0]
+  const parts = cleanStr.split('-')
+  if (parts.length === 3) {
+    const y = parseInt(parts[0], 10)
+    const m = parseInt(parts[1], 10) - 1
+    const d = parseInt(parts[2], 10)
+    const date = new Date(y, m, d)
+    if (!isNaN(date.getTime())) {
+      return new Intl.DateTimeFormat('id-ID', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      }).format(date)
+    }
+  }
   const d = new Date(dateStr)
   if (isNaN(d.getTime())) return '-'
   return new Intl.DateTimeFormat('id-ID', {

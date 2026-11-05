@@ -26,23 +26,20 @@ class ScanController extends Controller
             ], 404);
         }
 
-        if ($member->status !== 'lunas') {
+        if ($member->status === 'expired' || ($member->expired_at && now()->toDateString() > $member->expired_at->toDateString())) {
             return response()->json([
                 'success' => false,
-                'message' => 'Status keanggotaan belum lunas. Harap lakukan pembayaran iuran terlebih dahulu.',
+                'message' => 'Masa berlaku kartu member sudah habis (kadaluarsa / expired). Harap lakukan perpanjangan langganan.',
                 'data' => [
                     'member' => $member,
                 ],
             ], 403);
         }
 
-        if (
-            $member->expired_at &&
-            now()->toDateString() > $member->expired_at->toDateString()
-        ) {
+        if ($member->status !== 'lunas') {
             return response()->json([
                 'success' => false,
-                'message' => 'Masa berlaku kartu member sudah habis (kadaluarsa).',
+                'message' => 'Status keanggotaan belum lunas. Harap lakukan pembayaran iuran terlebih dahulu.',
                 'data' => [
                     'member' => $member,
                 ],

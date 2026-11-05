@@ -28,15 +28,6 @@
         </NuxtLink>
 
         <NuxtLink
-          to="/admin/member"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition"
-          :class="$route.path === '/admin/member' ? 'bg-[#f59e0b] text-slate-950 shadow-xs' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white'"
-        >
-          <CreditCard class="w-4 h-4 shrink-0" />
-          <span>Data Langganan Member</span>
-        </NuxtLink>
-
-        <NuxtLink
           to="/admin/rekap"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition"
           :class="$route.path === '/admin/rekap' ? 'bg-[#f59e0b] text-slate-950 shadow-xs' : 'text-slate-300 hover:bg-slate-700/60 hover:text-white'"
@@ -52,26 +43,6 @@
         >
           <User class="w-4 h-4 shrink-0" />
           <span>Kelola Profil Akun</span>
-        </NuxtLink>
-
-        <div class="pt-4 pb-1 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-          Akses Operasional
-        </div>
-
-        <NuxtLink
-          to="/petugas"
-          class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-700/60 hover:text-white transition"
-        >
-          <ArrowLeftRight class="w-3.5 h-3.5 shrink-0 text-[#f59e0b]" />
-          <span>Buka Antarmuka Petugas</span>
-        </NuxtLink>
-
-        <NuxtLink
-          to="/user"
-          class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-700/60 hover:text-white transition"
-        >
-          <QrCode class="w-3.5 h-3.5 shrink-0 text-[#3b82f6]" />
-          <span>Pintu Masuk (Kiosk & Member)</span>
         </NuxtLink>
       </nav>
 
@@ -126,11 +97,8 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import {
   LayoutDashboard,
   Users,
-  CreditCard,
   FileText,
   LogOut,
-  ArrowLeftRight,
-  QrCode,
   User,
 } from 'lucide-vue-next'
 import BrandLogo from '~/components/BrandLogo.vue'

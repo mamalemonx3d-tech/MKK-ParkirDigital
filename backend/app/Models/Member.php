@@ -15,6 +15,7 @@ class Member extends Model
         'nama',
         'perusahaan',
         'harga',
+        'total_terbayar',
         'status',
         'expired_at',
     ];
@@ -22,7 +23,20 @@ class Member extends Model
     protected $casts = [
         'expired_at' => 'date',
         'harga' => 'decimal:2',
+        'total_terbayar' => 'decimal:2',
     ];
+
+    protected $appends = [
+        'computed_status',
+    ];
+
+    public function getComputedStatusAttribute()
+    {
+        if ($this->expired_at && now()->toDateString() > $this->expired_at->toDateString()) {
+            return 'expired';
+        }
+        return $this->status;
+    }
 
     public function tagihan()
     {

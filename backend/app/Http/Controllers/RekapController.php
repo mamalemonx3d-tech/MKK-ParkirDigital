@@ -241,6 +241,8 @@ class RekapController extends Controller
 
         $totalTiketAktif = TiketParkir::where('status', 'masuk')->count();
         $totalTiketHariIni = TiketParkir::whereBetween('waktu_masuk', [$start, $end])->count();
+        $totalKeluarHariIni = TiketParkir::whereBetween('waktu_keluar', [$start, $end])->where('status', 'keluar')->count();
+        $totalSudahKeluar = TiketParkir::where('status', 'keluar')->count();
         $pendapatan = $this->hitungPendapatan($start, $end);
         $totalPetugas = User::where('role', 'petugas')->count();
         $totalMember = Member::count();
@@ -250,7 +252,12 @@ class RekapController extends Controller
             'success' => true,
             'data' => [
                 'tiket_aktif' => $totalTiketAktif,
+                'sedang_parkir' => $totalTiketAktif,
+                'total_belum_keluar' => $totalTiketAktif,
                 'tiket_hari_ini' => $totalTiketHariIni,
+                'masuk_hari_ini' => $totalTiketHariIni,
+                'keluar_hari_ini' => $totalKeluarHariIni,
+                'total_sudah_keluar' => $totalSudahKeluar,
                 'pendapatan_hari_ini' => $pendapatan['total'],
                 'pendapatan_non_member' => $pendapatan['non_member'],
                 'pendapatan_member' => $pendapatan['member'],
@@ -278,7 +285,6 @@ class RekapController extends Controller
                     'id' => $u->id,
                     'name' => $u->name,
                     'email' => $u->email,
-                    'no_hp' => $u->no_hp ?: '-',
                     'role' => 'Petugas Kasir & Gerbang',
                     'status' => 'Aktif Bertugas',
                     'shift' => ($idx % 2 === 0) ? 'Shift Pagi (07:00 - 15:00)' : 'Shift Siang (15:00 - 23:00)',

@@ -35,23 +35,24 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Seed Data Contoh Member
+        // 2. Seed Data Contoh Member dengan berbagai status (Lunas, Belum Lunas, Expired)
         $member1 = Member::updateOrCreate(
             ['kode' => 'MBR-26001'],
             [
                 'qr_code' => 'MBR-QR-SAMPLE01',
                 'nama' => 'Abhista Bhanu Hermawan',
                 'perusahaan' => 'PT RUAS DIGITAL',
-                'harga' => 150000,
+                'harga' => 150000, // Harga 1 Bulan
+                'total_terbayar' => 300000, // Bayar langsung 2 bulan
                 'status' => 'lunas',
-                'expired_at' => now()->addMonths(1)->toDateString(),
+                'expired_at' => now()->addMonths(2)->toDateString(),
             ]
         );
 
         TagihanMember::firstOrCreate(
             ['member_id' => $member1->id, 'tanggal_tagihan' => now()->toDateString()],
             [
-                'jumlah' => $member1->harga,
+                'jumlah' => 300000,
                 'status' => 'lunas',
                 'tanggal_bayar' => now()->toDateString(),
             ]
@@ -63,7 +64,8 @@ class DatabaseSeeder extends Seeder
                 'qr_code' => 'MBR-QR-SAMPLE02',
                 'nama' => 'Budi Santoso',
                 'perusahaan' => 'PT Maju Bersama',
-                'harga' => 50000,
+                'harga' => 150000,
+                'total_terbayar' => 150000,
                 'status' => 'lunas',
                 'expired_at' => now()->addMonths(1)->toDateString(),
             ]
@@ -72,9 +74,44 @@ class DatabaseSeeder extends Seeder
         TagihanMember::firstOrCreate(
             ['member_id' => $member2->id, 'tanggal_tagihan' => now()->toDateString()],
             [
-                'jumlah' => $member2->harga,
+                'jumlah' => 150000,
                 'status' => 'lunas',
                 'tanggal_bayar' => now()->toDateString(),
+            ]
+        );
+
+        $member3 = Member::updateOrCreate(
+            ['kode' => 'MBR-26003'],
+            [
+                'qr_code' => 'MBR-QR-SAMPLE03',
+                'nama' => 'Siti Rahmawati',
+                'perusahaan' => 'CV Karya Gemilang',
+                'harga' => 150000,
+                'total_terbayar' => 0,
+                'status' => 'belum',
+                'expired_at' => now()->addDays(14)->toDateString(),
+            ]
+        );
+
+        TagihanMember::firstOrCreate(
+            ['member_id' => $member3->id, 'tanggal_tagihan' => now()->toDateString()],
+            [
+                'jumlah' => 150000,
+                'status' => 'belum',
+                'tanggal_bayar' => null,
+            ]
+        );
+
+        $member4 = Member::updateOrCreate(
+            ['kode' => 'MBR-26004'],
+            [
+                'qr_code' => 'MBR-QR-SAMPLE04',
+                'nama' => 'Hendra Wijaya',
+                'perusahaan' => 'PT Cipta Kreasi',
+                'harga' => 150000,
+                'total_terbayar' => 150000,
+                'status' => 'expired',
+                'expired_at' => now()->subDays(5)->toDateString(),
             ]
         );
     }

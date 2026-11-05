@@ -2,7 +2,6 @@ export interface AuthUser {
   id: number
   name: string
   email: string
-  no_hp?: string
   role: 'super_admin' | 'petugas'
 }
 
