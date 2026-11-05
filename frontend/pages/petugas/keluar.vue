@@ -44,7 +44,7 @@
         <div class="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-              <Camera class="w-4 h-4 text-[#0066ff]" />
+              <Camera class="w-4 h-4 text-[#00ffff]" />
               <span>Kamera Scanner Keluar</span>
             </span>
 
@@ -63,7 +63,7 @@
                 @click="toggleCamera"
                 class="text-xs font-bold px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 transition cursor-pointer flex items-center gap-1.5"
               >
-                <Loader2 v-if="isStartingCamera" class="w-3.5 h-3.5 animate-spin text-[#0066ff]" />
+                <Loader2 v-if="isStartingCamera" class="w-3.5 h-3.5 animate-spin text-[#00ffff]" />
                 <span>{{ isScanning ? 'Matikan Kamera' : 'Nyalakan Kamera' }}</span>
               </button>
             </div>
@@ -89,13 +89,13 @@
               </p>
               <button
                 @click="startCamera"
-                class="mt-1 px-3.5 py-1.5 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg cursor-pointer transition shadow-xs"
+                class="mt-1 px-3.5 py-1.5 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-lg cursor-pointer transition shadow-xs"
               >
                 Aktifkan Kamera
               </button>
             </div>
             <div v-if="isStartingCamera" class="p-6 text-center text-slate-300 space-y-2">
-              <Loader2 class="w-8 h-8 mx-auto animate-spin text-[#0066ff]" />
+              <Loader2 class="w-8 h-8 mx-auto animate-spin text-[#00ffff]" />
               <p class="text-xs font-semibold">Mengakses perangkat video...</p>
             </div>
           </div>
@@ -104,7 +104,7 @@
           <div class="pt-3 border-t border-slate-100">
             <label class="text-xs font-bold text-slate-700 flex items-center justify-between mb-1.5">
               <span class="flex items-center gap-1.5">
-                <ScanBarcode class="w-4 h-4 text-[#0066ff]" />
+                <ScanBarcode class="w-4 h-4 text-[#00ffff]" />
                 <span>Input Barcode Scanner USB / Kode Tiket</span>
               </span>
               <span class="text-[10px] text-slate-400 font-mono font-medium">Auto-focus</span>
@@ -115,13 +115,13 @@
                 v-model="searchCode"
                 type="text"
                 placeholder="Tembak barcode atau ketik kode tiket..."
-                class="flex-1 px-3 py-2 text-xs font-mono font-bold rounded-lg border border-slate-300 focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] outline-none"
+                class="flex-1 px-3 py-2 text-xs font-mono font-bold rounded-lg border border-slate-300 focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff] outline-none"
                 @keyup.enter="lookupTicket(searchCode)"
               />
               <button
                 @click="lookupTicket(searchCode)"
                 :disabled="isLoadingLookup || !searchCode"
-                class="px-4 py-2 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg transition disabled:opacity-60 cursor-pointer shadow-xs"
+                class="px-4 py-2 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-lg transition disabled:opacity-60 cursor-pointer shadow-xs"
               >
                 Cari
               </button>
@@ -164,7 +164,7 @@
           <!-- Struk Fisik / Invoice Preview -->
           <div class="bg-slate-50 border border-slate-300 rounded-xl p-5 font-mono text-xs text-slate-800 space-y-3 shadow-inner">
             <div class="text-center pb-3 border-b border-dashed border-slate-300 space-y-0.5">
-              <p class="font-bold text-sm tracking-widest text-[#0066ff]">SECURE PARKING</p>
+              <p class="font-bold text-sm tracking-widest text-[#00ffff]">SECURE PARKING</p>
               <p class="text-[11px] font-bold text-slate-700 uppercase">STRUK PEMBAYARAN PARKIR RESMI</p>
               <p class="text-[10px] text-slate-400">NO: INV-PKR-{{ String(successPayment.ticketId || '001').padStart(4, '0') }} &bull; {{ formatDateTime(new Date().toISOString()) }}</p>
             </div>
@@ -186,7 +186,7 @@
               </div>
               <div class="flex justify-between" v-if="successPayment.type !== 'member'">
                 <span class="text-slate-500">Total Tarif:</span>
-                <span class="font-bold text-[#0066ff] text-xs">{{ formatRupiah(successPayment.total) }}</span>
+                <span class="font-bold text-[#00ffff] text-xs">{{ formatRupiah(successPayment.total) }}</span>
               </div>
               <div class="flex justify-between" v-if="cashReceived > 0">
                 <span class="text-slate-500">Uang Diterima:</span>
@@ -214,7 +214,7 @@
             </button>
             <button
               @click="resetTransaction"
-              class="py-2.5 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+              class="py-2.5 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold uppercase tracking-wider rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
             >
               <CheckCircle2 class="w-4 h-4" />
               <span>Transaksi Berikutnya [Enter]</span>
@@ -231,7 +231,7 @@
             <div>
               <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">ID Sesi Tiket</span>
               <div class="flex items-center gap-2 mt-0.5">
-                <span class="text-2xl font-black font-mono text-[#0066ff]">
+                <span class="text-2xl font-black font-mono text-[#00ffff]">
                   {{ activeTicket.type === 'member' ? activeTicket.data.kode : activeTicket.data.kode_tiket }}
                 </span>
                 <span
@@ -253,7 +253,7 @@
           </div>
 
           <!-- Total Biaya Parkir Display -->
-          <div class="bg-[#0066ff] rounded-2xl p-6 shadow-xs text-center text-white border-2 border-blue-500">
+          <div class="bg-slate-950 rounded-2xl p-6 shadow-xs text-center text-white border-2 border-[#00ffff]">
             <span class="text-xs font-bold uppercase tracking-widest text-slate-300 block mb-1">
               TOTAL BIAYA PARKIR
             </span>
@@ -281,7 +281,7 @@
                   type="text"
                   required
                   placeholder="Contoh: B 1234 ABC"
-                  class="w-full px-3.5 py-2.5 text-sm uppercase font-mono font-bold text-slate-900 rounded-lg border border-slate-300 focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] outline-none transition"
+                  class="w-full px-3.5 py-2.5 text-sm uppercase font-mono font-bold text-slate-900 rounded-lg border border-slate-300 focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff] outline-none transition"
                   @input="checkoutForm.plat_nomor = checkoutForm.plat_nomor.toUpperCase()"
                 />
               </div>
@@ -294,7 +294,7 @@
                 <select
                   v-model="checkoutForm.jenis_kendaraan"
                   required
-                  class="w-full px-3.5 py-2.5 text-xs font-bold rounded-lg border border-slate-300 focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff] outline-none bg-white transition cursor-pointer"
+                  class="w-full px-3.5 py-2.5 text-xs font-bold rounded-lg border border-slate-300 focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff] outline-none bg-white transition cursor-pointer"
                 >
                   <option value="mobil">Mobil (Roda 4)</option>
                   <option value="motor">Sepeda Motor (Roda 2)</option>
@@ -320,7 +320,7 @@
                   v-model.number="cashReceived"
                   type="number"
                   placeholder="Nominal uang diterima dari pengendara..."
-                  class="w-full px-3 py-2 text-xs font-mono font-bold rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none"
+                  class="w-full px-3 py-2 text-xs font-mono font-bold rounded-lg border border-slate-300 focus:border-[#00ffff] outline-none"
                 />
 
                 <!-- Quick Cash Buttons -->
@@ -328,7 +328,7 @@
                   <button
                     type="button"
                     @click="cashReceived = activeTicket.data.total_bayar"
-                    class="px-2.5 py-1 text-[11px] font-bold rounded bg-white border border-slate-300 hover:border-[#0066ff] hover:text-[#0066ff] transition cursor-pointer"
+                    class="px-2.5 py-1 text-[11px] font-bold rounded bg-white border border-slate-300 hover:border-[#00ffff] hover:text-[#00ffff] transition cursor-pointer"
                   >
                     Uang Pas
                   </button>
@@ -337,7 +337,7 @@
                     :key="amt"
                     type="button"
                     @click="cashReceived = amt"
-                    class="px-2.5 py-1 text-[11px] font-mono font-bold rounded bg-white border border-slate-300 hover:border-[#0066ff] hover:text-[#0066ff] transition cursor-pointer"
+                    class="px-2.5 py-1 text-[11px] font-mono font-bold rounded bg-white border border-slate-300 hover:border-[#00ffff] hover:text-[#00ffff] transition cursor-pointer"
                   >
                     {{ formatRupiah(amt) }}
                   </button>
@@ -350,7 +350,7 @@
               <button
                 type="submit"
                 :disabled="isSubmitting"
-                class="flex-1 py-3 px-5 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-60"
+                class="flex-1 py-3 px-5 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-60"
               >
                 <Loader2 v-if="isSubmitting" class="w-4 h-4 animate-spin" />
                 <Check v-else class="w-4 h-4 stroke-[3]" />

@@ -33,7 +33,7 @@
               type="email"
               required
               placeholder="nama@parkir.com"
-              class="w-full pl-9 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none transition"
+              class="w-full pl-9 pr-3.5 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20 outline-none transition"
             />
           </div>
         </div>
@@ -43,7 +43,7 @@
             <label class="block text-xs font-bold text-slate-700">
               Kata Sandi
             </label>
-            <NuxtLink to="/forgot-password" class="text-[11px] text-[#0066ff] hover:underline font-bold">
+            <NuxtLink to="/forgot-password" class="text-[11px] text-[#00ffff] hover:underline font-bold">
               Lupa sandi?
             </NuxtLink>
           </div>
@@ -54,7 +54,7 @@
               :type="showPassword ? 'text' : 'password'"
               required
               placeholder="••••••••"
-              class="w-full pl-9 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none transition"
+              class="w-full pl-9 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20 outline-none transition"
             />
             <button
               type="button"
@@ -70,7 +70,7 @@
         <button
           type="submit"
           :disabled="isLoading"
-          class="w-full mt-2 py-3 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
+          class="w-full mt-2 py-3 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
         >
           <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin text-[#ffe600]" />
           <span>{{ isLoading ? 'Memverifikasi...' : 'Masuk ke Sistem' }}</span>
@@ -86,7 +86,7 @@
           <button
             type="button"
             @click="fillCredentials('admin@parkir.com', 'password')"
-            class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-[#0066ff] transition cursor-pointer"
+            class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-[#00ffff] transition cursor-pointer"
           >
             <span class="font-bold text-slate-800 block">Super Admin</span>
             <span class="text-slate-500 font-mono text-[10px]">admin@parkir.com</span>
@@ -94,7 +94,7 @@
           <button
             type="button"
             @click="fillCredentials('petugas@parkir.com', 'password')"
-            class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-[#0066ff] transition cursor-pointer"
+            class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-[#00ffff] transition cursor-pointer"
           >
             <span class="font-bold text-slate-800 block">Petugas Gerbang</span>
             <span class="text-slate-500 font-mono text-[10px]">petugas@parkir.com</span>

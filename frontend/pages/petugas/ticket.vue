@@ -40,14 +40,14 @@
           v-model="searchQuery"
           type="text"
           placeholder="Cari kode tiket atau nomor polisi..."
-          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none"
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] outline-none"
         />
       </div>
 
       <!-- Filter Status -->
       <select
         v-model="statusFilter"
-        class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none bg-white font-medium"
+        class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] outline-none bg-white font-medium"
       >
         <option value="all">Semua Status</option>
         <option value="masuk">Di Dalam (Masuk)</option>
@@ -57,7 +57,7 @@
       <!-- Filter Jenis -->
       <select
         v-model="jenisFilter"
-        class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] outline-none bg-white font-medium"
+        class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] outline-none bg-white font-medium"
       >
         <option value="all">Semua Jenis</option>
         <option value="non_member">Umum (Non-Member)</option>

@@ -12,7 +12,7 @@
       </div>
 
       <span
-        class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0066ff] text-white font-mono"
+        class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#00ffff] text-slate-950 border border-cyan-400 font-mono"
       >
         Super Admin
       </span>
@@ -52,7 +52,7 @@
         <div class="space-y-4">
           <div class="border-b border-slate-100 pb-2">
             <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <User class="w-4 h-4 text-[#0066ff]" />
+              <User class="w-4 h-4 text-[#00ffff]" />
               <span>Informasi Pengguna</span>
             </h3>
           </div>
@@ -67,7 +67,7 @@
                 type="text"
                 required
                 placeholder="Nama Anda"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff]"
               />
             </div>
 
@@ -80,7 +80,7 @@
                 type="email"
                 required
                 placeholder="nama@email.com"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff]"
               />
             </div>
 
@@ -117,7 +117,7 @@
                 v-model="form.current_password"
                 type="password"
                 placeholder="Password lama"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff]"
               />
             </div>
 
@@ -129,7 +129,7 @@
                 v-model="form.password"
                 type="password"
                 placeholder="Minimal 6 karakter"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff]"
               />
             </div>
 
@@ -141,7 +141,7 @@
                 v-model="form.password_confirmation"
                 type="password"
                 placeholder="Ulangi password baru"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#0066ff] focus:ring-1 focus:ring-[#0066ff]"
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs text-slate-800 focus:outline-none focus:border-[#00ffff] focus:ring-1 focus:ring-[#00ffff]"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="px-5 py-2.5 rounded-lg bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs disabled:opacity-50"
+            class="px-5 py-2.5 rounded-lg bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs disabled:opacity-50"
           >
             <Loader2 v-if="isSubmitting" class="w-4 h-4 animate-spin" />
             <Save v-else class="w-4 h-4" />

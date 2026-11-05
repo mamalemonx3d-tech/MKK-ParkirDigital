@@ -42,7 +42,7 @@
             type="email"
             required
             placeholder="petugas@parkir.com"
-            class="w-full px-3.5 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none transition"
+            class="w-full px-3.5 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20 outline-none transition"
           />
           <p class="text-[11px] text-slate-400 mt-1">
             Kode verifikasi 6-digit akan dikirimkan langsung ke email resmi Anda (Google Mailer OTP).
@@ -52,7 +52,7 @@
         <button
           type="submit"
           :disabled="isLoading"
-          class="w-full py-2.5 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
+          class="w-full py-2.5 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
         >
           <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin" />
           <span>{{ isLoading ? 'Memeriksa Email...' : 'Kirim Kode OTP' }}</span>
@@ -71,7 +71,7 @@
             maxlength="6"
             required
             placeholder="123456"
-            class="w-full px-3.5 py-2.5 text-center text-lg font-mono font-bold tracking-widest rounded-lg border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none transition"
+            class="w-full px-3.5 py-2.5 text-center text-lg font-mono font-bold tracking-widest rounded-lg border border-slate-300 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20 outline-none transition"
           />
           <p class="text-[11px] text-slate-400 mt-1 text-center">
             Masa berlaku kode adalah 5 menit.
@@ -81,7 +81,7 @@
         <button
           type="submit"
           :disabled="isLoading"
-          class="w-full py-2.5 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
+          class="w-full py-2.5 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
         >
           <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin" />
           <span>{{ isLoading ? 'Memverifikasi...' : 'Verifikasi OTP' }}</span>
@@ -100,7 +100,7 @@
             minlength="8"
             required
             placeholder="••••••••"
-            class="w-full px-3.5 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none transition"
+            class="w-full px-3.5 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20 outline-none transition"
           />
         </div>
 
@@ -114,14 +114,14 @@
             minlength="8"
             required
             placeholder="••••••••"
-            class="w-full px-3.5 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#0066ff] focus:ring-2 focus:ring-[#0066ff]/20 outline-none transition"
+            class="w-full px-3.5 py-2.5 text-xs rounded-lg border border-slate-300 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20 outline-none transition"
           />
         </div>
 
         <button
           type="submit"
           :disabled="isLoading"
-          class="w-full py-2.5 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
+          class="w-full py-2.5 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
         >
           <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin" />
           <span>{{ isLoading ? 'Menyimpan...' : 'Simpan Kata Sandi Baru' }}</span>
@@ -130,7 +130,7 @@
 
       <!-- Back Link -->
       <div class="mt-6 pt-4 border-t border-slate-100 text-center">
-        <NuxtLink to="/login" class="text-xs text-slate-600 hover:text-[#0066ff] font-semibold">
+        <NuxtLink to="/login" class="text-xs text-slate-600 hover:text-[#00ffff] font-semibold">
           &larr; Kembali ke Halaman Login
         </NuxtLink>
       </div>

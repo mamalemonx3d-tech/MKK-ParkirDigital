@@ -10,13 +10,13 @@
         <nav class="flex items-center gap-3">
           <NuxtLink
             to="/user"
-            class="px-3.5 py-1.5 text-xs font-bold rounded-xl border border-slate-300 text-slate-700 hover:border-[#0066ff] hover:text-[#0066ff] transition"
+            class="px-3.5 py-1.5 text-xs font-bold rounded-xl border border-slate-300 text-slate-700 hover:border-[#00ffff] hover:bg-[#e6ffff] transition"
           >
             Kiosk Tiket Masuk
           </NuxtLink>
           <NuxtLink
             to="/login"
-            class="px-4 py-1.5 text-xs font-bold rounded-xl bg-[#0066ff] text-white hover:bg-[#0052cc] transition shadow-xs"
+            class="px-4 py-1.5 text-xs font-bold rounded-xl bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 transition shadow-xs"
           >
             Portal Staf
           </NuxtLink>

@@ -3,7 +3,7 @@
     <!-- Compact Mode (For Collapsed Sidebar) -->
     <div
       v-if="compact"
-      class="w-10 h-10 rounded-xl bg-[#FFE600] text-slate-950 flex items-center justify-center font-black text-lg shadow-xs"
+      class="w-10 h-10 rounded-xl bg-[#ffe600] text-slate-950 flex items-center justify-center font-black text-lg shadow-xs border border-slate-900/10"
       title="Secure Parking"
     >
       <span class="font-serif">P</span>
@@ -16,7 +16,7 @@
         :class="[
           isDarkSurface
             ? 'py-0.5'
-            : 'bg-[#0066FF] px-3.5 py-1.5 rounded-xl shadow-xs'
+            : 'bg-[#00ffff] px-3.5 py-1.5 rounded-xl shadow-xs border border-cyan-400'
         ]"
       >
         <img
@@ -32,7 +32,7 @@
       <span
         v-if="showSubtitle"
         class="text-[10px] font-bold tracking-wider uppercase mt-1 pl-0.5"
-        :class="isDarkSurface ? 'text-[#FFE600]' : 'text-[#0066FF]'"
+        :class="isDarkSurface ? 'text-[#ffe600]' : 'text-slate-900'"
       >
         {{ subtitle || 'Sistem Parkir Digital' }}
       </span>
@@ -69,7 +69,7 @@ const sizeClass = computed(() => {
     case 'xl':
       return 'h-14'
     case 'md':
-      default:
+    default:
       return 'h-9'
   }
 })

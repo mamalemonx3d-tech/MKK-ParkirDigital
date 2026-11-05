@@ -43,7 +43,7 @@
             <div v-if="options.isAlert">
               <button
                 @click="handleConfirm"
-                class="w-full py-2.5 px-4 bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
+                class="w-full py-2.5 px-4 bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
               >
                 {{ options.confirmText || 'Mengerti' }}
               </button>
@@ -61,8 +61,8 @@
               <button
                 type="button"
                 @click="handleConfirm"
-                class="flex-1 py-2.5 px-4 text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
-                :class="options.type === 'danger' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#0066ff] hover:bg-[#0052cc]'"
+                class="flex-1 py-2.5 px-4 text-xs font-bold rounded-xl transition shadow-xs cursor-pointer active:scale-[0.98]"
+                :class="options.type === 'danger' ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400'"
               >
                 {{ options.confirmText || 'Ya, Lanjutkan' }}
               </button>

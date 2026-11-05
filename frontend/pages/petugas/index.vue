@@ -18,7 +18,7 @@
           :disabled="isLoading"
           class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-200"
         >
-          <RefreshCw class="w-3.5 h-3.5" :class="isLoading ? 'animate-spin text-[#0066ff]' : ''" />
+          <RefreshCw class="w-3.5 h-3.5" :class="isLoading ? 'animate-spin text-[#00ffff]' : ''" />
           <span>Perbarui</span>
         </button>
         <NuxtLink
@@ -30,7 +30,7 @@
         </NuxtLink>
         <NuxtLink
           to="/petugas/keluar"
-          class="px-4 py-2 rounded-xl bg-[#0066ff] hover:bg-[#0052cc] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
+          class="px-4 py-2 rounded-xl bg-[#00ffff] hover:bg-[#00e5e5] text-slate-950 border border-cyan-400 text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
         >
           <Receipt class="w-3.5 h-3.5 text-[#ffe600]" />
           <span>Buka Kasir Keluar</span>
@@ -44,15 +44,15 @@
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-            <Car class="w-4 h-4 text-[#0066ff]" />
+            <Car class="w-4 h-4 text-[#00ffff]" />
             <span>Kendaraan di Dalam</span>
           </span>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-blue-50 text-[#0066ff] border border-blue-200">
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono bg-blue-50 text-[#00ffff] border border-blue-200">
             AKTIF
           </span>
         </div>
 
-        <div class="text-3xl font-bold font-mono text-[#0066ff] py-1">
+        <div class="text-3xl font-bold font-mono text-[#00ffff] py-1">
           {{ summary.tiket_aktif }}
           <span class="text-xs font-normal text-slate-400 font-sans">Kendaraan</span>
         </div>
@@ -66,7 +66,7 @@
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-            <Activity class="w-4 h-4 text-[#0066ff]" />
+            <Activity class="w-4 h-4 text-[#00ffff]" />
             <span>Masuk Hari Ini</span>
           </span>
           <span class="px-2 py-0.5 rounded-full bg-[#fefce8] text-slate-900 border border-[#ffe600] text-[10px] font-bold font-mono">
@@ -88,7 +88,7 @@
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-            <BadgeDollarSign class="w-4 h-4 text-[#0066ff]" />
+            <BadgeDollarSign class="w-4 h-4 text-[#00ffff]" />
             <span>Pendapatan Hari Ini</span>
           </span>
           <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold font-mono">
@@ -109,10 +109,10 @@
       <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-            <CreditCard class="w-4 h-4 text-[#0066ff]" />
+            <CreditCard class="w-4 h-4 text-[#00ffff]" />
             <span>Member Terdaftar</span>
           </span>
-          <span class="px-2 py-0.5 rounded-full bg-blue-50 text-[#0066ff] border border-blue-200 text-[10px] font-bold font-mono">
+          <span class="px-2 py-0.5 rounded-full bg-blue-50 text-[#00ffff] border border-blue-200 text-[10px] font-bold font-mono">
             TOTAL
           </span>
         </div>
@@ -132,14 +132,14 @@
     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
       <div class="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/70">
         <div class="flex items-center gap-2">
-          <Activity class="w-4 h-4 text-[#0066ff]" />
+          <Activity class="w-4 h-4 text-[#00ffff]" />
           <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider font-sans">
             Arus Lalu Lintas Kendaraan Terkini
           </h2>
         </div>
         <NuxtLink
           to="/petugas/ticket"
-          class="text-xs font-bold text-[#0066ff] hover:text-[#0052cc] transition flex items-center gap-1"
+          class="text-xs font-bold text-[#00ffff] hover:text-[#00e5e5] transition flex items-center gap-1"
         >
           <span>Lihat Semua Tiket</span>
           <ArrowRight class="w-3.5 h-3.5" />
@@ -174,7 +174,7 @@
               <td class="py-3 px-4 text-slate-600 text-[11px]">
                 {{ formatTimeOnly(t.waktu_masuk) }}
               </td>
-              <td class="py-3 px-4 font-bold text-[#0066ff]">
+              <td class="py-3 px-4 font-bold text-[#00ffff]">
                 {{ t.kode_tiket }}
               </td>
               <td class="py-3 px-4 font-sans">
@@ -191,15 +191,15 @@
               <td class="py-3 px-4 capitalize font-sans text-slate-700">
                 {{ t.jenis_kendaraan || 'Mobil' }}
               </td>
-              <td class="py-3 px-4 font-bold" :class="t.total_bayar > 0 ? 'text-[#0066ff]' : 'text-slate-500'">
+              <td class="py-3 px-4 font-bold" :class="t.total_bayar > 0 ? 'text-[#00ffff]' : 'text-slate-500'">
                 {{ formatRupiah(t.total_bayar) }}
               </td>
               <td class="py-3 px-4 text-center font-sans">
                 <span
                   class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase inline-flex items-center gap-1.5"
-                  :class="t.status === 'masuk' ? 'bg-[#ebf3ff] text-[#0066ff] border border-blue-200' : 'bg-slate-100 text-slate-600'"
+                  :class="t.status === 'masuk' ? 'bg-[#e6ffff] text-[#00ffff] border border-blue-200' : 'bg-slate-100 text-slate-600'"
                 >
-                  <span class="w-1.5 h-1.5 rounded-full" :class="t.status === 'masuk' ? 'bg-[#0066ff]' : 'bg-slate-400'"></span>
+                  <span class="w-1.5 h-1.5 rounded-full" :class="t.status === 'masuk' ? 'bg-[#00ffff]' : 'bg-slate-400'"></span>
                   <span>{{ t.status === 'masuk' ? 'Di Dalam' : 'Sudah Keluar' }}</span>
                 </span>
               </td>

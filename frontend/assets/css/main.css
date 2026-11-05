@@ -6,11 +6,11 @@
   --font-display: 'DM Serif Display', Georgia, Cambria, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* 3-Color Primary Palette: Biru Cerah, Kuning Cerah, Putih */
-  --color-brand-blue: #0066ff;
-  --color-brand-blue-hover: #0052cc;
-  --color-brand-blue-light: #ebf3ff;
-  --color-brand-blue-subtle: #f0f6ff;
+  /* 3-Color Primary Palette: Biru Cerah (Aqua #00FFFF), Kuning Cerah (#FFE600), Putih (#FFFFFF) */
+  --color-brand-blue: #00ffff;
+  --color-brand-blue-hover: #00e5e5;
+  --color-brand-blue-light: #e6ffff;
+  --color-brand-blue-subtle: #f0ffff;
 
   --color-brand-yellow: #ffe600;
   --color-brand-yellow-hover: #e6cf00;
@@ -24,15 +24,15 @@
   --color-brand-text: #0f172a;
   --color-brand-muted: #64748b;
 
-  /* Legacy Class Mappings to 3-Color Scheme */
-  --color-secure-cyan: #0066ff;
-  --color-secure-cyan-hover: #0052cc;
-  --color-secure-cyan-light: #ebf3ff;
-  --color-secure-cyan-subtle: #f0f6ff;
+  /* Semantic Class Mappings to Aqua Scheme */
+  --color-secure-cyan: #00ffff;
+  --color-secure-cyan-hover: #00e5e5;
+  --color-secure-cyan-light: #e6ffff;
+  --color-secure-cyan-subtle: #f0ffff;
 
-  --color-secure-navy: #0066ff;
-  --color-secure-navy-dark: #0052cc;
-  --color-secure-navy-light: #2563eb;
+  --color-secure-navy: #00ffff;
+  --color-secure-navy-dark: #00e5e5;
+  --color-secure-navy-light: #33ffff;
 
   --color-secure-orange: #ffe600;
   --color-secure-orange-hover: #e6cf00;
