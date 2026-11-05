@@ -20,12 +20,12 @@ class ForgotPasswordController extends Controller
         ]);
 
         $email = strtolower(trim($request->email));
-        $user = User::where('email', $email)->first();
+        $user = User::whereRaw('LOWER(TRIM(email)) = ?', [$email])->first();
 
         if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Email tidak terdaftar dalam sistem.'
+                'message' => "Email '{$email}' tidak terdaftar dalam database pengguna."
             ], 404);
         }
 
@@ -62,7 +62,7 @@ class ForgotPasswordController extends Controller
         ]);
 
         $email = strtolower(trim($request->email));
-        $user = User::where('email', $email)->first();
+        $user = User::whereRaw('LOWER(TRIM(email)) = ?', [$email])->first();
 
         if (!$user) {
             return response()->json([
@@ -83,7 +83,7 @@ class ForgotPasswordController extends Controller
         if (!Hash::check($request->otp, $storedOtp)) {
             return response()->json([
                 'success' => false,
-                'message' => 'OTP salah.'
+                'message' => 'Kode OTP yang Anda masukkan salah.'
             ], 400);
         }
 
@@ -108,7 +108,7 @@ class ForgotPasswordController extends Controller
         ]);
 
         $email = strtolower(trim($request->email));
-        $user = User::where('email', $email)->first();
+        $user = User::whereRaw('LOWER(TRIM(email)) = ?', [$email])->first();
 
         if (!$user) {
             return response()->json([

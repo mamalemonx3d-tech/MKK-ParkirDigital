@@ -35,6 +35,15 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        User::updateOrCreate(
+            ['email' => 'mamalemonx3d@gmail.com'],
+            [
+                'name' => 'Fajri',
+                'password' => Hash::make('password'),
+                'role' => 'petugas',
+            ]
+        );
+
         // 2. Data Member Resmi Sesuai Data Pengguna (Fixed Tarif: Rp 150.000 / Bulan)
         // Member 1: Abhista Bhanu Hermawan - PT RUAS
         $member1 = Member::updateOrCreate(

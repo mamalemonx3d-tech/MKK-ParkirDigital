@@ -55,7 +55,7 @@
           class="w-full py-2.5 px-4 bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold rounded-lg transition flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-70"
         >
           <Loader2 v-if="isLoading" class="w-4 h-4 animate-spin" />
-          <span>{{ isLoading ? 'Memeriksa Email...' : 'Kirim Kode OTP' }}</span>
+          <span>{{ isLoading ? 'Mengirim Kode OTP ke Email...' : 'Kirim Kode OTP' }}</span>
         </button>
       </form>
 
@@ -106,7 +106,7 @@
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1.5">
-            Ulangi Kata Sandi Baru
+            Konfirmasi Kata Sandi Baru
           </label>
           <input
             v-model="confirmPassword"
@@ -174,7 +174,7 @@ const submitEmail = async () => {
       }
     }
   } catch (err: any) {
-    errorMessage.value = err.response?.data?.message || 'Email tidak ditemukan.'
+    errorMessage.value = err.response?.data?.message || err.customMessage || err.message || 'Gagal memproses verifikasi email.'
   } finally {
     isLoading.value = false
   }
@@ -196,7 +196,7 @@ const submitOtp = async () => {
       successMessage.value = res.data.message
     }
   } catch (err: any) {
-    errorMessage.value = err.response?.data?.message || 'Kode OTP salah atau kadaluarsa.'
+    errorMessage.value = err.response?.data?.message || err.customMessage || err.message || 'Kode OTP salah atau kadaluarsa.'
   } finally {
     isLoading.value = false
   }
@@ -227,7 +227,7 @@ const submitNewPassword = async () => {
       }, 1500)
     }
   } catch (err: any) {
-    errorMessage.value = err.response?.data?.message || 'Gagal mereset kata sandi.'
+    errorMessage.value = err.response?.data?.message || err.customMessage || err.message || 'Gagal mereset kata sandi.'
   } finally {
     isLoading.value = false
   }

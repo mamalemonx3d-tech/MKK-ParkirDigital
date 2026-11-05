@@ -6,7 +6,7 @@ export const useApi = () => {
 
   const client = axios.create({
     baseURL: apiBase,
-    timeout: 5000, // Maksimal 5 detik agar UI tidak hang jika backend mati
+    timeout: 30000, // 30 detik agar proses kirim email SMTP dan query berat tidak putus di tengah jalan
   })
 
   client.interceptors.request.use((req) => {
