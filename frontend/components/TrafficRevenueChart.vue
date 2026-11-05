@@ -1,266 +1,232 @@
 <template>
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 sm:p-6 space-y-5 select-none font-sans">
-    <!-- Top Header: Title, Subtitle, Date Picker & View Filters -->
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 font-sans select-none">
+    <!-- Top Header (Inspired directly by user reference design) -->
+    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4">
+      <!-- Left: Title, Big Metric Number & Indicator -->
       <div>
-        <div class="flex items-center gap-2">
-          <h2 class="text-base sm:text-lg font-bold text-slate-900 font-serif tracking-tight">
-            Arus Kendaraan & Transaksi Harian
-          </h2>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-[#3b82f6] border border-blue-200">
-            Dribbble Analytic
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">
+          Arus Kendaraan & Transaksi
+        </h3>
+        <div class="flex items-baseline gap-2 mt-1">
+          <span class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-sans">
+            {{ (chartData.total_masuk || 0) + (chartData.total_keluar || 0) }}
+          </span>
+          <span class="text-xs font-semibold text-slate-400">total unit lalu lintas</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-600 mt-1">
+          <ArrowUpRight class="w-4 h-4 shrink-0" />
+          <span>{{ formatRupiah(chartData.total_pendapatan || 0) }} total transaksi</span>
+          <span class="text-slate-400 font-normal ml-1">
+            ({{ chartData.total_masuk || 0 }} masuk • {{ chartData.total_keluar || 0 }} keluar)
           </span>
         </div>
-        <p class="text-xs text-slate-500 mt-0.5">
-          Grafik arus lalu lintas per jam serta total uang transaksi masuk/keluar pada tanggal yang dipilih.
-        </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-2.5">
-        <!-- Date Picker for Specific Date Inspection -->
-        <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
-          <Calendar class="w-3.5 h-3.5 text-[#3b82f6] shrink-0" />
-          <span class="text-xs font-semibold text-slate-600 hidden sm:inline">Tanggal:</span>
-          <input
-            v-model="selectedDate"
-            type="date"
-            @change="fetchChartData"
-            class="text-xs font-mono font-bold bg-transparent text-slate-800 outline-none cursor-pointer"
-          />
+      <!-- Right: Clean Dropdown & Legend -->
+      <div class="flex flex-col sm:items-end gap-2.5">
+        <!-- Date Selector Dropdown Pill (mimicking the "30 days ▾" dropdown in the design) -->
+        <div class="relative inline-flex items-center">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white text-xs font-medium text-slate-700 shadow-2xs transition">
+            <Calendar class="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <input
+              type="date"
+              v-model="selectedDate"
+              @change="fetchChartData"
+              class="text-xs font-semibold text-slate-700 bg-transparent outline-none cursor-pointer"
+            />
+          </div>
         </div>
 
-        <!-- Metric Mode Filter -->
-        <div class="inline-flex rounded-xl bg-slate-100 p-1 text-xs">
-          <button
-            type="button"
-            @click="chartMode = 'all'"
-            class="px-2.5 py-1 rounded-lg font-bold transition cursor-pointer"
-            :class="chartMode === 'all' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-600 hover:text-slate-900'"
-          >
-            Semua
-          </button>
-          <button
-            type="button"
-            @click="chartMode = 'traffic'"
-            class="px-2.5 py-1 rounded-lg font-bold transition cursor-pointer"
-            :class="chartMode === 'traffic' ? 'bg-[#3b82f6] text-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'"
-          >
-            Arus (Unit)
-          </button>
-          <button
-            type="button"
-            @click="chartMode = 'revenue'"
-            class="px-2.5 py-1 rounded-lg font-bold transition cursor-pointer"
-            :class="chartMode === 'revenue' ? 'bg-emerald-600 text-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'"
-          >
-            Transaksi (Rp)
-          </button>
+        <!-- Legend (Identical to reference: Blue square & Gray square) -->
+        <div class="flex items-center gap-4 text-xs font-medium">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-xs bg-[#2563eb]"></span>
+            <span class="text-slate-800 font-semibold">Kendaraan Masuk</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-xs bg-[#94a3b8]"></span>
+            <span class="text-slate-600">Kendaraan Keluar</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Mini KPI Strip for Selected Date -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      <!-- 1. Total Masuk -->
-      <div class="p-3.5 rounded-xl bg-blue-50/50 border border-blue-100">
-        <span class="text-[10px] font-bold text-[#3b82f6] uppercase tracking-wider block">
-          Kendaraan Masuk
-        </span>
-        <div class="text-2xl font-black font-mono text-slate-900 mt-1">
-          {{ chartData.total_masuk || 0 }} <span class="text-xs font-normal text-slate-500">unit</span>
-        </div>
-      </div>
-
-      <!-- 2. Total Keluar -->
-      <div class="p-3.5 rounded-xl bg-amber-50/50 border border-amber-100">
-        <span class="text-[10px] font-bold text-amber-700 uppercase tracking-wider block">
-          Kendaraan Keluar
-        </span>
-        <div class="text-2xl font-black font-mono text-slate-900 mt-1">
-          {{ chartData.total_keluar || 0 }} <span class="text-xs font-normal text-slate-500">unit</span>
-        </div>
-      </div>
-
-      <!-- 3. Total Omset Transaksi Uang -->
-      <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-100">
-        <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block">
-          Total Transaksi (Duit)
-        </span>
-        <div class="text-xl sm:text-2xl font-black font-mono text-emerald-800 mt-1 truncate">
-          {{ formatRupiah(chartData.total_pendapatan || 0) }}
-        </div>
-      </div>
-
-      <!-- 4. Jam Tersibuk -->
-      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-          Jam Tersibuk
-        </span>
-        <div class="text-sm sm:text-base font-black font-mono text-slate-800 mt-1.5 flex items-center gap-1.5">
-          <Clock class="w-3.5 h-3.5 text-[#f59e0b] shrink-0" />
-          <span class="truncate">{{ chartData.peak_hour || '09:00 - 10:00' }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Interactive SVG Chart Area -->
+    <!-- Chart Canvas Area -->
     <div class="relative w-full pt-2">
-      <!-- Loading Overlay -->
+      <!-- Loading State -->
       <div
         v-if="isLoading"
         class="absolute inset-0 bg-white/70 backdrop-blur-2xs flex items-center justify-center z-20 rounded-xl"
       >
-        <Loader2 class="w-6 h-6 animate-spin text-[#3b82f6]" />
+        <Loader2 class="w-6 h-6 animate-spin text-[#2563eb]" />
       </div>
 
-      <!-- Legend Strip -->
-      <div class="flex items-center justify-between text-xs text-slate-500 mb-3 px-1">
-        <div class="flex items-center gap-4">
-          <div v-if="chartMode !== 'revenue'" class="flex items-center gap-1.5">
-            <span class="w-3 h-3 rounded bg-[#3b82f6]"></span>
-            <span class="font-medium text-[11px] text-slate-700">Kendaraan Masuk</span>
-          </div>
-          <div v-if="chartMode !== 'revenue'" class="flex items-center gap-1.5">
-            <span class="w-3 h-3 rounded bg-[#f59e0b]"></span>
-            <span class="font-medium text-[11px] text-slate-700">Kendaraan Keluar</span>
-          </div>
-          <div v-if="chartMode !== 'traffic'" class="flex items-center gap-1.5">
-            <span class="w-3 h-1.5 rounded-full bg-emerald-600"></span>
-            <span class="font-medium text-[11px] text-emerald-800 font-bold">Total Transaksi Uang (Rp)</span>
-          </div>
+      <!-- Floating Interactive Tooltip -->
+      <div
+        v-if="hoveredIndex !== null && currentHoverData"
+        class="absolute top-1 right-2 z-30 bg-[#1e293b] text-white text-xs px-3.5 py-2.5 rounded-xl shadow-lg border border-slate-700 pointer-events-none transition-all space-y-1"
+      >
+        <div class="font-mono font-bold text-amber-400 text-[11px]">
+          Pukul {{ currentHoverData.hour }} - {{ nextHour(currentHoverData.hour_num) }}
         </div>
-
-        <span class="text-[11px] text-slate-400 font-mono hidden md:inline">
-          Rentang: 24 Jam (00:00 - 23:00)
-        </span>
+        <div class="flex items-center justify-between gap-4 text-[11px]">
+          <span class="text-slate-300 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-xs bg-[#3b82f6]"></span>
+            Masuk:
+          </span>
+          <strong class="font-mono text-[#60a5fa]">{{ currentHoverData.masuk }} unit</strong>
+        </div>
+        <div class="flex items-center justify-between gap-4 text-[11px]">
+          <span class="text-slate-300 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-xs bg-[#94a3b8]"></span>
+            Keluar:
+          </span>
+          <strong class="font-mono text-slate-200">{{ currentHoverData.keluar }} unit</strong>
+        </div>
+        <div class="flex items-center justify-between gap-4 text-[11px] pt-1 border-t border-slate-700">
+          <span class="text-slate-300">Transaksi:</span>
+          <strong class="font-mono text-emerald-400">{{ formatRupiah(currentHoverData.pendapatan) }}</strong>
+        </div>
       </div>
 
-      <!-- Chart Canvas (SVG Clean Dribbble-style) -->
+      <!-- SVG Line Chart (Clean, Minimalist with Landai Smooth Spline Lines) -->
       <div class="w-full overflow-x-auto">
         <div class="min-w-[620px] relative">
-          <!-- Floating Hover Tooltip -->
-          <div
-            v-if="hoveredBar"
-            class="absolute top-0 right-4 z-30 bg-[#1e293b] text-white text-xs px-3.5 py-2.5 rounded-xl shadow-lg border border-slate-700 pointer-events-none transition-all space-y-1"
-          >
-            <div class="font-mono font-bold text-amber-400 text-[11px]">
-              Pukul {{ hoveredBar.hour }} - {{ nextHour(hoveredBar.hour_num) }}
-            </div>
-            <div class="flex items-center justify-between gap-3 text-[11px]">
-              <span class="text-slate-300">Kendaraan Masuk:</span>
-              <strong class="font-mono text-[#60a5fa]">{{ hoveredBar.masuk }} unit</strong>
-            </div>
-            <div class="flex items-center justify-between gap-3 text-[11px]">
-              <span class="text-slate-300">Kendaraan Keluar:</span>
-              <strong class="font-mono text-[#fbbf24]">{{ hoveredBar.keluar }} unit</strong>
-            </div>
-            <div class="flex items-center justify-between gap-3 text-[11px] pt-1 border-t border-slate-700">
-              <span class="text-slate-300">Total Transaksi:</span>
-              <strong class="font-mono text-emerald-400">{{ formatRupiah(hoveredBar.pendapatan) }}</strong>
-            </div>
-          </div>
-
           <svg
-            viewBox="0 0 960 260"
+            viewBox="0 0 920 230"
             class="w-full h-56 sm:h-64 overflow-visible"
             preserveAspectRatio="none"
+            @mouseleave="hoveredIndex = null"
           >
-            <!-- Background Grid Lines -->
-            <line x1="40" y1="30" x2="940" y2="30" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3" />
-            <line x1="40" y1="80" x2="940" y2="80" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3" />
-            <line x1="40" y1="130" x2="940" y2="130" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3" />
-            <line x1="40" y1="180" x2="940" y2="180" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="3 3" />
-            <!-- Baseline -->
-            <line x1="40" y1="210" x2="940" y2="210" stroke="#cbd5e1" stroke-width="1.5" />
+            <defs>
+              <!-- Soft Subtle Gradient for Masuk Area -->
+              <linearGradient id="masukGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2563eb" stop-opacity="0.08" />
+                <stop offset="100%" stop-color="#2563eb" stop-opacity="0" />
+              </linearGradient>
+            </defs>
 
-            <!-- Area Path for Revenue (Emerald Gradient Spline) -->
-            <path
-              v-if="chartMode !== 'traffic' && revenueAreaPath"
-              :d="revenueAreaPath"
-              fill="rgba(16, 185, 129, 0.08)"
+            <!-- Horizontal Grid Lines & Y-Axis Labels (Identical to reference: 15, 10, 5, 0) -->
+            <g v-for="(level, idx) in yLevels" :key="'grid-' + idx">
+              <!-- Y-Axis Number on Left -->
+              <text
+                x="36"
+                :y="level.y + 4"
+                text-anchor="end"
+                font-family="system-ui, -apple-system, sans-serif"
+                font-size="11"
+                fill="#94a3b8"
+                font-weight="500"
+              >
+                {{ level.value }}
+              </text>
+              <!-- Faint Horizontal Line -->
+              <line
+                x1="45"
+                :y1="level.y"
+                x2="910"
+                :y2="level.y"
+                stroke="#f1f5f9"
+                stroke-width="1.2"
+              />
+            </g>
+
+            <!-- Baseline X-Axis Line -->
+            <line
+              x1="45"
+              y1="190"
+              x2="910"
+              y2="190"
+              stroke="#e2e8f0"
+              stroke-width="1.2"
             />
 
-            <!-- Line Path for Revenue -->
+            <!-- Soft Landai Area Fill for Blue (Masuk) -->
             <path
-              v-if="chartMode !== 'traffic' && revenueLinePath"
-              :d="revenueLinePath"
+              v-if="masukAreaPath"
+              :d="masukAreaPath"
+              fill="url(#masukGradient)"
+            />
+
+            <!-- 1. Secondary Line: Kendaraan Keluar (Gray #94A3B8, Smooth Landai Spline) -->
+            <path
+              v-if="keluarLinePath"
+              :d="keluarLinePath"
               fill="none"
-              stroke="#059669"
+              stroke="#94a3b8"
               stroke-width="2.5"
               stroke-linecap="round"
               stroke-linejoin="round"
             />
 
-            <!-- Revenue Data Points (Circles) -->
-            <g v-if="chartMode !== 'traffic'">
+            <!-- 2. Primary Line: Kendaraan Masuk (Blue #2563EB, Smooth Landai Spline) -->
+            <path
+              v-if="masukLinePath"
+              :d="masukLinePath"
+              fill="none"
+              stroke="#2563eb"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+
+            <!-- Hover Vertical Guideline & Highlight Dots -->
+            <g v-if="hoveredIndex !== null && hoverCoords">
+              <!-- Vertical Crosshair Guideline -->
+              <line
+                :x1="hoverCoords.x"
+                y1="30"
+                :x2="hoverCoords.x"
+                y2="190"
+                stroke="#cbd5e1"
+                stroke-width="1"
+                stroke-dasharray="3 3"
+              />
+              <!-- Circle Dot on Keluar (Gray) -->
               <circle
-                v-for="(point, idx) in revenuePoints"
-                :key="'pt-' + idx"
-                :cx="point.x"
-                :cy="point.y"
-                r="3.5"
-                fill="#ffffff"
-                stroke="#059669"
+                :cx="hoverCoords.x"
+                :cy="hoverCoords.yKeluar"
+                r="4.5"
+                fill="#94a3b8"
+                stroke="#ffffff"
                 stroke-width="2"
-                class="transition-all hover:scale-150 cursor-pointer"
+              />
+              <!-- Circle Dot on Masuk (Blue) -->
+              <circle
+                :cx="hoverCoords.x"
+                :cy="hoverCoords.yMasuk"
+                r="4.5"
+                fill="#2563eb"
+                stroke="#ffffff"
+                stroke-width="2"
               />
             </g>
 
-            <!-- Hourly Traffic Bars (Masuk & Keluar side-by-side) -->
-            <g v-if="chartMode !== 'revenue'">
-              <g
-                v-for="(h, idx) in hourlyData"
-                :key="'bar-' + idx"
-                @mouseenter="hoveredBar = h"
-                @mouseleave="hoveredBar = null"
-                class="cursor-pointer group"
-              >
-                <!-- Transparent Hover Hit Area -->
-                <rect
-                  :x="barX(idx) - 8"
-                  y="20"
-                  width="44"
-                  height="190"
-                  fill="transparent"
-                  class="group-hover:fill-slate-100/40 transition-colors"
-                />
+            <!-- Transparent Hover Hit Areas (Columns across each hour) -->
+            <rect
+              v-for="(h, idx) in hourlyData"
+              :key="'hit-' + idx"
+              :x="getX(idx) - (stepX / 2)"
+              y="20"
+              :width="stepX"
+              height="180"
+              fill="transparent"
+              class="cursor-pointer"
+              @mouseenter="hoveredIndex = idx"
+            />
 
-                <!-- Bar Masuk (Blue #3B82F6) -->
-                <rect
-                  :x="barX(idx)"
-                  :y="barY(h.masuk)"
-                  width="12"
-                  :height="barHeight(h.masuk)"
-                  rx="3"
-                  fill="#3b82f6"
-                  class="transition-all group-hover:brightness-110"
-                />
-
-                <!-- Bar Keluar (Amber #F59E0B) -->
-                <rect
-                  :x="barX(idx) + 14"
-                  :y="barY(h.keluar)"
-                  width="12"
-                  :height="barHeight(h.keluar)"
-                  rx="3"
-                  fill="#f59e0b"
-                  class="transition-all group-hover:brightness-110"
-                />
-              </g>
-            </g>
-
-            <!-- X-Axis Labels (Every 3 hours: 00:00, 03:00, 06:00, 09:00, 12:00, 15:00, 18:00, 21:00) -->
+            <!-- X-Axis Labels (Bottom time labels: 00:00, 04:00, 08:00, 12:00, 16:00, 20:00, 23:00) -->
             <g>
               <text
                 v-for="tick in xTicks"
                 :key="'tick-' + tick.hour"
                 :x="tick.x"
-                y="230"
+                y="212"
                 text-anchor="middle"
-                font-family="monospace"
-                font-size="10"
-                fill="#64748b"
-                font-weight="bold"
+                font-family="system-ui, -apple-system, sans-serif"
+                font-size="11"
+                fill="#94a3b8"
+                font-weight="500"
               >
                 {{ tick.hour }}
               </text>
@@ -274,15 +240,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Calendar, Clock, Loader2 } from 'lucide-vue-next'
+import { Calendar, ArrowUpRight, Loader2 } from 'lucide-vue-next'
 import { formatRupiah } from '~/utils/formatters'
 
 const api = useApi()
 
 const selectedDate = ref(new Date().toISOString().split('T')[0])
-const chartMode = ref<'all' | 'traffic' | 'revenue'>('all')
 const isLoading = ref(false)
-const hoveredBar = ref<any>(null)
+const hoveredIndex = ref<number | null>(null)
 
 const chartData = ref<any>({
   date: selectedDate.value,
@@ -299,90 +264,142 @@ const hourlyData = computed(() => {
   return chartData.value?.hourly || []
 })
 
-const maxTrafficValue = computed(() => {
-  let max = 5
+// Current hovered item
+const currentHoverData = computed(() => {
+  if (hoveredIndex.value === null || !hourlyData.value[hoveredIndex.value]) return null
+  return hourlyData.value[hoveredIndex.value]
+})
+
+// Coordinate constants
+const leftX = 55
+const rightX = 900
+const stepX = (rightX - leftX) / 23 // ~36.74px per hour
+const baselineY = 190
+const topY = 30
+const usableHeight = baselineY - topY // 160px
+
+const getX = (index: number) => {
+  return leftX + index * stepX
+}
+
+// Compute dynamic maximum scale rounded nicely (e.g. 5, 10, 15, 20, etc.)
+const maxScale = computed(() => {
+  let max = 0
   hourlyData.value.forEach((h: any) => {
     if (h.masuk > max) max = h.masuk
     if (h.keluar > max) max = h.keluar
   })
-  return Math.ceil(max * 1.25)
+  if (max <= 5) return 5
+  if (max <= 10) return 10
+  if (max <= 15) return 15
+  if (max <= 20) return 20
+  if (max <= 30) return 30
+  if (max <= 50) return 50
+  return Math.ceil(max / 10) * 10
 })
 
-const maxRevenueValue = computed(() => {
-  let max = 10000
-  hourlyData.value.forEach((h: any) => {
-    if (h.pendapatan > max) max = h.pendapatan
-  })
-  return Math.ceil(max * 1.25)
+// Y Levels for grid and labels (4 horizontal lines just like the reference photo: 15, 10, 5, 0)
+const yLevels = computed(() => {
+  const max = maxScale.value
+  return [
+    { value: max, y: topY },
+    { value: Math.round((max * 2) / 3), y: topY + usableHeight * (1 / 3) },
+    { value: Math.round(max / 3), y: topY + usableHeight * (2 / 3) },
+    { value: 0, y: baselineY },
+  ]
 })
 
-const barX = (index: number) => {
-  // 24 slots across 40px to 920px -> slot width ~36.6px
-  return 55 + index * 36.5
+const getY = (val: number) => {
+  const safeVal = Math.max(0, Number(val) || 0)
+  const ratio = Math.min(1, safeVal / maxScale.value)
+  return baselineY - ratio * usableHeight
 }
 
-const barHeight = (val: number) => {
-  if (!val || val <= 0) return 0
-  const max = maxTrafficValue.value
-  return Math.min(170, Math.max(4, (val / max) * 170))
-}
-
-const barY = (val: number) => {
-  const h = barHeight(val)
-  return 210 - h
-}
-
-// Revenue Line Points & Smooth Path
-const revenuePoints = computed(() => {
-  const max = maxRevenueValue.value
-  return hourlyData.value.map((h: any, idx: number) => {
-    const x = barX(idx) + 13
-    const val = Number(h.pendapatan) || 0
-    const yRatio = val / max
-    const y = 205 - yRatio * 155
-    return { x, y, val, hour: h.hour }
-  })
+// Data Points for Masuk
+const masukPoints = computed(() => {
+  return hourlyData.value.map((h: any, idx: number) => ({
+    x: getX(idx),
+    y: getY(h.masuk),
+    val: h.masuk,
+  }))
 })
 
-const revenueLinePath = computed(() => {
-  const pts = revenuePoints.value
+// Data Points for Keluar
+const keluarPoints = computed(() => {
+  return hourlyData.value.map((h: any, idx: number) => ({
+    x: getX(idx),
+    y: getY(h.keluar),
+    val: h.keluar,
+  }))
+})
+
+// Catmull-Rom to Cubic Bézier Spline generator for smooth "landai-landai" curves
+const getSmoothSplinePath = (pts: { x: number; y: number }[], tension = 0.35) => {
   if (!pts || pts.length === 0) return ''
-  let d = `M ${pts[0].x} ${pts[0].y}`
-  for (let i = 1; i < pts.length; i++) {
-    const prev = pts[i - 1]
-    const cur = pts[i]
-    const cpX1 = prev.x + (cur.x - prev.x) / 2
-    const cpY1 = prev.y
-    const cpX2 = cpX1
-    const cpY2 = cur.y
-    d += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${cur.x} ${cur.y}`
+  if (pts.length === 1) return `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`
+
+  let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`
+  const n = pts.length
+
+  for (let i = 0; i < n - 1; i++) {
+    const p0 = i > 0 ? pts[i - 1] : pts[i]
+    const p1 = pts[i]
+    const p2 = pts[i + 1]
+    const p3 = i < n - 2 ? pts[i + 2] : p2
+
+    let cp1x = p1.x + (p2.x - p0.x) * tension
+    let cp1y = p1.y + (p2.y - p0.y) * tension
+
+    let cp2x = p2.x - (p3.x - p1.x) * tension
+    let cp2y = p2.y - (p3.y - p1.y) * tension
+
+    // Clamp control points to baseline so curve does not dip below zero
+    if (p1.y >= baselineY && p2.y >= baselineY) {
+      cp1y = baselineY
+      cp2y = baselineY
+    }
+
+    d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`
   }
   return d
-})
-
-const revenueAreaPath = computed(() => {
-  const line = revenueLinePath.value
-  if (!line || revenuePoints.value.length === 0) return ''
-  const first = revenuePoints.value[0]
-  const last = revenuePoints.value[revenuePoints.value.length - 1]
-  return `${line} L ${last.x} 210 L ${first.x} 210 Z`
-})
-
-const xTicks = computed(() => {
-  const ticks = []
-  const step = 3
-  for (let i = 0; i < 24; i += step) {
-    ticks.push({
-      hour: sprintfHour(i),
-      x: barX(i) + 13,
-    })
-  }
-  return ticks
-})
-
-const sprintfHour = (h: number) => {
-  return `${String(h).padStart(2, '0')}:00`
 }
+
+// Smooth Spline Lines
+const masukLinePath = computed(() => getSmoothSplinePath(masukPoints.value))
+const keluarLinePath = computed(() => getSmoothSplinePath(keluarPoints.value))
+
+// Soft Area Fill for Masuk
+const masukAreaPath = computed(() => {
+  const line = masukLinePath.value
+  const pts = masukPoints.value
+  if (!line || pts.length === 0) return ''
+  const first = pts[0]
+  const last = pts[pts.length - 1]
+  return `${line} L ${last.x.toFixed(1)} ${baselineY} L ${first.x.toFixed(1)} ${baselineY} Z`
+})
+
+// Coordinates for hover indicators
+const hoverCoords = computed(() => {
+  if (hoveredIndex.value === null) return null
+  const idx = hoveredIndex.value
+  const pMasuk = masukPoints.value[idx]
+  const pKeluar = keluarPoints.value[idx]
+  if (!pMasuk || !pKeluar) return null
+  return {
+    x: pMasuk.x,
+    yMasuk: pMasuk.y,
+    yKeluar: pKeluar.y,
+  }
+})
+
+// X-Axis time ticks: 00:00, 04:00, 08:00, 12:00, 16:00, 20:00, 23:00
+const xTicks = computed(() => {
+  const hours = [0, 4, 8, 12, 16, 20, 23]
+  return hours.map((h) => ({
+    hour: `${String(h).padStart(2, '0')}:00`,
+    x: getX(h),
+  }))
+})
 
 const nextHour = (hNum: number) => {
   const next = (Number(hNum) + 1) % 24
