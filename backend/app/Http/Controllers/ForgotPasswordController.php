@@ -1,15 +1,15 @@
 <?php
 
-namespace AppHttpControllers;
+namespace App\Http\Controllers;
 
-use AppModelsUser;
-use AppMailResetPasswordOtpMail;
-use IlluminateHttpRequest;
-use IlluminateSupportFacadesCache;
-use IlluminateSupportFacadesHash;
-use IlluminateSupportFacadesLog;
-use IlluminateSupportFacadesMail;
-use IlluminateSupportStr;
+use App\Models\User;
+use App\Mail\ResetPasswordOtpMail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
@@ -49,7 +49,7 @@ class ForgotPasswordController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal mengirim email OTP. Pastikan koneksi internet aktif atau hubungi Super Admin.',
+                'message' => 'Gagal mengirim email OTP: ' . $e->getMessage(),
             ], 500);
         }
     }
