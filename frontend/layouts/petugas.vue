@@ -251,18 +251,6 @@
             <Menu class="w-5 h-5 text-slate-800" />
           </button>
 
-          <!-- Desktop Sidebar Toggle Button -->
-          <button
-            @click="toggleSidebar"
-            type="button"
-            class="hidden md:flex p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 transition cursor-pointer items-center gap-1.5 text-xs font-bold"
-            :title="isCollapsed ? 'Perluas Menu Sidebar' : 'Tutup Menu Sidebar'"
-          >
-            <PanelLeftClose v-if="!isCollapsed" class="w-4 h-4 text-[#3b82f6]" />
-            <PanelLeftOpen v-else class="w-4 h-4 text-[#3b82f6]" />
-            <span class="text-[11px]">{{ isCollapsed ? 'Buka Menu' : 'Tutup Menu' }}</span>
-          </button>
-
           <!-- Page Title Indicator -->
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-[#3b82f6]"></span>
@@ -301,8 +289,6 @@ import {
   User,
   ChevronLeft,
   ChevronRight,
-  PanelLeftClose,
-  PanelLeftOpen,
   Menu,
   X,
 } from 'lucide-vue-next'

@@ -12,7 +12,7 @@
       </div>
 
       <!-- Quick Action Buttons -->
-      <div class="flex flex-wrap items-center gap-2.5">
+      <div class="flex items-center gap-2.5">
         <button
           @click="fetchData"
           :disabled="isLoading"
@@ -21,13 +21,6 @@
           <RefreshCw class="w-3.5 h-3.5" :class="isLoading ? 'animate-spin text-[#3b82f6]' : ''" />
           <span>Perbarui</span>
         </button>
-        <NuxtLink
-          to="/petugas/keluar"
-          class="px-4 py-2 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-[0.98]"
-        >
-          <Receipt class="w-3.5 h-3.5 text-[#f59e0b]" />
-          <span>Buka Kasir Keluar</span>
-        </NuxtLink>
       </div>
     </div>
 
@@ -228,7 +221,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import {
-  Receipt,
   Car,
   BadgeDollarSign,
   CreditCard,

@@ -1,39 +1,13 @@
 <template>
   <div class="space-y-5 max-w-6xl mx-auto">
     <!-- Clean Enterprise Sub-Header -->
-    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <div class="flex items-center gap-2">
-          <h1 class="text-xl font-normal text-[#0f172a] font-serif tracking-tight">
-            Pos Kasir Gerbang Keluar
-          </h1>
-          <span class="text-[11px] px-2.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono font-bold border border-slate-200">
-            Pintu Keluar 01
-          </span>
-        </div>
-        <p class="text-xs text-slate-500 mt-0.5">
-          Pemindaian tiket, perhitungan durasi otomatis, dan pemrosesan pembayaran parkir.
-        </p>
-      </div>
-
-      <!-- Functional Gate Status & Emergency Toggle -->
-      <div class="flex items-center gap-2">
-        <div
-          class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-mono font-bold border transition"
-          :class="barrierGateStatus === 'open' ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-slate-50 text-slate-700 border-slate-200'"
-        >
-          <span class="w-2 h-2 rounded-full" :class="barrierGateStatus === 'open' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'"></span>
-          <span>{{ barrierGateStatus === 'open' ? 'PALANG TERBUKA' : 'PALANG TERTUTUP' }}</span>
-        </div>
-
-        <button
-          @click="toggleManualBarrier"
-          class="text-xs font-bold px-3 py-1.5 rounded-lg border transition cursor-pointer"
-          :class="barrierGateStatus === 'open' ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100' : 'bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200'"
-        >
-          {{ barrierGateStatus === 'open' ? 'Kunci Palang' : 'Buka Manual' }}
-        </button>
-      </div>
+    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <h1 class="text-xl font-normal text-[#0f172a] font-serif tracking-tight">
+        Pos Kasir Gerbang Keluar
+      </h1>
+      <p class="text-xs text-slate-500 mt-0.5">
+        Pemindaian tiket, perhitungan durasi otomatis, dan pemrosesan pembayaran parkir.
+      </p>
     </div>
 
     <!-- Main POS Grid -->
