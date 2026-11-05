@@ -19,6 +19,30 @@
       </button>
     </div>
 
+    <!-- Filter Strip -->
+    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center gap-3">
+      <div class="relative flex-1 w-full">
+        <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+        <input
+          v-model="searchQuery"
+          @input="currentPage = 1"
+          type="text"
+          placeholder="Cari nama member, kode, atau PT..."
+          class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#3b82f6] outline-none"
+        />
+      </div>
+
+      <select
+        v-model="statusFilter"
+        @change="currentPage = 1"
+        class="w-full sm:w-44 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#3b82f6] outline-none bg-white font-medium"
+      >
+        <option value="all">Semua Status</option>
+        <option value="lunas">Lunas</option>
+        <option value="belum">Belum Lunas</option>
+      </select>
+    </div>
+
     <!-- Table Tagihan -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
       <div class="overflow-x-auto">
@@ -35,13 +59,13 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
-            <tr v-if="tagihanList.length === 0">
+            <tr v-if="filteredTagihan.length === 0">
               <td colspan="7" class="text-center py-8 text-slate-400">
-                Belum ada tagihan member yang tercatat.
+                Belum ada tagihan member yang sesuai filter.
               </td>
             </tr>
             <tr
-              v-for="t in tagihanList"
+              v-for="t in paginatedTagihan"
               :key="t.id"
               class="hover:bg-slate-50/80 transition"
             >
@@ -93,6 +117,12 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="filteredTagihan.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- Modal Invoice Kuitansi Member Resmi -->
@@ -213,9 +243,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { RefreshCw, Receipt, X, Printer } from 'lucide-vue-next'
+import { ref, computed, onMounted } from 'vue'
+import { RefreshCw, Receipt, X, Printer, Search } from 'lucide-vue-next'
 import BrandLogo from '~/components/BrandLogo.vue'
+import PaginationControl from '~/components/PaginationControl.vue'
 
 definePageMeta({
   layout: 'petugas',
@@ -228,6 +259,33 @@ const { askConfirm, askAlert } = useConfirm()
 const tagihanList = ref<any[]>([])
 const isLoading = ref(false)
 const activeInvoice = ref<any>(null)
+const searchQuery = ref('')
+const statusFilter = ref<'all' | 'lunas' | 'belum'>('all')
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
+
+const filteredTagihan = computed(() => {
+  return tagihanList.value.filter(t => {
+    if (statusFilter.value !== 'all' && t.status !== statusFilter.value) {
+      return false
+    }
+    if (searchQuery.value.trim()) {
+      const q = searchQuery.value.toLowerCase().trim()
+      const nama = t.member?.nama?.toLowerCase() || ''
+      const kode = t.member?.kode?.toLowerCase() || ''
+      const pt = t.member?.perusahaan?.toLowerCase() || ''
+      if (!nama.includes(q) && !kode.includes(q) && !pt.includes(q)) {
+        return false
+      }
+    }
+    return true
+  })
+})
+
+const paginatedTagihan = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredTagihan.value.slice(start, start + itemsPerPage.value)
+})
 
 const fetchTagihan = async () => {
   isLoading.value = true

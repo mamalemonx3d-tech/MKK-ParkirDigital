@@ -10,13 +10,25 @@
           Tinjauan seluruh member aktif, masa berlaku langganan, dan status pelunasan.
         </p>
       </div>
-      <NuxtLink
-        to="/petugas/member"
-        class="px-3.5 py-2 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
-      >
-        <UserPlus class="w-4 h-4" />
-        <span>Buka Form Pendaftaran Member</span>
-      </NuxtLink>
+      <div class="flex items-center gap-2.5 w-full sm:w-auto">
+        <div class="relative flex-1 sm:w-64">
+          <Search class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Cari nama, PT, kode..."
+            @input="currentPage = 1"
+            class="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 focus:border-[#3b82f6] outline-none"
+          />
+        </div>
+        <NuxtLink
+          to="/petugas/member"
+          class="px-3.5 py-2 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs shrink-0"
+        >
+          <UserPlus class="w-4 h-4" />
+          <span class="hidden sm:inline">Pendaftaran Member</span>
+        </NuxtLink>
+      </div>
     </div>
 
     <!-- Members Table -->
@@ -35,13 +47,13 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
-            <tr v-if="members.length === 0">
+            <tr v-if="filteredMembers.length === 0">
               <td colspan="7" class="text-center py-8 text-slate-400">
-                Belum ada member terdaftar.
+                Belum ada data member yang cocok.
               </td>
             </tr>
             <tr
-              v-for="m in members"
+              v-for="m in paginatedMembers"
               :key="m.id"
               class="hover:bg-slate-50/80 transition"
             >
@@ -81,13 +93,20 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="filteredMembers.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { UserPlus, CreditCard } from 'lucide-vue-next'
+import { ref, computed, onMounted } from 'vue'
+import { UserPlus, CreditCard, Search } from 'lucide-vue-next'
+import PaginationControl from '~/components/PaginationControl.vue'
 
 definePageMeta({
   layout: 'admin',
@@ -96,6 +115,25 @@ definePageMeta({
 
 const api = useApi()
 const members = ref<any[]>([])
+const search = ref('')
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
+
+const filteredMembers = computed(() => {
+  if (!search.value.trim()) return members.value
+  const q = search.value.toLowerCase()
+  return members.value.filter(
+    m =>
+      m.nama?.toLowerCase().includes(q) ||
+      m.kode?.toLowerCase().includes(q) ||
+      m.perusahaan?.toLowerCase().includes(q)
+  )
+})
+
+const paginatedMembers = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredMembers.value.slice(start, start + itemsPerPage.value)
+})
 
 const fetchMembers = async () => {
   try {

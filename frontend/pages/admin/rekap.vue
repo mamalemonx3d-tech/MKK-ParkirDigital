@@ -43,7 +43,7 @@
         <input
           v-model="selectedDate"
           type="date"
-          @change="fetchReport"
+          @change="currentPage = 1; fetchReport()"
           class="px-3.5 py-1.5 text-xs rounded-xl border border-slate-300 font-mono font-bold bg-white text-slate-800 focus:border-[#3b82f6] outline-none"
         />
       </div>
@@ -130,7 +130,7 @@
                 Belum ada data petugas parkir.
               </td>
             </tr>
-            <tr v-for="p in petugasList" :key="p.id" class="hover:bg-slate-50/80 transition">
+            <tr v-for="p in paginatedPetugasList" :key="p.id" class="hover:bg-slate-50/80 transition">
               <td class="py-3 px-4 font-bold text-slate-900 flex items-center gap-2">
                 <div class="w-7 h-7 rounded-full bg-[#3b82f6] text-white border border-blue-600 flex items-center justify-center font-bold text-xs uppercase">
                   {{ p.name.charAt(0) }}
@@ -155,6 +155,12 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="petugasList.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- TAB 2: LAPORAN NON-MEMBER & MEMBER -->
@@ -248,7 +254,7 @@
                   Tidak ada transaksi parkir pada tanggal ini.
                 </td>
               </tr>
-              <tr v-for="item in reportData.detail" :key="item.kode_tiket" class="hover:bg-slate-50/80 transition">
+              <tr v-for="item in paginatedReportDetail" :key="item.kode_tiket" class="hover:bg-slate-50/80 transition">
                 <td class="py-3 px-4 font-mono font-bold text-[#3b82f6]">{{ item.kode_tiket }}</td>
                 <td class="py-3 px-4">
                   <span
@@ -282,6 +288,12 @@
             </tbody>
           </table>
         </div>
+
+        <PaginationControl
+          v-model:currentPage="currentPage"
+          :totalItems="(reportData.detail || []).length"
+          :itemsPerPage="itemsPerPage"
+        />
       </div>
     </div>
 
@@ -323,7 +335,7 @@
                   Tidak ada transaksi parkir pada tanggal ini.
                 </td>
               </tr>
-              <tr v-for="item in reportData.detail" :key="item.kode_tiket" class="hover:bg-slate-50/80 transition">
+              <tr v-for="item in paginatedReportDetail" :key="item.kode_tiket" class="hover:bg-slate-50/80 transition">
                 <td class="py-3 px-4 font-mono font-bold text-[#3b82f6]">{{ item.kode_tiket }}</td>
                 <td class="py-3 px-4 font-mono font-bold text-slate-700">{{ item.nomor_polisi || '-' }}</td>
                 <td class="py-3 px-4 capitalize">{{ item.jenis_kendaraan || '-' }}</td>
@@ -354,7 +366,7 @@
                   Tidak ada data untuk periode ini.
                 </td>
               </tr>
-              <tr v-for="item in reportData.detail" :key="item.tanggal" class="hover:bg-slate-50/80 transition">
+              <tr v-for="item in paginatedReportDetail" :key="item.tanggal" class="hover:bg-slate-50/80 transition">
                 <td class="py-3 px-4 font-mono font-bold text-slate-900">{{ item.tanggal }}</td>
                 <td class="py-3 px-4 font-medium text-slate-700">{{ item.nama_hari || '-' }}</td>
                 <td class="py-3 px-4 font-mono">{{ item.total_masuk }} unit</td>
@@ -365,6 +377,12 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="(reportData.detail || []).length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
   </div>
 </template>
@@ -372,6 +390,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { FileDown, Ticket, CreditCard, RefreshCw, User } from 'lucide-vue-next'
+import PaginationControl from '~/components/PaginationControl.vue'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
@@ -386,6 +405,19 @@ const selectedDate = ref(new Date().toISOString().split('T')[0])
 const reportData = ref<any>({})
 const petugasList = ref<any[]>([])
 const isLoading = ref(false)
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
+
+const paginatedPetugasList = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return petugasList.value.slice(start, start + itemsPerPage.value)
+})
+
+const paginatedReportDetail = computed(() => {
+  const list = reportData.value?.detail || []
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return list.slice(start, start + itemsPerPage.value)
+})
 
 const tabs = [
   { id: 'harian', label: 'Rekap Harian' },
@@ -443,6 +475,7 @@ const summaryTotals = computed(() => {
 
 const changeTab = (tab: any) => {
   activeTab.value = tab
+  currentPage.value = 1
   fetchReport()
 }
 

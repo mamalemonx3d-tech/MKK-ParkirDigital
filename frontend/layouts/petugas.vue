@@ -1,16 +1,30 @@
 <template>
-  <div class="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row text-[#0f172a] font-sans print:block print:bg-white print:min-h-0">
-    <!-- Sidebar Navigation with #1E293B Solid Slate Blue (Hidden on Print) -->
+  <div class="h-screen w-screen overflow-hidden flex flex-col md:flex-row bg-[#f8fafc] text-[#0f172a] font-sans print:block print:h-auto print:w-auto print:overflow-visible print:bg-white">
+    <!-- ========================================== -->
+    <!-- 1. MOBILE BACKDROP OVERLAY                 -->
+    <!-- ========================================== -->
+    <div
+      v-if="isMobileMenuOpen"
+      @click="isMobileMenuOpen = false"
+      class="fixed inset-0 bg-slate-950/60 backdrop-blur-2xs z-50 md:hidden transition-opacity print:hidden"
+    ></div>
+
+    <!-- ========================================== -->
+    <!-- 2. SIDEBAR (DESKTOP FIXED & MOBILE DRAWER) -->
+    <!-- ========================================== -->
     <aside
-      class="bg-[#1e293b] text-white flex flex-col shrink-0 md:min-h-screen transition-all duration-300 ease-in-out relative z-40 border-r border-slate-700/60 print:hidden"
-      :class="isCollapsed ? 'w-full md:w-16' : 'w-full md:w-64'"
+      class="fixed inset-y-0 left-0 z-50 bg-[#1e293b] text-white flex flex-col shrink-0 h-screen border-r border-slate-700/60 transition-all duration-300 ease-in-out md:static md:translate-x-0 print:hidden"
+      :class="[
+        isMobileMenuOpen ? 'translate-x-0 shadow-2xl w-72' : '-translate-x-full md:translate-x-0',
+        isCollapsed ? 'md:w-16' : 'md:w-64'
+      ]"
     >
       <!-- Brand Header & Toggle Button -->
       <div
         class="border-b border-slate-700/60 flex items-center transition-all duration-300"
         :class="isCollapsed ? 'p-3 justify-center flex-col gap-2' : 'p-4 justify-between'"
       >
-        <NuxtLink to="/petugas" class="focus:outline-none">
+        <NuxtLink to="/petugas" @click="isMobileMenuOpen = false" class="focus:outline-none">
           <BrandLogo
             :showSubtitle="!isCollapsed"
             subtitle="Pos Operasional"
@@ -20,12 +34,21 @@
           />
         </NuxtLink>
 
-        <!-- Toggle Collapse/Expand Button -->
+        <!-- Close button on Mobile Drawer -->
+        <button
+          @click="isMobileMenuOpen = false"
+          type="button"
+          class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/60 md:hidden cursor-pointer"
+        >
+          <X class="w-5 h-5" />
+        </button>
+
+        <!-- Toggle Collapse/Expand Button (Desktop only) -->
         <button
           @click="toggleSidebar"
           type="button"
           :title="isCollapsed ? 'Buka Sidebar (Menu Lengkap)' : 'Tutup Sidebar (Perluas Layar)'"
-          class="p-1.5 rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-200 transition cursor-pointer"
+          class="hidden md:flex p-1.5 rounded-lg bg-slate-700/60 hover:bg-slate-700 text-slate-200 transition cursor-pointer"
         >
           <ChevronRight v-if="isCollapsed" class="w-4 h-4 text-[#f59e0b]" />
           <ChevronLeft v-else class="w-4 h-4 text-slate-300" />
@@ -37,6 +60,7 @@
         <!-- Dashboard -->
         <NuxtLink
           to="/petugas"
+          @click="isMobileMenuOpen = false"
           :title="isCollapsed ? 'Dashboard Operasional' : undefined"
           class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
           :class="[
@@ -59,6 +83,7 @@
         <!-- Pos Kasir Keluar -->
         <NuxtLink
           to="/petugas/keluar"
+          @click="isMobileMenuOpen = false"
           :title="isCollapsed ? 'Pos Kasir Keluar' : undefined"
           class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
           :class="[
@@ -75,6 +100,7 @@
         <!-- Daftar Tiket Parkir -->
         <NuxtLink
           to="/petugas/ticket"
+          @click="isMobileMenuOpen = false"
           :title="isCollapsed ? 'Daftar Tiket Parkir' : undefined"
           class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
           :class="[
@@ -97,6 +123,7 @@
         <!-- Registrasi Member -->
         <NuxtLink
           to="/petugas/member"
+          @click="isMobileMenuOpen = false"
           :title="isCollapsed ? 'Registrasi Member' : undefined"
           class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
           :class="[
@@ -113,6 +140,7 @@
         <!-- Iuran Tagihan Member -->
         <NuxtLink
           to="/petugas/member/tagihan"
+          @click="isMobileMenuOpen = false"
           :title="isCollapsed ? 'Iuran & Tagihan Member' : undefined"
           class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
           :class="[
@@ -129,6 +157,7 @@
         <!-- Laporan Shift Kasir -->
         <NuxtLink
           to="/petugas/laporan"
+          @click="isMobileMenuOpen = false"
           :title="isCollapsed ? 'Laporan Shift Kasir' : undefined"
           class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
           :class="[
@@ -145,6 +174,7 @@
         <!-- Kelola Profil Akun -->
         <NuxtLink
           to="/petugas/profile"
+          @click="isMobileMenuOpen = false"
           :title="isCollapsed ? 'Kelola Profil Akun' : undefined"
           class="flex items-center gap-3 rounded-xl text-xs font-bold transition"
           :class="[
@@ -167,6 +197,7 @@
 
           <NuxtLink
             to="/admin/dashboard"
+            @click="isMobileMenuOpen = false"
             :title="isCollapsed ? 'Kembali ke Panel Super Admin' : undefined"
             class="flex items-center gap-3 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-700/60 hover:text-white transition"
             :class="isCollapsed ? 'justify-center p-2.5' : 'px-3 py-2'"
@@ -183,6 +214,7 @@
           <NuxtLink
             v-if="!isCollapsed"
             to="/petugas/profile"
+            @click="isMobileMenuOpen = false"
             class="truncate pr-2 hover:opacity-85 transition cursor-pointer flex-1"
           >
             <p class="text-xs font-bold text-white truncate">{{ auth.user.value?.name || 'Petugas Pos' }}</p>
@@ -202,25 +234,37 @@
       </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0 print:block print:w-full">
+    <!-- ========================================== -->
+    <!-- 3. MAIN CONTENT AREA (H-SCREEN FIXED BODY)  -->
+    <!-- ========================================== -->
+    <div class="flex-1 h-screen flex flex-col min-w-0 overflow-hidden print:block print:h-auto print:w-full print:overflow-visible">
       <!-- Topbar Header (Hidden on Print) -->
-      <header class="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between sticky top-0 z-30 shadow-2xs print:hidden">
+      <header class="bg-white border-b border-slate-200 h-16 px-4 sm:px-6 flex items-center justify-between shrink-0 z-30 shadow-2xs print:hidden">
         <div class="flex items-center gap-3">
-          <!-- Quick Sidebar Toggle on Topbar -->
+          <!-- Mobile Hamburger Toggle Button -->
+          <button
+            @click="isMobileMenuOpen = true"
+            type="button"
+            class="p-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition md:hidden cursor-pointer"
+            title="Buka Menu Navigasi"
+          >
+            <Menu class="w-5 h-5 text-slate-800" />
+          </button>
+
+          <!-- Desktop Sidebar Toggle Button -->
           <button
             @click="toggleSidebar"
             type="button"
-            class="p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 transition cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+            class="hidden md:flex p-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 transition cursor-pointer items-center gap-1.5 text-xs font-bold"
             :title="isCollapsed ? 'Perluas Menu Sidebar' : 'Tutup Menu Sidebar'"
           >
             <PanelLeftClose v-if="!isCollapsed" class="w-4 h-4 text-[#3b82f6]" />
             <PanelLeftOpen v-else class="w-4 h-4 text-[#3b82f6]" />
-            <span class="hidden sm:inline text-[11px]">{{ isCollapsed ? 'Buka Menu' : 'Tutup Menu' }}</span>
+            <span class="text-[11px]">{{ isCollapsed ? 'Buka Menu' : 'Tutup Menu' }}</span>
           </button>
 
           <div class="flex items-center gap-2 text-xs">
-            <span class="font-bold text-[#0f172a]">POS OPERASIONAL GERBANG</span>
+            <span class="font-bold text-[#0f172a] truncate max-w-[140px] sm:max-w-none">POS OPERASIONAL GERBANG</span>
             <span class="text-slate-300 hidden sm:inline">&bull;</span>
             <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#fef3c7] text-[#b45309] border border-[#f59e0b]/40 font-bold text-[10px]">
               <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse"></span>
@@ -230,13 +274,13 @@
         </div>
 
         <div class="flex items-center gap-4 text-xs font-mono text-slate-700">
-          <span class="bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200 font-bold text-[11px]">
+          <span class="bg-slate-50 px-2.5 sm:px-3 py-1.5 rounded-lg border border-slate-200 font-bold text-[10px] sm:text-[11px] truncate">
             {{ currentFormattedTime }}
           </span>
         </div>
       </header>
 
-      <!-- Page Content Canvas -->
+      <!-- Scrollable Main Page Content (Only this scrolls) -->
       <main class="flex-1 p-4 sm:p-6 overflow-y-auto bg-[#f8fafc] print:p-0 print:m-0 print:bg-white print:overflow-visible print:block">
         <slot />
       </main>
@@ -245,10 +289,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import {
   LayoutDashboard,
-  Camera,
   Receipt,
   Ticket,
   CreditCard,
@@ -261,13 +304,15 @@ import {
   ChevronRight,
   PanelLeftClose,
   PanelLeftOpen,
+  Menu,
+  X,
 } from 'lucide-vue-next'
 import BrandLogo from '~/components/BrandLogo.vue'
 
 const auth = useAuth()
-const route = useRoute()
+const isMobileMenuOpen = ref(false)
 
-// Persistent reactive sidebar collapse state
+// Persistent reactive sidebar collapse state for desktop
 const isCollapsed = useState<boolean>('petugas-sidebar-collapsed', () => false)
 
 const toggleSidebar = () => {

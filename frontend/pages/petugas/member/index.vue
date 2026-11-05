@@ -28,6 +28,7 @@
         <Search class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
         <input
           v-model="searchQuery"
+          @input="currentPage = 1"
           type="text"
           placeholder="Cari ID kartu, nama pemegang, atau PT..."
           class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 focus:border-[#3b82f6] focus:ring-2 focus:ring-[#3b82f6]/20 outline-none transition"
@@ -39,6 +40,7 @@
         <span class="text-xs font-semibold text-slate-600 shrink-0">Filter Status:</span>
         <select
           v-model="statusFilter"
+          @change="currentPage = 1"
           class="px-3 py-2 text-xs rounded-xl border border-slate-300 bg-white text-slate-800 font-semibold focus:border-[#3b82f6] outline-none transition"
         >
           <option value="all">Semua Status ({{ members.length }})</option>
@@ -72,7 +74,7 @@
               </td>
             </tr>
             <tr
-              v-for="m in filteredMembers"
+              v-for="m in paginatedMembers"
               :key="m.id"
               class="hover:bg-slate-50/80 transition"
             >
@@ -165,6 +167,12 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="filteredMembers.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- Modal Form: Tambah Member Baru (Fixed Rate 150.000 / Bulan) -->
@@ -448,6 +456,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { UserPlus, CreditCard, Pencil, Check, Trash2, X, Search } from 'lucide-vue-next'
 import { formatRupiah, formatDate } from '~/utils/formatters'
+import PaginationControl from '~/components/PaginationControl.vue'
 
 definePageMeta({
   layout: 'petugas',
@@ -466,6 +475,8 @@ const isSubmitting = ref(false)
 
 const searchQuery = ref('')
 const statusFilter = ref<'all' | 'lunas' | 'belum' | 'expired'>('all')
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
 
 const addForm = reactive({
   nama: '',
@@ -521,6 +532,11 @@ const filteredMembers = computed(() => {
 
     return true
   })
+})
+
+const paginatedMembers = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredMembers.value.slice(start, start + itemsPerPage.value)
 })
 
 const fetchMembers = async () => {

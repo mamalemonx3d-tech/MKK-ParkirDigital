@@ -159,13 +159,13 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 font-mono">
-            <tr v-if="recentTickets.length === 0">
+            <tr v-if="allTickets.length === 0">
               <td colspan="9" class="text-center py-10 text-slate-400 font-sans text-xs">
                 Belum ada transaksi lalu lintas kendaraan hari ini.
               </td>
             </tr>
             <tr
-              v-for="t in recentTickets"
+              v-for="t in paginatedTickets"
               :key="t.id"
               class="hover:bg-slate-50/80 transition"
             >
@@ -215,12 +215,18 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="allTickets.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
   Receipt,
   Car,
@@ -232,6 +238,7 @@ import {
 } from 'lucide-vue-next'
 import { formatRupiah, formatDurasiJam } from '~/utils/formatters'
 import TrafficRevenueChart from '~/components/TrafficRevenueChart.vue'
+import PaginationControl from '~/components/PaginationControl.vue'
 
 definePageMeta({
   layout: 'petugas',
@@ -240,13 +247,20 @@ definePageMeta({
 
 const api = useApi()
 const isLoading = ref(false)
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
 const summary = ref({
   tiket_aktif: 0,
   tiket_hari_ini: 0,
   pendapatan_hari_ini: 0,
   total_member: 0,
 })
-const recentTickets = ref<any[]>([])
+const allTickets = ref<any[]>([])
+
+const paginatedTickets = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return allTickets.value.slice(start, start + itemsPerPage.value)
+})
 
 const fetchData = async () => {
   isLoading.value = true
@@ -261,7 +275,7 @@ const fetchData = async () => {
     }
 
     if (ticketRes.data) {
-      recentTickets.value = (ticketRes.data || []).slice(0, 8)
+      allTickets.value = Array.isArray(ticketRes.data) ? ticketRes.data : (ticketRes.data?.data || [])
     }
   } catch (err) {
     console.error('Gagal mengambil data dashboard:', err)

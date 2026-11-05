@@ -10,13 +10,25 @@
           Kelola data login staf pos keluar dan gerbang masuk.
         </p>
       </div>
-      <button
-        @click="openModal()"
-        class="px-3.5 py-2 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs"
-      >
-        <UserPlus class="w-4 h-4" />
-        <span>Tambah Petugas Baru</span>
-      </button>
+      <div class="flex items-center gap-2.5 w-full sm:w-auto">
+        <div class="relative flex-1 sm:w-64">
+          <Search class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Cari petugas..."
+            @input="currentPage = 1"
+            class="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-200 focus:border-[#3b82f6] outline-none"
+          />
+        </div>
+        <button
+          @click="openModal()"
+          class="px-3.5 py-2 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white border border-blue-600 text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-xs shrink-0"
+        >
+          <UserPlus class="w-4 h-4" />
+          <span class="hidden sm:inline">Tambah Petugas</span>
+        </button>
+      </div>
     </div>
 
     <!-- Table Users -->
@@ -27,18 +39,18 @@
             <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
               <th class="py-3 px-4">Nama Lengkap</th>
               <th class="py-3 px-4">Alamat Email</th>
-                            <th class="py-3 px-4">Peran (Role)</th>
+              <th class="py-3 px-4">Peran (Role)</th>
               <th class="py-3 px-4 text-center">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
-            <tr v-if="users.length === 0">
+            <tr v-if="filteredUsers.length === 0">
               <td colspan="4" class="text-center py-8 text-slate-400">
-                Belum ada data petugas.
+                Belum ada data petugas yang cocok.
               </td>
             </tr>
             <tr
-              v-for="u in users"
+              v-for="u in paginatedUsers"
               :key="u.id"
               class="hover:bg-slate-50/80 transition"
             >
@@ -75,6 +87,12 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="filteredUsers.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
 
     <!-- Modal Form: Tambah / Edit Petugas -->
@@ -165,8 +183,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
-import { UserPlus, Edit, Trash2, X } from 'lucide-vue-next'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { UserPlus, Edit, Trash2, X, Search } from 'lucide-vue-next'
+import PaginationControl from '~/components/PaginationControl.vue'
 
 definePageMeta({
   layout: 'admin',
@@ -179,6 +198,22 @@ const users = ref<any[]>([])
 const isModalOpen = ref(false)
 const isSubmitting = ref(false)
 const editingId = ref<number | null>(null)
+const search = ref('')
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
+
+const filteredUsers = computed(() => {
+  if (!search.value.trim()) return users.value
+  const q = search.value.toLowerCase()
+  return users.value.filter(
+    u => u.name?.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q)
+  )
+})
+
+const paginatedUsers = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredUsers.value.slice(start, start + itemsPerPage.value)
+})
 
 const form = reactive({
   name: '',

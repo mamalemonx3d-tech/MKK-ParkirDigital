@@ -109,7 +109,7 @@
         <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
           <button
             type="button"
-            @click="activeTab = 'all'"
+            @click="activeTab = 'all'; currentPage = 1"
             class="px-3 py-1.5 rounded-lg text-xs font-bold transition"
             :class="activeTab === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'"
           >
@@ -117,7 +117,7 @@
           </button>
           <button
             type="button"
-            @click="activeTab = 'masuk'"
+            @click="activeTab = 'masuk'; currentPage = 1"
             class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5"
             :class="activeTab === 'masuk' ? 'bg-[#3b82f6] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'"
           >
@@ -126,7 +126,7 @@
           </button>
           <button
             type="button"
-            @click="activeTab = 'keluar'"
+            @click="activeTab = 'keluar'; currentPage = 1"
             class="px-3 py-1.5 rounded-lg text-xs font-bold transition"
             :class="activeTab === 'keluar' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'"
           >
@@ -159,7 +159,7 @@
               </td>
             </tr>
             <tr
-              v-for="t in filteredTickets.slice(0, 15)"
+              v-for="t in paginatedTickets"
               :key="t.id"
               class="hover:bg-slate-50/80 transition"
             >
@@ -223,10 +223,17 @@
         </table>
       </div>
 
+      <!-- Pagination Control -->
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="filteredTickets.length"
+        :itemsPerPage="itemsPerPage"
+      />
+
       <!-- Table Footer Link -->
-      <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs">
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
         <span class="text-slate-500">
-          Menampilkan hingga 15 kendaraan terkini.
+          Data tersinkronisasi otomatis dengan gerbang parkir.
         </span>
         <NuxtLink
           to="/admin/rekap"
@@ -245,6 +252,7 @@ import { ref, computed, onMounted } from 'vue'
 import { FileSpreadsheet, UserPlus, User } from 'lucide-vue-next'
 import { formatRupiah, formatDateTime, formatDurasiJam } from '~/utils/formatters'
 import TrafficRevenueChart from '~/components/TrafficRevenueChart.vue'
+import PaginationControl from '~/components/PaginationControl.vue'
 
 definePageMeta({
   layout: 'admin',
@@ -253,6 +261,8 @@ definePageMeta({
 
 const api = useApi()
 const activeTab = ref<'all' | 'masuk' | 'keluar'>('all')
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
 
 const summary = ref({
   sedang_parkir: 0,
@@ -280,6 +290,11 @@ const filteredTickets = computed(() => {
   if (activeTab.value === 'masuk') return ticketsDiDalam.value
   if (activeTab.value === 'keluar') return ticketsKeluar.value
   return allTickets.value
+})
+
+const paginatedTickets = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredTickets.value.slice(start, start + itemsPerPage.value)
 })
 
 const fetchData = async () => {

@@ -15,7 +15,7 @@
         <input
           v-model="selectedDate"
           type="date"
-          @change="fetchDailyReport"
+          @change="currentPage = 1; fetchDailyReport()"
           class="px-3.5 py-2 text-xs rounded-xl border border-slate-300 font-mono font-bold bg-white focus:border-[#3b82f6] outline-none"
         />
         <button
@@ -86,7 +86,7 @@
               </td>
             </tr>
             <tr
-              v-for="item in reportData.detail"
+              v-for="item in paginatedDetail"
               :key="item.kode_tiket"
               class="hover:bg-slate-50/80 transition"
             >
@@ -122,14 +122,22 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="(reportData.detail || []).length"
+        :itemsPerPage="itemsPerPage"
+        class="print:hidden"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Printer, User } from 'lucide-vue-next'
 import { formatRupiah } from '~/utils/formatters'
+import PaginationControl from '~/components/PaginationControl.vue'
 
 definePageMeta({
   layout: 'petugas',
@@ -138,11 +146,18 @@ definePageMeta({
 
 const api = useApi()
 const selectedDate = ref(new Date().toISOString().split('T')[0])
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
 const reportData = ref<any>({
   total_masuk: 0,
   total_keluar: 0,
   total_pendapatan: 0,
   detail: [],
+})
+
+const paginatedDetail = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return (reportData.value.detail || []).slice(start, start + itemsPerPage.value)
 })
 
 const fetchDailyReport = async () => {

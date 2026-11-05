@@ -38,6 +38,7 @@
         <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
         <input
           v-model="searchQuery"
+          @input="currentPage = 1"
           type="text"
           placeholder="Cari kode tiket atau nomor polisi..."
           class="w-full pl-9 pr-3.5 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#3b82f6] outline-none"
@@ -47,6 +48,7 @@
       <!-- Filter Status -->
       <select
         v-model="statusFilter"
+        @change="currentPage = 1"
         class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#3b82f6] outline-none bg-white font-medium"
       >
         <option value="all">Semua Status</option>
@@ -57,6 +59,7 @@
       <!-- Filter Jenis -->
       <select
         v-model="jenisFilter"
+        @change="currentPage = 1"
         class="w-full sm:w-40 px-3 py-2 text-xs rounded-lg border border-slate-300 focus:border-[#3b82f6] outline-none bg-white font-medium"
       >
         <option value="all">Semua Jenis</option>
@@ -89,7 +92,7 @@
               </td>
             </tr>
             <tr
-              v-for="ticket in filteredTickets"
+              v-for="ticket in paginatedTickets"
               :key="ticket.id"
               class="hover:bg-slate-50/80 transition"
             >
@@ -141,6 +144,12 @@
           </tbody>
         </table>
       </div>
+
+      <PaginationControl
+        v-model:currentPage="currentPage"
+        :totalItems="filteredTickets.length"
+        :itemsPerPage="itemsPerPage"
+      />
     </div>
   </div>
 </template>
@@ -148,6 +157,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { Search, RefreshCw, Trash2 } from 'lucide-vue-next'
+import PaginationControl from '~/components/PaginationControl.vue'
 
 definePageMeta({
   layout: 'petugas',
@@ -162,6 +172,13 @@ const isClearing = ref(false)
 const searchQuery = ref('')
 const statusFilter = ref('all')
 const jenisFilter = ref('all')
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
+
+const paginatedTickets = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredTickets.value.slice(start, start + itemsPerPage.value)
+})
 
 const fetchTickets = async () => {
   isLoading.value = true
