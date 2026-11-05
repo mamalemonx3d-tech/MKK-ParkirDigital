@@ -113,10 +113,11 @@
             <Menu class="w-5 h-5 text-slate-800" />
           </button>
 
+          <!-- Page Title Indicator -->
           <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-[#3b82f6] animate-pulse"></span>
-            <h1 class="text-xs sm:text-sm font-bold text-[#0f172a] font-sans tracking-tight truncate max-w-[200px] sm:max-w-none">
-              Sistem Informasi Pengelolaan Parkir Digital
+            <span class="w-2 h-2 rounded-full bg-[#3b82f6]"></span>
+            <h1 class="text-xs sm:text-sm font-bold text-[#0f172a] font-sans tracking-tight">
+              {{ pageTitle }}
             </h1>
           </div>
         </div>
@@ -137,7 +138,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {
   LayoutDashboard,
   Users,
@@ -150,7 +151,18 @@ import {
 import BrandLogo from '~/components/BrandLogo.vue'
 
 const auth = useAuth()
+const route = useRoute()
 const isMobileMenuOpen = ref(false)
+
+const pageTitle = computed(() => {
+  const p = route.path
+  if (p === '/admin' || p === '/admin/dashboard') return 'Dashboard'
+  if (p.startsWith('/admin/users')) return 'Manajemen Petugas'
+  if (p.startsWith('/admin/rekap')) return 'Laporan & Rekapitulasi'
+  if (p.startsWith('/admin/member')) return 'Monitoring Member'
+  if (p.startsWith('/admin/profile')) return 'Kelola Profil Akun'
+  return 'Dashboard'
+})
 
 const currentFormattedTime = ref('')
 let timer: any = null

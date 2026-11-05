@@ -263,13 +263,12 @@
             <span class="text-[11px]">{{ isCollapsed ? 'Buka Menu' : 'Tutup Menu' }}</span>
           </button>
 
-          <div class="flex items-center gap-2 text-xs">
-            <span class="font-bold text-[#0f172a] truncate max-w-[140px] sm:max-w-none">POS OPERASIONAL GERBANG</span>
-            <span class="text-slate-300 hidden sm:inline">&bull;</span>
-            <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#fef3c7] text-[#b45309] border border-[#f59e0b]/40 font-bold text-[10px]">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#3b82f6] animate-pulse"></span>
-              Shift Aktif
-            </span>
+          <!-- Page Title Indicator -->
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#3b82f6]"></span>
+            <h1 class="text-xs sm:text-sm font-bold text-[#0f172a] font-sans tracking-tight">
+              {{ pageTitle }}
+            </h1>
           </div>
         </div>
 
@@ -289,7 +288,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {
   LayoutDashboard,
   Receipt,
@@ -310,7 +309,22 @@ import {
 import BrandLogo from '~/components/BrandLogo.vue'
 
 const auth = useAuth()
+const route = useRoute()
 const isMobileMenuOpen = ref(false)
+
+const pageTitle = computed(() => {
+  const p = route.path
+  if (p === '/petugas') return 'Dashboard'
+  if (p.startsWith('/petugas/keluar')) return 'Pos Keluar'
+  if (p.startsWith('/petugas/ticket')) return 'Daftar Tiket Parkir'
+  if (p.startsWith('/petugas/member/tagihan')) return 'Iuran & Tagihan Member'
+  if (p.startsWith('/petugas/member/kartu')) return 'Cetak Kartu Member'
+  if (p.startsWith('/petugas/member')) return 'Registrasi Member'
+  if (p.startsWith('/petugas/laporan')) return 'Laporan Shift Kasir'
+  if (p.startsWith('/petugas/profile')) return 'Kelola Profil Akun'
+  if (p.startsWith('/petugas/scan')) return 'Scan Tiket'
+  return 'Dashboard'
+})
 
 // Persistent reactive sidebar collapse state for desktop
 const isCollapsed = useState<boolean>('petugas-sidebar-collapsed', () => false)
